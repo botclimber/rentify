@@ -30,12 +30,6 @@
 		}
 	};*/
 
-  document.getElementById("btn").onclick = function() {
-  	var msg = {"msg": document.getElementById("msg").value}
-  	socket.send(JSON.stringify(msg))
-   };
-
-
    </script>
    </head>
    <body>
@@ -46,7 +40,10 @@
        <p id="resp">results: </p>
 
 	<script>
-
+  document.getElementById("btn").onclick = function() {
+    var msg = {"msg": document.getElementById("msg").value}
+    socket.send(JSON.stringify(msg))
+   };
 	</script>
 
 </body>
