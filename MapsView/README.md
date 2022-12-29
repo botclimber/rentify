@@ -5,7 +5,7 @@ This repo contains the project template and finished code for the Google Maps Pl
 ![App screenshot](screenshot.png)
 
 ## Getting Started
-To get started with the codelab, download or fork this repo. A starter template is available in `/starter` and the full solution code is available in `/solution`.
+To get started with the codelab, download or fork this repo. A starter template is available in `/starter` and the full solution code is available in `/app`.
 
 To run the starter or solution apps, run the following from their respective directories:
 
