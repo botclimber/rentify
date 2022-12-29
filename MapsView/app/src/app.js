@@ -49,8 +49,8 @@ socket.onmessage = function(event) {
         console.log('Maps JS API loaded');
         const map = displayMap();
         const markers = addMarkers(map, locations);
-        clusterMarkers(map, markers);
-        addPanToMarker(map, markers);
+        clusterMarkers(map, markers[0]);
+        addPanToMarker(map, markers[0], markers[1]);
       });
 
 };
@@ -96,17 +96,21 @@ function addMarkers(map, locations) {
     barangaroo: { lat: - 33.8605523, lng: 151.1972205 }
   }*/
   const markers = [];
+  const reviews = [];
   for (const location in locations) {
-    console.log(locations[location])
+
     const markerOptions = {
       map: map,
       position: locations[location],
       icon: './img/custom_pin.png'
     }
+
     const marker = new google.maps.Marker(markerOptions);
     markers.push(marker);
+    reviews.push(locations[location].reviews)
   }
-  return markers;
+
+  return [markers, reviews];
 }
 
 function clusterMarkers(map, markers) {
@@ -114,7 +118,7 @@ function clusterMarkers(map, markers) {
   const markerCluster = new MarkerClusterer(map, markers, clustererOptions);
 }
 
-function addPanToMarker(map, markers) {
+/*function addPanToMarker(map, markers) {
   let circle;
   markers.map(marker => {
     marker.addListener('click', event => {
@@ -124,6 +128,21 @@ function addPanToMarker(map, markers) {
         circle.setMap(null);
       }
       circle = drawCircle(map, location);
+    });
+  });
+}*/
+
+function addPanToMarker(map, markers, reviews) {
+  let circle;
+  var infoWindow = new google.maps.InfoWindow();
+
+  markers.map( (marker, idx) => {
+    marker.addListener('click', event => {
+      //const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+
+      infoWindow.setContent("<div style = 'width:500px;min-height:40px'>" + reviews[idx] + "</div>");
+      infoWindow.open(map, marker);
+
     });
   });
 }
