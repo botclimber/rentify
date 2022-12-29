@@ -26,9 +26,10 @@ sockserver.on('connection', (ws) => {
    ws.on('message', (data) => {
        	const dataRec = JSON.parse(data);
 
-	const coords = conv.cityToLatLng(dataRec.city)
-	coords.then(res => {
-
+	conv.cityToLatLng(dataRec.city)
+	.then(res => {
+	
+	console.log("searching for "+ res[0].country+", "+res[0].city)
 	var locations = {
           type: "locations",
 	  city: {lat: res[0].latitude, lng: res[0].longitude}, 
@@ -49,7 +50,11 @@ sockserver.on('connection', (ws) => {
        })*/
 
 	ws.send(JSON.stringify(locations));
-	})	
+	}).catch( reason => { 
+	
+	console.log(reason)	
+	ws.send(JSON.stringify({status: "rejected",msg: reason}));
+	});	
    });
 
    ws.on('close', () => {
