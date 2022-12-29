@@ -17,32 +17,68 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
+
 const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
 
-const loader = new Loader(apiOptions);
+// ------------ websocket connection --------------
+const socket = new WebSocket('ws://localhost:8000/');
 
-loader.load().then(() => {
-  console.log('Maps JS API loaded');
-  const map = displayMap();
-  const markers = addMarkers(map);
-  clusterMarkers(map, markers);
-  addPanToMarker(map, markers);
-});
+socket.onopen = function(e) {
+    console.log("[open] Connection established");
+    console.log("Sending to server");
+    var data = {"city": "Porto"}
+    socket.send(JSON.stringify(data));
+};
+
+socket.onerror = function(error) {
+   console.log(`[error]`);
+};
+
+socket.onmessage = function(event) {
+    console.log(`[message] Data received from server: ${event.data}`);
+    //document.getElementById("resp").innerHTML += event.data+"<br>"
+
+    var data = JSON.parse(event.data)
+
+    var locations = data.locations
+    const loader = new Loader(apiOptions);
+
+      loader.load().then(() => {
+        console.log('Maps JS API loaded');
+        const map = displayMap();
+        const markers = addMarkers(map, locations);
+        clusterMarkers(map, markers);
+        addPanToMarker(map, markers);
+      });
+
+};
+
+/*	socket.onclose = function(event) {
+		if (event.wasClean) {
+			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+		} else {
+			// e.g. server process killed or network down
+			// event.code is usually 1006 in this case
+			console.log('[close] Connection died');
+		}
+	};*/
+// ------------ websocket connection --------------
 
 function displayMap() {
   const mapOptions = {
+    // change here city coords
     center: { lat: -33.860664, lng: 151.208138 },
-    zoom: 14,
-    mapId: 'YOUR_MAP_ID'
+    zoom: 14
+    //mapId: 'YOUR_MAP_ID'
   };
   const mapDiv = document.getElementById('map');
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
-function addMarkers(map) {
-  const locations = {
+function addMarkers(map, locations) {
+  /*const locations = {
     operaHouse: { lat: -33.8567844, lng: 151.213108 },
     tarongaZoo: { lat: -33.8472767, lng: 151.2188164 },
     manlyBeach: { lat: -33.8209738, lng: 151.2563253 },
@@ -58,9 +94,10 @@ function addMarkers(map) {
     aquarium: { lat: -33.869627, lng: 151.202146 },
     darlingHarbour: { lat: -33.87488, lng: 151.1987113 },
     barangaroo: { lat: - 33.8605523, lng: 151.1972205 }
-  }
+  }*/
   const markers = [];
   for (const location in locations) {
+    console.log(locations[location])
     const markerOptions = {
       map: map,
       position: locations[location],
