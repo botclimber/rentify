@@ -8,7 +8,7 @@ view where user interact with
 - ReviewsService:
 service that manage the reviews
 
-enter these forlder for more infpo
+enter these folder for more info
 
 ![Screenshot](imgs/arq.png)
 ![Screenshot](imgs/wAPIGAT.png)
