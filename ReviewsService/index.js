@@ -3,7 +3,7 @@ const { Server } = require('ws');
 
 const sockserver = new Server({ port: 8000});
 const connections = new Set();
-//const conv = require("convertLocation.js")
+const conv = require("./convertLocation.js")
 
 var revMsg = '<div id="content">' +
 '<div id="siteNotice">' +
@@ -24,8 +24,15 @@ sockserver.on('connection', (ws) => {
    console.log('New client connected!');
    connections.add(ws)
    ws.on('message', (data) => {
-        var locations = {
+       	const dataRec = JSON.parse(data);
+
+	conv.cityToLatLng(dataRec.city)
+	.then(res => {
+	
+	console.log("searching for "+ res[0].country+", "+res[0].city)
+	var locations = {
           type: "locations",
+	  city: {lat: res[0].latitude, lng: res[0].longitude}, 
           locations: {
           test0: { lat: -33.8567844, lng: 151.213108, reviews:revMsg  },
           test1: { lat: -33.8472767, lng: 151.2188164, reviews: revMsg },
@@ -37,13 +44,17 @@ sockserver.on('connection', (ws) => {
           test7: { lat: -33.8737375, lng: 151.222569, reviews: revMsg }
         }
       };
-
-       const dataRec = JSON.parse(data);
-
-       connections.forEach((client) => {
+	
+       /*connections.forEach((client) => {
            client.send(JSON.stringify(locations));
-       })
+       })*/
 
+	ws.send(JSON.stringify(locations));
+	}).catch( reason => { 
+	
+	console.log(reason)	
+	ws.send(JSON.stringify({status: "rejected",msg: reason}));
+	});	
    });
 
    ws.on('close', () => {

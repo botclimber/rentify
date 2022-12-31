@@ -24,7 +24,7 @@ const CONFIG = {
     app: './src/app.js'
   },
   devServer: {
-    contentBase: path.join(__dirname, 'src')
+    static: path.join(__dirname, 'src')
   }
 };
 

@@ -28,7 +28,9 @@ const socket = new WebSocket('ws://localhost:8000/');
 socket.onopen = function(e) {
     console.log("[open] Connection established");
     console.log("Sending to server");
-    var data = {"city": "Porto"}
+
+    const urlParams = new URLSearchParams(window.location.search)
+    var data = {"city": urlParams.get('city')}
     socket.send(JSON.stringify(data));
 };
 
@@ -47,7 +49,7 @@ socket.onmessage = function(event) {
 
       loader.load().then(() => {
         console.log('Maps JS API loaded');
-        const map = displayMap();
+        const map = displayMap(data.city);
         const markers = addMarkers(map, locations);
         clusterMarkers(map, markers[0]);
         addPanToMarker(map, markers[0], markers[1]);
@@ -66,11 +68,11 @@ socket.onmessage = function(event) {
 	};*/
 // ------------ websocket connection --------------
 
-function displayMap() {
+function displayMap(cityCoords) {
   const mapOptions = {
     // change here city coords
-    center: { lat: -33.860664, lng: 151.208138 },
-    zoom: 14
+    center: { lat: cityCoords.lat, lng: cityCoords.lng },
+    zoom: 10
     //mapId: 'YOUR_MAP_ID'
   };
   const mapDiv = document.getElementById('map');
