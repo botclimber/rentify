@@ -28,6 +28,7 @@ sockserver.on('connection', (ws) => {
   ws.on('message', (data) => {
     const dataRec = JSON.parse(data);
 
+    console.log(dataRec)
     conv.cityToLatLng(dataRec.city)
       .then(res => {
 

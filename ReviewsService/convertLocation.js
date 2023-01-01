@@ -10,6 +10,8 @@ var options = {
 var geocoder = geo(options);
 
 exports.cityToLatLng = async function(city){
+	
+	var city = city || "Porto"
 	var res = await geocoder.geocode(city)
 	//console.log(city, res)
 	

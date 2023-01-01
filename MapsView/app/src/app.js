@@ -57,6 +57,11 @@ socket.onmessage = function(event) {
 
 };
 
+document.getElementById("sCity").onclick = function(){
+	
+	socket.send(JSON.stringify({"city": document.getElementById("iCity").value}))
+}
+
 /*	socket.onclose = function(event) {
 		if (event.wasClean) {
 			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
