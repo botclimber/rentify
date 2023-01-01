@@ -1,6 +1,6 @@
-USE master;  
-GO  
-CREATE DATABASE Rentify_db  
+
+CREATE DATABASE Rentify_dn; 
+USE Rentify_dn;
 
 Create Table Users (
   id int,
@@ -8,16 +8,16 @@ Create Table Users (
   username varchar(30) UNIQUE not null,
   password varchar(30) not null,
   name varchar(255) not null,
-  PRIMARY KEY (id),
-)
+  PRIMARY KEY (id)
+);
 
 Create Table Admins (
   id int,
   email varchar(255) UNIQUE not null,
   username varchar(30) UNIQUE not null,
   password varchar(30) not null,
-  PRIMARY KEY (id),
-)
+  PRIMARY KEY (id)
+);
 
 Create Table Addresses (
   id int,
@@ -29,8 +29,8 @@ Create Table Addresses (
   postalCode varchar(20) not null,
   number varchar(5) not null,
   country varchar(100) not null,
-  PRIMARY KEY (id),
-)
+  PRIMARY KEY (id)
+);
 
 Create Table ResidenceAddresses (
   id int,
@@ -40,7 +40,7 @@ Create Table ResidenceAddresses (
   number varchar(5) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
-)
+);
 
 Create Table Reviews (
   id int,
@@ -57,5 +57,5 @@ Create Table Reviews (
   FOREIGN KEY (userId) REFERENCES Users(Id),
   FOREIGN KEY (adminId) REFERENCES Admins(Id),
   FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
-)
+);
 
