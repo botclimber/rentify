@@ -1,9 +1,9 @@
 
-CREATE DATABASE Rentify_dn; 
-USE Rentify_dn;
+CREATE DATABASE Rentify_db; 
+USE Rentify_db;
 
 Create Table Users (
-  id int,
+  id int auto_increment,
   email varchar(255) UNIQUE not null,
   username varchar(30) UNIQUE not null,
   password varchar(30) not null,
@@ -12,7 +12,7 @@ Create Table Users (
 );
 
 Create Table Admins (
-  id int,
+  id int auto_increment,
   email varchar(255) UNIQUE not null,
   username varchar(30) UNIQUE not null,
   password varchar(30) not null,
@@ -20,7 +20,7 @@ Create Table Admins (
 );
 
 Create Table Addresses (
-  id int,
+  id int auto_increment,
   latitude float not null,
   longitude float not null,
   streetName varchar(255) not null,
@@ -33,7 +33,7 @@ Create Table Addresses (
 );
 
 Create Table ResidenceAddresses (
-  id int,
+  id int auto_increment,
   addressId int not null,
   floor varchar(50) not null,
   direction varchar(50) not null,
@@ -43,7 +43,7 @@ Create Table ResidenceAddresses (
 );
 
 Create Table Reviews (
-  id int,
+  id int auto_increment,
   userId int not null,
   adminId int not null,
   residenceId int not null,
