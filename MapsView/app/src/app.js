@@ -50,18 +50,6 @@ socket.onmessage = function(event) {
       loader.load().then(() => {
         console.log('Maps JS API loaded');
         const map = displayMap(data.address);
-
-	map.addListener("click", (mapsMouseEvent) => {
-	
-		var infoWindow = new google.maps.InfoWindow({
-		position: mapsMouseEvent.latLng,
-		});
-		infoWindow.setContent(
-		JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-		);
-		infoWindow.open(map);
-	});
-
         const markers = addMarkers(map, locations);
         clusterMarkers(map, markers[0]);
         addPanToMarker(map, markers[0], markers[1]);

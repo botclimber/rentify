@@ -113,13 +113,20 @@ body {font-family: Arial, Helvetica, sans-serif;}
 		<h1>New Review</h1>
 
 		<label for="City"><b>City</b></label>
-		<input type="text" placeholder="City/village" required>
+		<input type="text" placeholder="City/village" id="nrCity" required>
 
 		<label for="Street"><b>Street</b></label>
-		<input type="text" placeholder="Street" required>
+		<input type="text" placeholder="Street" id="nrStreet" required>
 
 		<label for="Building Number"><b>Building Number</b></label>
-		<input type="text" placeholder="Building Number " required>
+		<input type="text" placeholder="Building Number" id="nrBNumber"  required>
+
+
+		<label for="Floor"><b>Fllor (optional)</b></label>
+		<input type="text" placeholder="Floor (optional)" id="nrBNumber"  required>
+
+		<label for="Side"><b>Side (optional)</b></label>
+		<input type="text" placeholder="Side e.g. left or right (optional)" id="nrBNumber"  required>
 
 		<button id="newReview" class="btn">Add</button>
 		<button  type="button" class="btn cancel" id="closeNReviewForm" >Close</button>
