@@ -16,7 +16,6 @@ it is smart enought to figure it out if we are trying to get a city or specific 
 */
 exports.getLatLng = async function(address){
 
-	console.log(address)
 	var city = address.city || "Porto"
 	var street = address.street || ""
 	var bNumber = address.buildingNumber || ""	

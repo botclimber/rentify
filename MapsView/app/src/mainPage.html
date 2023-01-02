@@ -59,16 +59,16 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* Full-width input fields */
-.form-container input[type=text] {
+.form-container input[type=text], textarea {
   width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
+  padding: 10px;
+  margin: 5px 0 15px 0;
   border: none;
   background: #f1f1f1;
 }
 
 /* When the inputs get focus, do something */
-.form-container input[type=text]:focus {
+.form-container input[type=text]:focus, textarea:focus {
   background-color: #ddd;
   outline: none;
 }
@@ -77,11 +77,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
 .form-container .btn {
   background-color: #04AA6D;
   color: white;
-  padding: 16px 20px;
+  padding: 10px 0px;
   border: none;
   cursor: pointer;
   width: 100%;
-  margin-bottom:10px;
+  margin-bottom:5px;
   opacity: 0.8;
 }
 
@@ -104,34 +104,25 @@ body {font-family: Arial, Helvetica, sans-serif;}
         	<input type="text" id="iCity" placeholder="City/State"/>
         	<input type="text" id="iStreet" placeholder="Street"/>
         	<input type="text" id="iBNumber" placeholder="building number"/>
-        	<button id="sCity">Search</button>
+        	<button id="sAddress">Search</button>
 		<button id="openNReviewForm"  >New Review</button>
 		</form>
 	</div>
 <div class="form-popup" id="myForm">
 	<form action="#" class="form-container">
-		<h1>New Review</h1>
-
-		<label for="City"><b>City</b></label>
-		<input type="text" placeholder="City/village" id="nrCity" required>
-
-		<label for="Street"><b>Street</b></label>
-		<input type="text" placeholder="Street" id="nrStreet" required>
-
-		<label for="Building Number"><b>Building Number</b></label>
-		<input type="text" placeholder="Building Number" id="nrBNumber"  required>
-
-
-		<label for="Floor"><b>Fllor (optional)</b></label>
-		<input type="text" placeholder="Floor (optional)" id="nrBNumber"  required>
-
-		<label for="Side"><b>Side (optional)</b></label>
-		<input type="text" placeholder="Side e.g. left or right (optional)" id="nrBNumber"  required>
+		<p>click on map to set target review location (lat:<b id="selLat" ></b> ,lng: <b id="selLng" ></b>)</p>
+		<input type="hidden" id = "nrLat" value = "" required>
+		<input type="hidden" id = "nrLng" value = "" required>
+		<input type="text" placeholder="Floor (optional)" id="nrFloor">
+		<input type="text" placeholder="Directione.g. left or right (optional)" id="nrSide" >
+		<input type="text" placeholder="Rating from 1 to 5" id="nrRating">
+		<input type="text" placeholder="Give us your feedback about this place" id="nrReview" >
+		Review as Anonymous: <input type="checkbox" id="nrAnon"><br/><br/>
 
 		<button id="newReview" class="btn">Add</button>
 		<button  type="button" class="btn cancel" id="closeNReviewForm" >Close</button>
 	</form>
-</div> 
+</div>
     <div style="border-radius:2%;width:850px;height:600px;" id="map"></div>
   </div>
 

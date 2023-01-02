@@ -23,49 +23,113 @@ const apiOptions = {
 }
 
 // ------------ websocket connection --------------
+var location =function(city = "", street = "", nr = "", floor = "", side = ""){
+	return {city: city, street: street, buildingNumber: nr, floor: floor, side: side }
+}
+
 const socket = new WebSocket('ws://localhost:8000/');
+
+var locations = {}	
+var data = {
+	address: {lat: 41.1579438, lng:-8.629105299999999}
+}	
+
+
+var map
+var markers = []
+
+var iCity = document.getElementById("iCity")
+var iStreet = document.getElementById("iStreet")
+var iBNumber = document.getElementById("iBNumber")
+
+var nrLat = document.getElementById("nrLat")
+var nrLng = document.getElementById("nrLng")
+var nrFloor = document.getElementById("nrFloor")
+var nrSide = document.getElementById("nrSide")
+var nrRating = document.getElementById("nrRating")
+var nrAnon = document.getElementById("nrAnon")
+var nrReview = document.getElementById("nrReview")
+var newReview = document.getElementById("newReview")
+
+const loader = new Loader(apiOptions)
+loader.load().then(() => {
+	map = displayMap(data.address);
+	markers = addMarkers(map, locations);
+});
 
 socket.onopen = function(e) {
     console.log("[open] Connection established");
     console.log("Sending to server");
 
-    const urlParams = new URLSearchParams(window.location.search)
-    var data = {"city": urlParams.get('city')}
-    socket.send(JSON.stringify(data));
+	const urlParams = new URLSearchParams(window.location.search)
+	var data = {"city": urlParams.get('city')}
+	socket.send(JSON.stringify(data));
 };
 
 socket.onerror = function(error) {
    console.log(`[error]`);
 };
 
+
 socket.onmessage = function(event) {
     console.log(`[message] Data received from server: ${event.data}`);
     //document.getElementById("resp").innerHTML += event.data+"<br>"
 
-    var data = JSON.parse(event.data)
+	var data = JSON.parse(event.data)
+	var locations = data.locations
+	
+	if(data.type == "address"){
+	
+		map = displayMap(data.address);
+	}
 
-    var locations = data.locations
-    const loader = new Loader(apiOptions);
+	// Configure the click listener.
+	map.addListener("click", (mapsMouseEvent) => {
+		var coords = mapsMouseEvent.latLng.toJSON()
+		
+		console.log(coords)
+		nrLat.value = coords.lat
+		nrLng.value = coords.lng
+		document.getElementById("selLat").textContent = coords.lat
+		document.getElementById("selLng").textContent = coords.lng
+		
+	});
 
-      loader.load().then(() => {
-        console.log('Maps JS API loaded');
-        const map = displayMap(data.address);
-        const markers = addMarkers(map, locations);
-        clusterMarkers(map, markers[0]);
-        addPanToMarker(map, markers[0], markers[1]);
-      });
+	markers = addMarkers(map, locations);
+	
+	//clustering marks is a bit buggy so lets remove it for now
+	//clusterMarkers(map, markers[0]);
+	addPanToMarker(map, markers[0], markers[1]);
 
 };
 
-document.getElementById("sCity").onclick = function(){
-	var location = {
-		"city": document.getElementById("iCity").value,
-		"street": document.getElementById("iStreet").value,
-		"buildingNumber": document.getElementById("iBNumber").value
-	}
+document.getElementById("sAddress").onclick = function(){
 	
-	socket.send(JSON.stringify(location))
+	socket.send(JSON.stringify(location(iCity.value, iStreet.value), iBNumber.value))
 }
+
+
+/* NEW REVIEW */
+newReview.addEventListener('click', (event) => {
+	
+	var nReview = {
+		type: "createReview",
+		city: iCity.value,
+		nrStreet: iStreet.value,
+		nrBNumber: iBNumber.value,
+		lat: nrLat.value,
+		lng: nrLng.value,
+		nrFloor: nrFloor.value,
+		nrSide: nrSide.value,
+		nrRating: nrRating.value,
+		nrAnon: nrAnon.value,
+		nrReview: nrReview.value
+	}
+		
+	socket.send(JSON.stringify(nReview))
+});
+/* NEW REVIEW*/
+
 
 /*	socket.onclose = function(event) {
 		if (event.wasClean) {
