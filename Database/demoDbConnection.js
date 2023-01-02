@@ -11,14 +11,6 @@ var con = mysql.createConnection({
   database: "Rentify_db"
 });
 
-con.connect(function (err) {
-  if (err) throw err;
-  con.query("SELECT * FROM Users", function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-  });
-});
-
 // testing purposes
 exports.insertUser = async function (city) {
   con.connect(function (err) {
@@ -33,10 +25,3 @@ exports.insertUser = async function (city) {
 }
 
 
-con.connect(function (err) {
-  if (err) throw err;
-  con.query("SELECT * FROM Users", function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-  });
-});
