@@ -3,7 +3,7 @@ const { Server } = require('ws');
 
 const sockserver = new Server({ port: 8000});
 const connections = new Set();
-const conv = require("./convertLocation.js")
+const conv = require("./src/convertLocation.js")
 
 /*var reviews = {
 id:

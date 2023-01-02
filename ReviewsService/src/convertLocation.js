@@ -21,6 +21,7 @@ exports.getLatLng = async function(address){
 	var bNumber = address.buildingNumber || ""	
 	var rAddress = city+", "+street+" "+bNumber || address.city || "Porto"
 
+	console.log(rAddress)
 	var res = await geocoder.geocode(rAddress)
 	
 	return res 

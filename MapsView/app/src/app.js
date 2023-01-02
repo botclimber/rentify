@@ -29,10 +29,10 @@ var location =function(city = "", street = "", nr = "", floor = "", side = ""){
 
 const socket = new WebSocket('ws://localhost:8000/');
 
-var locations = {}	
+var locations = {}
 var data = {
 	address: {lat: 41.1579438, lng:-8.629105299999999}
-}	
+}
 
 
 var map
@@ -77,26 +77,26 @@ socket.onmessage = function(event) {
 
 	var data = JSON.parse(event.data)
 	var locations = data.locations
-	
+
 	if(data.type == "address"){
-	
+
 		map = displayMap(data.address);
 	}
 
 	// Configure the click listener.
 	map.addListener("click", (mapsMouseEvent) => {
 		var coords = mapsMouseEvent.latLng.toJSON()
-		
+
 		console.log(coords)
 		nrLat.value = coords.lat
 		nrLng.value = coords.lng
 		document.getElementById("selLat").textContent = coords.lat
 		document.getElementById("selLng").textContent = coords.lng
-		
+
 	});
 
 	markers = addMarkers(map, locations);
-	
+
 	//clustering marks is a bit buggy so lets remove it for now
 	//clusterMarkers(map, markers[0]);
 	addPanToMarker(map, markers[0], markers[1]);
@@ -104,14 +104,14 @@ socket.onmessage = function(event) {
 };
 
 document.getElementById("sAddress").onclick = function(){
-	
-	socket.send(JSON.stringify(location(iCity.value, iStreet.value), iBNumber.value))
+
+	socket.send(JSON.stringify(location(iCity.value, iStreet.value, iBNumber.value)))
 }
 
 
 /* NEW REVIEW */
 newReview.addEventListener('click', (event) => {
-	
+
 	var nReview = {
 		type: "createReview",
 		city: iCity.value,
@@ -125,7 +125,7 @@ newReview.addEventListener('click', (event) => {
 		nrAnon: nrAnon.value,
 		nrReview: nrReview.value
 	}
-		
+
 	socket.send(JSON.stringify(nReview))
 });
 /* NEW REVIEW*/
@@ -153,7 +153,7 @@ function displayMap(cityCoords) {
   const mapOptions = {
     // change here city coords
     	center: { lat: cityCoords.lat, lng: cityCoords.lng },
-   	
+
 	// zoom must be adapted to user search
 	/* TODO:
 	if searching for a specific street zoom in
@@ -161,7 +161,7 @@ function displayMap(cityCoords) {
 
 	*/
 	 zoom: 20
- 
+
     //mapId: 'YOUR_MAP_ID'
   };
   const mapDiv = document.getElementById('map');
@@ -250,4 +250,3 @@ function drawCircle(map, location) {
   const circle = new google.maps.Circle(circleOptions);
   return circle;
 }
-
