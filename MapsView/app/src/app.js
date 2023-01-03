@@ -42,6 +42,9 @@ var iCity = document.getElementById("iCity")
 var iStreet = document.getElementById("iStreet")
 var iBNumber = document.getElementById("iBNumber")
 
+var nrCity = document.getElementById("nrCity")
+var nrStreet = document.getElementById("nrStreet")
+var nrBNumber = document.getElementById("nrBNumber")
 var nrLat = document.getElementById("nrLat")
 var nrLng = document.getElementById("nrLng")
 var nrFloor = document.getElementById("nrFloor")
@@ -83,18 +86,6 @@ socket.onmessage = function(event) {
 		map = displayMap(data.address);
 	}
 
-	// Configure the click listener.
-	map.addListener("click", (mapsMouseEvent) => {
-		var coords = mapsMouseEvent.latLng.toJSON()
-
-		console.log(coords)
-		nrLat.value = coords.lat
-		nrLng.value = coords.lng
-		document.getElementById("selLat").textContent = coords.lat
-		document.getElementById("selLng").textContent = coords.lng
-
-	});
-
 	markers = addMarkers(map, locations);
 
 	//clustering marks is a bit buggy so lets remove it for now
@@ -114,11 +105,9 @@ newReview.addEventListener('click', (event) => {
 
 	var nReview = {
 		type: "createReview",
-		city: iCity.value,
-		nrStreet: iStreet.value,
-		nrBNumber: iBNumber.value,
-		lat: nrLat.value,
-		lng: nrLng.value,
+		city: nrCity.value,
+		street: nrStreet.value,
+		buildingNumber: nrBNumber.value,
 		nrFloor: nrFloor.value,
 		nrSide: nrSide.value,
 		nrRating: nrRating.value,
@@ -141,13 +130,33 @@ newReview.addEventListener('click', (event) => {
 		}
 	};*/
 // ------------ websocket connection --------------
+
+nrCity.addEventListener('focusout', (event) => {
+
+  socket.send(JSON.stringify(location(nrCity.value)))
+})
+
+nrStreet.addEventListener('focusout', (event) => {
+
+  socket.send(JSON.stringify(location(nrCity.value, nrStreet)))
+})
+
+nrBNumber.addEventListener('focusout', (event) => {
+
+  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
+})
+
 document.getElementById("openNReviewForm").onclick = function(){
+  nrCity.value = iCity.value
+  nrStreet.value = iStreet.value
+  nrBNumber.value = iBNumber.value
 	document.getElementById("myForm").style.display = "block";
 }
 
 document.getElementById("closeNReviewForm").onclick = function(){
 	document.getElementById("myForm").style.display = "none";
 }
+
 
 function displayMap(cityCoords) {
   const mapOptions = {
