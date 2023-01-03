@@ -74,12 +74,13 @@ function create(object) {
   for (let [key, value] of Object.entries(object)) {
     if (key === "id") continue
     columnNames += key + ",";
-    values += `"${value}",`;
+    values += value + ",";
   }
   columnNames = columnNames.slice(0, -1);
   values = values.slice(0, -1);
 
-  // restriction: class has same name as table
+  // restriction: class has same name as table 
+  // another solution: have a property type which will refer to the table name
   var sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
   db.con.query(sql, [values], function (err, result) {
     if (err) throw err;
