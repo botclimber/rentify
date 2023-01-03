@@ -13,6 +13,8 @@ class Review {
 
 class Reviews{
   constructor(){
+
+    // later when getting data from db replace this structure from array to Map
     this.reviews = []
   }
 

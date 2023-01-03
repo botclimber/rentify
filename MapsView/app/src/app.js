@@ -81,13 +81,10 @@ socket.onmessage = function(event) {
 	var data = JSON.parse(event.data)
 	var locations = data.locations
 
-	if(data.type == "address"){
-
+	if(data.type == "address")
 		map = displayMap(data.address);
-	}
 
-	markers = addMarkers(map, locations);
-
+  markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
 	//clustering marks is a bit buggy so lets remove it for now
 	//clusterMarkers(map, markers[0]);
 	addPanToMarker(map, markers[0], markers[1]);
@@ -138,7 +135,7 @@ nrCity.addEventListener('focusout', (event) => {
 
 nrStreet.addEventListener('focusout', (event) => {
 
-  socket.send(JSON.stringify(location(nrCity.value, nrStreet)))
+  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value)))
 })
 
 nrBNumber.addEventListener('focusout', (event) => {
@@ -177,7 +174,13 @@ function displayMap(cityCoords) {
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
-function addMarkers(map, locations) {
+function addMarkers(map, locations, toRemoveMarkers = []) {
+
+  //remove all markers
+  for(let mark of toRemoveMarkers){
+    console.log("TRACE 27: "+mark)
+    mark.setMap(null) }
+
   /*const locations = {
     operaHouse: { lat: -33.8567844, lng: 151.213108 },
     tarongaZoo: { lat: -33.8472767, lng: 151.2188164 },
@@ -213,24 +216,11 @@ function addMarkers(map, locations) {
   return [markers, reviews];
 }
 
-function clusterMarkers(map, markers) {
+/*function clusterMarkers(map, markers) {
   const clustererOptions = { imagePath: './img/m' };
   const markerCluster = new MarkerClusterer(map, markers, clustererOptions);
-}
-
-/*function addPanToMarker(map, markers) {
-  let circle;
-  markers.map(marker => {
-    marker.addListener('click', event => {
-      const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
-      map.panTo(location);
-      if (circle) {
-        circle.setMap(null);
-      }
-      circle = drawCircle(map, location);
-    });
-  });
 }*/
+
 
 function addPanToMarker(map, markers, reviews) {
   let circle;
