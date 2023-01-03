@@ -1,4 +1,4 @@
-// thinking about best approach
+const Db = require("./DB.js")
 
 class Review {
   constructor(address, comment, anon, rating){
@@ -11,11 +11,18 @@ class Review {
   addComment(comment){this.comment.push(comment)}
 }
 
-class Reviews{
+class Reviews extends Db.module{
   constructor(){
 
     // later when getting data from db replace this structure from array to Map
+    super()
     this.reviews = []
+
+  }
+
+  test(){
+
+    console.log(this.con)
   }
 
   exists(review){
@@ -28,6 +35,7 @@ class Reviews{
   }
 
   addReview(review){
+    if(review.address.city != "" && review.address.street != "" && review.address.nr != ""){
     if(this.exists(review)){
       for (let rev of this.reviews){
         if(review.address.coords.lat == rev.address.coords.lat && review.address.coords.lng == rev.address.coords.lng){
@@ -37,6 +45,7 @@ class Reviews{
     }else{
       this.reviews.push(review)
     }
+  }
   }
 
 /*
@@ -58,10 +67,12 @@ idea is to change for db request data
         locations: function(){
           var content = '{'
 
+            var id = 1
           	for(let x of this.reviews){
-          		content += '"m'+x.address.nr+'": {"lat":'+x.address.coords.lat+',"lng": '+x.address.coords.lng+', "reviews":"'+this.buildComments(x.comment)+'"}'
-          		content += (x.address.nr == this.reviews[this.reviews.length - 1].address.nr)? '' : ','
-          	}
+          		content += '"m'+id+'": {"lat":'+x.address.coords.lat+',"lng": '+x.address.coords.lng+', "reviews":"'+this.buildComments(x.comment)+'"}'
+          		content += (id == this.reviews.length)? '' : ','
+              id++
+            }
 
           	content += '}'
 
@@ -72,7 +83,7 @@ idea is to change for db request data
     console.log(data.locations())
     return data
   }
-  
+
   //getOne()
 }
 

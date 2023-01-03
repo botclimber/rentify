@@ -24,7 +24,7 @@ const apiOptions = {
 
 // ------------ websocket connection --------------
 var location =function(city = "", street = "", nr = "", floor = "", side = ""){
-	return {city: city, street: street, buildingNumber: nr, floor: floor, side: side }
+	return {type: "address", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
 }
 
 const socket = new WebSocket('ws://localhost:8000/');
@@ -81,8 +81,7 @@ socket.onmessage = function(event) {
 	var data = JSON.parse(event.data)
 	var locations = data.locations
 
-	if(data.type == "address")
-		map = displayMap(data.address);
+	if(data.type == "address") map = displayMap(data.address);
 
   markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
 	//clustering marks is a bit buggy so lets remove it for now
@@ -130,12 +129,12 @@ newReview.addEventListener('click', (event) => {
 
 nrCity.addEventListener('focusout', (event) => {
 
-  socket.send(JSON.stringify(location(nrCity.value)))
+  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
 })
 
 nrStreet.addEventListener('focusout', (event) => {
 
-  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value)))
+  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
 })
 
 nrBNumber.addEventListener('focusout', (event) => {

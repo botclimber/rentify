@@ -60,8 +60,8 @@ sockserver.on('connection', (ws) => {
 		});
    });
 
-   ws.on('close', () => {
-       connections.delete(ws);
-       console.log('Client has disconnected!');
-   });
+  ws.on('close', () => {
+    connections.delete(ws);
+    console.log('Client has disconnected!');
+  });
 });
