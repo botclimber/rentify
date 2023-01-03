@@ -1,10 +1,9 @@
 // server init goes here
 const { Server } = require('ws');
 
+const Address = require("./src/Address.js")
 const R = require("./src/Reviews.js")
 const Reviews = new R.Reviews()
-
-const Address = require("./src/Address.js")
 
 const sockserver = new Server({ port: 8000});
 const connections = new Set();
@@ -15,8 +14,7 @@ sockserver.on('connection', (ws) => {
    connections.add(ws)
 
    ws.on('message', (data) => {
-       	const dataRec = JSON.parse(data);
-		console.log(dataRec)
+    const dataRec = JSON.parse(data);
 
 		conv.getLatLng(dataRec)
 		.then(res => {
@@ -48,7 +46,7 @@ sockserver.on('connection', (ws) => {
 			console.log(allReviews)
 
 			var response = {
-				type: "address",
+				type: dataRec.type,
 				address: {lat: res[0].latitude, lng: res[0].longitude},
 				locations: JSON.parse(allReviews.locations())
 			}

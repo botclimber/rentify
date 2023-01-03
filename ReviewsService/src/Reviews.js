@@ -72,6 +72,7 @@ idea is to change for db request data
     console.log(data.locations())
     return data
   }
+  
   //getOne()
 }
 
