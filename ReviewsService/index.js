@@ -1,8 +1,8 @@
 // server init goes here
 const { Server } = require('ws');
 
-const Address = require("./src/Address.js")
-const R = require("./src/Reviews.js")
+const Address = require("./src/modules/Address.js")
+const R = require("./src/modules/Reviews.js")
 const Reviews = new R.Reviews()
 
 const sockserver = new Server({ port: 8000});

@@ -99,19 +99,22 @@ document.getElementById("sAddress").onclick = function(){
 /* NEW REVIEW */
 newReview.addEventListener('click', (event) => {
 
-	var nReview = {
-		type: "createReview",
-		city: nrCity.value,
-		street: nrStreet.value,
-		buildingNumber: nrBNumber.value,
-		nrFloor: nrFloor.value,
-		nrSide: nrSide.value,
-		nrRating: nrRating.value,
-		nrAnon: nrAnon.value,
-		nrReview: nrReview.value
+	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
+		var nReview = {
+			type: "createReview",
+			city: nrCity.value,
+			street: nrStreet.value,
+			buildingNumber: nrBNumber.value,
+			nrFloor: nrFloor.value,
+			nrSide: nrSide.value,
+			nrRating: nrRating.value,
+			nrAnon: nrAnon.value,
+			nrReview: nrReview.value
+		}
+		
+		console.log("ANON VALUE: "+nrAnon.value)
+		socket.send(JSON.stringify(nReview))
 	}
-
-	socket.send(JSON.stringify(nReview))
 });
 /* NEW REVIEW*/
 
@@ -126,6 +129,14 @@ newReview.addEventListener('click', (event) => {
 		}
 	};*/
 // ------------ websocket connection --------------
+nrAnon.addEventListener('change', (event) => {
+	
+	switch(nrAnon.value){
+		case "true": nrAnon.value = "false"; break;
+		case "false": nrAnon.value = "true"; break;
+	}
+	
+})
 
 nrCity.addEventListener('focusout', (event) => {
 

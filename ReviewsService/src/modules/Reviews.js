@@ -1,4 +1,4 @@
-const Db = require("./DB.js")
+const Db = require("./Db.js")
 
 class Review {
   constructor(address, comment, anon, rating){
@@ -20,10 +20,7 @@ class Reviews extends Db.module{
 
   }
 
-  test(){
-
-    console.log(this.con)
-  }
+  test(){ console.log(this.con) }
 
   exists(review){
 
