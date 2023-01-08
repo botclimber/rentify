@@ -83,7 +83,22 @@ socket.onmessage = function(event) {
 
 	if(data.type == "address") map = displayMap(data.address);
 
-  markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
+	// Configure the click listener.
+	map.addListener("click", (mapsMouseEvent) => {
+		alert("Place registed! Complete Form and add review")
+		var coords = mapsMouseEvent.latLng.toJSON()
+
+		console.log(coords)
+		nrLat.value = coords.lat
+		nrLng.value = coords.lng
+	
+		nrCity.value = iCity.value
+		nrStreet.value = iStreet.value
+		nrBNumber.value = iBNumber.value
+		document.getElementById("myForm").style.display = "block";
+	});
+
+  	markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
 	//clustering marks is a bit buggy so lets remove it for now
 	//clusterMarkers(map, markers[0]);
 	addPanToMarker(map, markers[0], markers[1]);
@@ -102,6 +117,8 @@ newReview.addEventListener('click', (event) => {
 	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
 		var nReview = {
 			type: "createReview",
+			lat: nrLat.value,
+			lng: nrLng.value,
 			city: nrCity.value,
 			street: nrStreet.value,
 			buildingNumber: nrBNumber.value,
@@ -129,6 +146,32 @@ newReview.addEventListener('click', (event) => {
 		}
 	};*/
 // ------------ websocket connection --------------
+
+function isInputsFilled(){
+	return (iCity.value !== "" && iStreet.value !== "" && iBNumber.value !== "")
+}
+
+const formBtn = document.getElementById("openNReviewForm")
+iCity.addEventListener('focusout', (event) => {
+	
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+	
+})
+
+iStreet.addEventListener('focusout', (event) => {
+	
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+	
+})
+
+iBNumber.addEventListener('focusout', (event) => {
+	
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+	
+})
 nrAnon.addEventListener('change', (event) => {
 	
 	switch(nrAnon.value){
@@ -138,25 +181,14 @@ nrAnon.addEventListener('change', (event) => {
 	
 })
 
-nrCity.addEventListener('focusout', (event) => {
-
-  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
-})
-
-nrStreet.addEventListener('focusout', (event) => {
-
-  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
-})
-
-nrBNumber.addEventListener('focusout', (event) => {
-
-  socket.send(JSON.stringify(location(nrCity.value, nrStreet.value, nrBNumber.value)))
-})
-
 document.getElementById("openNReviewForm").onclick = function(){
-  nrCity.value = iCity.value
-  nrStreet.value = iStreet.value
-  nrBNumber.value = iBNumber.value
+	nrCity.value = iCity.value
+	nrStreet.value = iStreet.value
+	nrBNumber.value = iBNumber.value
+	
+	nrLat.value = ""
+	nrLng.value = ""
+	
 	document.getElementById("myForm").style.display = "block";
 }
 

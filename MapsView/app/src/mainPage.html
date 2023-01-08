@@ -101,11 +101,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
   <div style="top:10%;left:10%;">
     	<div>
 		<form action="#">
-        	<input type="text" id="iCity" placeholder="City/State"/>
-        	<input type="text" id="iStreet" placeholder="Street"/>
-        	<input type="text" id="iBNumber" placeholder="building number"/>
+        	<input type="text" id="iCity" placeholder="City/State" value = ""/>
+        	<input type="text" id="iStreet" placeholder="Street" value = ""/>
+        	<input type="text" id="iBNumber" placeholder="building number" value =""/>
         	<button id="sAddress">Search</button>
-		<button id="openNReviewForm"  >New Review</button>
+		<button id="openNReviewForm" style="display:none" >New Review</button>
 		</form>
 	</div>
 <div class="form-popup" id="myForm">
@@ -118,13 +118,15 @@ body {font-family: Arial, Helvetica, sans-serif;}
 		<input type="text" placeholder="Rating from 1 to 5" id="nrRating">
 		<input type="text" placeholder="Give us your feedback about this place" id="nrReview" required>
 		Review as Anonymous: <input type="checkbox" id="nrAnon" value = "false"><br/><br/>
-
+		<input type="hidden" id="nrLat" value="">
+		<input type="hidden"  id="nrLng" value="">
 		<button id="newReview" class="btn">Add</button>
 		<button  type="button" class="btn cancel" id="closeNReviewForm" >Close</button>
 	</form>
 </div>
     <div style="border-radius:2%;width:850px;height:600px;" id="map"></div>
-  </div>
+	<p style="color:red;font-size:8pt"><b>!Please click on the map if location not precisely pointing to requested place</b></p>  
+</div>
 
 </body>
 

@@ -32,7 +32,7 @@ class Reviews extends Db.module{
   }
 
   addReview(review){
-    if(review.address.city != "" && review.address.street != "" && review.address.nr != ""){
+    if(review.address.city !== "" && review.address.street !== "" && review.address.nr !== ""){
     if(this.exists(review)){
       for (let rev of this.reviews){
         if(review.address.coords.lat == rev.address.coords.lat && review.address.coords.lng == rev.address.coords.lng){
