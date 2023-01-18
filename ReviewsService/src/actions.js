@@ -5,7 +5,7 @@ const Reviews = new R.Reviews()
 
 // ws is an array or list of clients
 exports.actions = (function(ws){
-	
+
 	// ACTION TO SEARCH FOR ADDRESS
 	function address(data){
 		console.log(ws, data)
@@ -31,10 +31,10 @@ exports.actions = (function(ws){
 				ws.forEach((client) => {
 					 client.send(JSON.stringify({status: "rejected",msg: reason}));
 				});
-                        });  
+                        });
 	}
 
-	// ACTION TO INSERT/CREATE NEW REVIEW	
+	// ACTION TO INSERT/CREATE NEW REVIEW
 	function createReview(data){
 		function run(lat,lng){
 
@@ -49,6 +49,7 @@ exports.actions = (function(ws){
 
 			var response = {
 				type: data.type,
+				address: {lat: parseFloat(lat), lng: parseFloat(lng)},
 				locations: JSON.parse(allReviews.locations())
 			}
 

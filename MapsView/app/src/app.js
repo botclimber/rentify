@@ -33,6 +33,7 @@ var data = {
 	address: {lat: 41.1579438, lng:-8.629105299999999}
 }
 
+var mapCounter = 0
 var map
 var markers = []
 
@@ -79,24 +80,25 @@ socket.onmessage = function(event) {
 	var data = JSON.parse(event.data)
 	var locations = data.locations
 
-	if(data.type == "address") map = displayMap(data.address);
+	//if(data.type == "address") map = displayMap(data.address);
+  map = displayMap(data.address);
+  markers = addMarkers(map, locations, markers[0]);
 
-	// Configure the click listener.
+  //clustering marks is a bit buggy so lets remove it for now
+	//clusterMarkers(map, markers[0]);
+	addPanToMarker(map, markers[0], markers[1]);
+
+  // Configure the click listener.
 	map.addListener("click", (mapsMouseEvent) => {
 
 		var coords = mapsMouseEvent.latLng.toJSON()
     reviewFromExisting(coords.lat, coords.lng)
 	});
 
-  	markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
-	//clustering marks is a bit buggy so lets remove it for now
-	//clusterMarkers(map, markers[0]);
-	addPanToMarker(map, markers[0], markers[1]);
-
 };
 
 function reviewFromExisting(lat, lng){
-  alert("Place registed! Complete Form and add review")
+  console.log('Place registed! complete Form and add review ('+lat+', '+lng+')')
   console.info(lat, lng)
   nrLat.value = lat
   nrLng.value = lng
@@ -201,7 +203,6 @@ document.getElementById("closeNReviewForm").onclick = function(){
 	document.getElementById("myForm").style.display = "none";
 }
 
-
 function displayMap(cityCoords) {
   const mapOptions = {
     // change here city coords
@@ -217,7 +218,8 @@ function displayMap(cityCoords) {
 
     //mapId: 'YOUR_MAP_ID'
   };
-  const mapDiv = document.getElementById('map');
+
+  const mapDiv = document.getElementById("map");
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
@@ -277,7 +279,7 @@ function addPanToMarker(map, markers, reviews) {
     marker.addListener('click', event => {
       const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 
-      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){alert('Place registed! Complete Form and add review [marker click]'); console.info("+location.lat+", "+location.lng+"); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.type = 'hidden'; nrStreet.type = 'hidden'; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';})();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
+      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';})();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
       infoWindow.open(map, marker);
 
     });
