@@ -32,9 +32,9 @@ exports.module = class DB{
 	connect(){
 
 		this.con.connect(function (err) {
-	    if (err) throw err;
-	    console.log("Connected to DB!");
-	  });
+	    		if (err) throw err;
+	    		console.log("Connected to DB!");
+	  	});
 	}
 
 	/* TODO:

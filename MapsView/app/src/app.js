@@ -34,7 +34,6 @@ var data = {
 	address: {lat: 41.1579438, lng:-8.629105299999999}
 }
 
-
 var map
 var markers = []
 
@@ -65,8 +64,7 @@ socket.onopen = function(e) {
     console.log("Sending to server");
 
 	const urlParams = new URLSearchParams(window.location.search)
-	var data = {"city": urlParams.get('city')}
-	socket.send(JSON.stringify(data));
+	socket.send(JSON.stringify(location(urlParams.get('city'))));
 };
 
 socket.onerror = function(error) {
@@ -91,7 +89,7 @@ socket.onmessage = function(event) {
 		console.log(coords)
 		nrLat.value = coords.lat
 		nrLng.value = coords.lng
-	
+
 		nrCity.value = iCity.value
 		nrStreet.value = iStreet.value
 		nrBNumber.value = iBNumber.value
@@ -128,7 +126,7 @@ newReview.addEventListener('click', (event) => {
 			nrAnon: nrAnon.value,
 			nrReview: nrReview.value
 		}
-		
+
 		console.log("ANON VALUE: "+nrAnon.value)
 		socket.send(JSON.stringify(nReview))
 	}
@@ -153,42 +151,42 @@ function isInputsFilled(){
 
 const formBtn = document.getElementById("openNReviewForm")
 iCity.addEventListener('focusout', (event) => {
-	
+
 	if(isInputsFilled()) formBtn.style.display=""
 	else formBtn.style.display="none"
-	
+
 })
 
 iStreet.addEventListener('focusout', (event) => {
-	
+
 	if(isInputsFilled()) formBtn.style.display=""
 	else formBtn.style.display="none"
-	
+
 })
 
 iBNumber.addEventListener('focusout', (event) => {
-	
+
 	if(isInputsFilled()) formBtn.style.display=""
 	else formBtn.style.display="none"
-	
+
 })
 nrAnon.addEventListener('change', (event) => {
-	
+
 	switch(nrAnon.value){
 		case "true": nrAnon.value = "false"; break;
 		case "false": nrAnon.value = "true"; break;
 	}
-	
+
 })
 
 document.getElementById("openNReviewForm").onclick = function(){
 	nrCity.value = iCity.value
 	nrStreet.value = iStreet.value
 	nrBNumber.value = iBNumber.value
-	
+
 	nrLat.value = ""
 	nrLng.value = ""
-	
+
 	document.getElementById("myForm").style.display = "block";
 }
 
