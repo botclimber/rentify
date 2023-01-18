@@ -110,13 +110,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	</div>
 <div class="form-popup" id="myForm">
 	<form action="#" class="form-container">
-    <input type="text" placeholder="City" id="nrCity" required>
-    <input type="text" placeholder="Street" id="nrStreet" required>
-    <input type="text" placeholder="Port Number" id="nrBNumber" required>
+    <input type="text" placeholder="City" id="nrCity" name="nrCity" value="" required>
+    <input type="text" placeholder="Street" id="nrStreet" name="nrStreet" value="" required>
+    <input type="text" placeholder="Port Number" id="nrBNumber" name="nrBNumber" value="" required>
 		<input type="text" placeholder="Floor (optional)" id="nrFloor">
 		<input type="text" placeholder="Directione.g. left or right (optional)" id="nrSide" >
 		<input type="text" placeholder="Rating from 1 to 5" id="nrRating">
-		<input type="text" placeholder="Give us your feedback about this place" id="nrReview" required>
+		<input type="text" placeholder="Give us your feedback about this place" id="nrReview" name="nrReview" value="" required>
 		Review as Anonymous: <input type="checkbox" id="nrAnon" value = "false"><br/><br/>
 		<input type="hidden" id="nrLat" value="">
 		<input type="hidden"  id="nrLng" value="">
@@ -125,9 +125,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	</form>
 </div>
     <div style="border-radius:2%;width:850px;height:600px;" id="map"></div>
-	<p style="color:red;font-size:8pt"><b>!Please click on the map if location not precisely pointing to requested place</b></p>  
+	<p style="color:red;font-size:8pt"><b>!Please click on the map if location not precisely pointing to requested place</b></p>
 </div>
-
 </body>
 
 </html>

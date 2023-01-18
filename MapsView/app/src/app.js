@@ -17,7 +17,6 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
-
 const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
@@ -53,6 +52,7 @@ var nrAnon = document.getElementById("nrAnon")
 var nrReview = document.getElementById("nrReview")
 var newReview = document.getElementById("newReview")
 
+
 const loader = new Loader(apiOptions)
 loader.load().then(() => {
 	map = displayMap(data.address);
@@ -83,17 +83,9 @@ socket.onmessage = function(event) {
 
 	// Configure the click listener.
 	map.addListener("click", (mapsMouseEvent) => {
-		alert("Place registed! Complete Form and add review")
+
 		var coords = mapsMouseEvent.latLng.toJSON()
-
-		console.log(coords)
-		nrLat.value = coords.lat
-		nrLng.value = coords.lng
-
-		nrCity.value = iCity.value
-		nrStreet.value = iStreet.value
-		nrBNumber.value = iBNumber.value
-		document.getElementById("myForm").style.display = "block";
+    reviewFromExisting(coords.lat, coords.lng)
 	});
 
   	markers = (data.type == "address")? addMarkers(map, locations) : addMarkers(map, locations, markers[0]);
@@ -103,11 +95,26 @@ socket.onmessage = function(event) {
 
 };
 
+function reviewFromExisting(lat, lng){
+  alert("Place registed! Complete Form and add review")
+  console.info(lat, lng)
+  nrLat.value = lat
+  nrLng.value = lng
+
+  nrCity.type= 'text'
+  nrStreet.type = 'text'
+  nrBNumber.type = 'text'
+
+  nrCity.value = iCity.value
+  nrStreet.value = iStreet.value
+  nrBNumber.value = iBNumber.value
+  document.getElementById("myForm").style.display = "block";
+}
+
 document.getElementById("sAddress").onclick = function(){
 
 	socket.send(JSON.stringify(location(iCity.value, iStreet.value, iBNumber.value)))
 }
-
 
 /* NEW REVIEW */
 newReview.addEventListener('click', (event) => {
@@ -268,9 +275,9 @@ function addPanToMarker(map, markers, reviews) {
 
   markers.map( (marker, idx) => {
     marker.addListener('click', event => {
-      //const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+      const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 
-      infoWindow.setContent("<div style = 'width:500px;min-height:40px'>" + reviews[idx] + "</div>");
+      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){alert('Place registed! Complete Form and add review [marker click]'); console.info("+location.lat+", "+location.lng+"); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.type = 'hidden'; nrStreet.type = 'hidden'; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';})();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
       infoWindow.open(map, marker);
 
     });
