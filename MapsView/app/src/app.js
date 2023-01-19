@@ -227,7 +227,6 @@ function addMarkers(map, locations, toRemoveMarkers = []) {
 
   //remove all markers
   for(let mark of toRemoveMarkers){
-    console.log("TRACE 27: "+mark)
     mark.setMap(null) }
 
   /*const locations = {

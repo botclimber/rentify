@@ -10,28 +10,28 @@ exports.actions = (function(ws){
 	function address(data){
 		console.log(ws, data)
 		conv.getLatLng(data)
-                        .then(res => {
+        .then(res => {
 
-				var allReviews = Reviews.getAll()
-				console.log(allReviews)
+					var allReviews = Reviews.getAll()
+					console.log(allReviews)
 
-				var response = {
-					type: data.type,
-					address: {lat: res[0].latitude, lng: res[0].longitude},
-					locations: JSON.parse(allReviews.locations())
-				}
+					var response = {
+						type: data.type,
+						address: {lat: res[0].latitude, lng: res[0].longitude},
+						locations: JSON.parse(allReviews.locations())
+					}
 
-				ws.forEach((client) => {
-					 client.send(JSON.stringify(response));
-				});
+					ws.forEach((client) => {
+						 client.send(JSON.stringify(response));
+					});
 
-                        }).catch( reason => {
+        }).catch( reason => {
 
-				console.log(reason)
-				ws.forEach((client) => {
-					 client.send(JSON.stringify({status: "rejected",msg: reason}));
-				});
-                        });
+					console.log(reason)
+					ws.forEach((client) => {
+						 client.send(JSON.stringify({status: "rejected",msg: reason}));
+					});
+        });
 	}
 
 	// ACTION TO INSERT/CREATE NEW REVIEW
