@@ -3,7 +3,7 @@ const geo = require("node-geocoder")
 var options = {
   provider: 'google',
   httpAdapter: 'https', // Default
-  apiKey: 'AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ', // for Mapquest, OpenCage, Google Premier
+  apiKey: process.env.API_KEY, // for Mapquest, OpenCage, Google Premier
   formatter: 'json' // 'gpx', 'string', ...
 };
 

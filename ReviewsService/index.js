@@ -3,7 +3,7 @@ const { Server } = require('ws');
 
 const actions = require("./src/actions.js")
 
-const sockserver = new Server({ port: 8000});
+const sockserver = new Server({ port: process.env.PORT});
 const connections = new Set();
 
 sockserver.on('connection', (ws) => {
