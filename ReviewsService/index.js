@@ -5,7 +5,7 @@ const Address = require("./src/modules/Address.js")
 const R = require("./src/modules/Reviews.js")
 const Reviews = new R.Reviews()
 
-const sockserver = new Server({ port: 8000});
+const sockserver = new Server({ port: process.env.PORT});
 const connections = new Set();
 const conv = require("./src/convertLocation.js")
 
