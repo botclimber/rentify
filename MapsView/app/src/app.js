@@ -17,50 +17,131 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
-
 const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
 
 // ------------ websocket connection --------------
+var location =function(city = "", street = "", nr = "", floor = "", side = ""){
+	return {type: "address", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
+}
+
 const socket = new WebSocket('ws://localhost:8000/');
+
+var locations = {}
+var data = {
+	address: {lat: 41.1579438, lng:-8.629105299999999}
+}
+
+var mapCounter = 0
+var map
+var markers = []
+
+var iCity = document.getElementById("iCity")
+var iStreet = document.getElementById("iStreet")
+var iBNumber = document.getElementById("iBNumber")
+
+var nrCity = document.getElementById("nrCity")
+var nrStreet = document.getElementById("nrStreet")
+var nrBNumber = document.getElementById("nrBNumber")
+var nrLat = document.getElementById("nrLat")
+var nrLng = document.getElementById("nrLng")
+var nrFloor = document.getElementById("nrFloor")
+var nrSide = document.getElementById("nrSide")
+var nrRating = document.getElementById("nrRating")
+var nrAnon = document.getElementById("nrAnon")
+var nrReview = document.getElementById("nrReview")
+var newReview = document.getElementById("newReview")
+
+
+const loader = new Loader(apiOptions)
+loader.load().then(() => {
+	map = displayMap(data.address);
+	markers = addMarkers(map, locations);
+});
 
 socket.onopen = function(e) {
     console.log("[open] Connection established");
     console.log("Sending to server");
 
-    const urlParams = new URLSearchParams(window.location.search)
-    var data = {"city": urlParams.get('city')}
-    socket.send(JSON.stringify(data));
+	const urlParams = new URLSearchParams(window.location.search)
+	socket.send(JSON.stringify(location(urlParams.get('city'))));
 };
 
 socket.onerror = function(error) {
    console.log(`[error]`);
 };
 
+
 socket.onmessage = function(event) {
     console.log(`[message] Data received from server: ${event.data}`);
     //document.getElementById("resp").innerHTML += event.data+"<br>"
 
-    var data = JSON.parse(event.data)
+	var data = JSON.parse(event.data)
+	var locations = data.locations
 
-    var locations = data.locations
-    const loader = new Loader(apiOptions);
+	//if(data.type == "address") map = displayMap(data.address);
+  map = displayMap(data.address);
+  markers = addMarkers(map, locations, markers[0]);
 
-      loader.load().then(() => {
-        console.log('Maps JS API loaded');
-        const map = displayMap(data.city);
-        const markers = addMarkers(map, locations);
-        clusterMarkers(map, markers[0]);
-        addPanToMarker(map, markers[0], markers[1]);
-      });
+  //clustering marks is a bit buggy so lets remove it for now
+	//clusterMarkers(map, markers[0]);
+	addPanToMarker(map, markers[0], markers[1]);
+
+  // Configure the click listener.
+	map.addListener("click", (mapsMouseEvent) => {
+
+		var coords = mapsMouseEvent.latLng.toJSON()
+    reviewFromExisting(coords.lat, coords.lng)
+	});
 
 };
 
-document.getElementById("sCity").onclick = function(){
-	
-	socket.send(JSON.stringify({"city": document.getElementById("iCity").value}))
+function reviewFromExisting(lat, lng){
+  console.log('Place registed! complete Form and add review ('+lat+', '+lng+')')
+  console.info(lat, lng)
+  nrLat.value = lat
+  nrLng.value = lng
+
+  nrCity.type= 'text'
+  nrStreet.type = 'text'
+  nrBNumber.type = 'text'
+
+  nrCity.value = iCity.value
+  nrStreet.value = iStreet.value
+  nrBNumber.value = iBNumber.value
+  document.getElementById("myForm").style.display = "block";
 }
+
+document.getElementById("sAddress").onclick = function(){
+
+	socket.send(JSON.stringify(location(iCity.value, iStreet.value, iBNumber.value)))
+}
+
+/* NEW REVIEW */
+newReview.addEventListener('click', (event) => {
+
+	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
+		var nReview = {
+			type: "createReview",
+			lat: nrLat.value,
+			lng: nrLng.value,
+			city: nrCity.value,
+			street: nrStreet.value,
+			buildingNumber: nrBNumber.value,
+			nrFloor: nrFloor.value,
+			nrSide: nrSide.value,
+			nrRating: nrRating.value,
+			nrAnon: nrAnon.value,
+			nrReview: nrReview.value
+		}
+
+		console.log("ANON VALUE: "+nrAnon.value)
+		socket.send(JSON.stringify(nReview))
+	}
+});
+/* NEW REVIEW*/
+
 
 /*	socket.onclose = function(event) {
 		if (event.wasClean) {
@@ -73,18 +154,81 @@ document.getElementById("sCity").onclick = function(){
 	};*/
 // ------------ websocket connection --------------
 
+function isInputsFilled(){
+	return (iCity.value !== "" && iStreet.value !== "" && iBNumber.value !== "")
+}
+
+const formBtn = document.getElementById("openNReviewForm")
+iCity.addEventListener('focusout', (event) => {
+
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+
+})
+
+iStreet.addEventListener('focusout', (event) => {
+
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+
+})
+
+iBNumber.addEventListener('focusout', (event) => {
+
+	if(isInputsFilled()) formBtn.style.display=""
+	else formBtn.style.display="none"
+
+})
+nrAnon.addEventListener('change', (event) => {
+
+	switch(nrAnon.value){
+		case "true": nrAnon.value = "false"; break;
+		case "false": nrAnon.value = "true"; break;
+	}
+
+})
+
+document.getElementById("openNReviewForm").onclick = function(){
+	nrCity.value = iCity.value
+	nrStreet.value = iStreet.value
+	nrBNumber.value = iBNumber.value
+
+	nrLat.value = ""
+	nrLng.value = ""
+
+	document.getElementById("myForm").style.display = "block";
+}
+
+document.getElementById("closeNReviewForm").onclick = function(){
+	document.getElementById("myForm").style.display = "none";
+}
+
 function displayMap(cityCoords) {
   const mapOptions = {
     // change here city coords
-    center: { lat: cityCoords.lat, lng: cityCoords.lng },
-    zoom: 10
+    	center: { lat: cityCoords.lat, lng: cityCoords.lng },
+
+	// zoom must be adapted to user search
+	/* TODO:
+	if searching for a specific street zoom in
+	if searching for city zoom out
+
+	*/
+	 zoom: 20
+
     //mapId: 'YOUR_MAP_ID'
   };
-  const mapDiv = document.getElementById('map');
+
+  const mapDiv = document.getElementById("map");
   return new google.maps.Map(mapDiv, mapOptions);
 }
 
-function addMarkers(map, locations) {
+function addMarkers(map, locations, toRemoveMarkers = []) {
+
+  //remove all markers
+  for(let mark of toRemoveMarkers){
+    mark.setMap(null) }
+
   /*const locations = {
     operaHouse: { lat: -33.8567844, lng: 151.213108 },
     tarongaZoo: { lat: -33.8472767, lng: 151.2188164 },
@@ -120,24 +264,11 @@ function addMarkers(map, locations) {
   return [markers, reviews];
 }
 
-function clusterMarkers(map, markers) {
+/*function clusterMarkers(map, markers) {
   const clustererOptions = { imagePath: './img/m' };
   const markerCluster = new MarkerClusterer(map, markers, clustererOptions);
-}
-
-/*function addPanToMarker(map, markers) {
-  let circle;
-  markers.map(marker => {
-    marker.addListener('click', event => {
-      const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
-      map.panTo(location);
-      if (circle) {
-        circle.setMap(null);
-      }
-      circle = drawCircle(map, location);
-    });
-  });
 }*/
+
 
 function addPanToMarker(map, markers, reviews) {
   let circle;
@@ -145,9 +276,9 @@ function addPanToMarker(map, markers, reviews) {
 
   markers.map( (marker, idx) => {
     marker.addListener('click', event => {
-      //const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
+      const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 
-      infoWindow.setContent("<div style = 'width:500px;min-height:40px'>" + reviews[idx] + "</div>");
+      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';})();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
       infoWindow.open(map, marker);
 
     });
