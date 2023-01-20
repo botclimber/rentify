@@ -11,7 +11,7 @@ this.con.query(sql, function (err, result) {
 */
 var mysql = require('mysql2');
 
-exports.module = class DB{
+module.exports = class DB{
 
 	// create hidden .env variables to do connection
 	constructor(){

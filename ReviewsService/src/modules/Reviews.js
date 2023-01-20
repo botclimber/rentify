@@ -11,7 +11,7 @@ class Review {
   addComment(comment){this.comment.push(comment)}
 }
 
-class Reviews extends Db.module{
+class Reviews extends Db{
   constructor(){
 
     // later when getting data from db replace this structure from array to Map

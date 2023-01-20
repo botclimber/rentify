@@ -8,7 +8,8 @@ Create Table Addresses (
   city varchar(100) not null,
   street varchar(255) not null,
   nr varchar(5) not null,
-  state varchar(50) not null,
+  floor varchar(50) not null,
+  direction varchar(50) not null,
   postalCode varchar(20) not null,
   country varchar(100) not null,
   PRIMARY KEY (id)

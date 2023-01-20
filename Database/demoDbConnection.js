@@ -1,11 +1,12 @@
 // small demo of a connection to the DB with:
 // a Select statement in the Users table
 // inser statement in Users table using city
-
-var mysql = require('mysql2');
+const mysql = require('mysql2');
+const addr = require('./Address.js')
+const DB = require('./Db.js')
 
 // testing purposes
-exports.addUser = async function (city) {
+/*exports.addUser = async function (city) {
   con.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
@@ -15,59 +16,19 @@ exports.addUser = async function (city) {
       console.log("1 record inserted");
     });
   });
-}
+}*/
+console.log(DB)
 
+const db = new DB;
+const addresses = new Array(5).fill().map((_, key) => new addr(city = 'city '+key, street = 'street' + key, nr = 'nr '+key, floor = 'floor '+key, direction = 'dir '+key, lat = key, lng = key+1, postalCode = 'posCode '+key, country = 'country '+key))
 
-class DB {
-
-  // create hidden .env variables to do connection
-  constructor() {
-
-    this.con = mysql.createConnection({
-      host: "localhost",
-      user: "root", // switch to your current user
-      password: "admin", // switch to your current password
-      database: "Rentify_DB"
-    });
-
-    // test connection
-    this.connect()
-  }
-
-  connect() {
-    this.con.connect(function (err) {
-      if (err) throw err;
-      console.log("Connected to DB!");
-    });
-  }
-
-  // to investigate if having a generic crud operation like this makes sense
-
-
-  /* TODO:
-  - generic CRUD methods
-  */
-
-}
-
-var db = new DB();
-
-class Users {
-  constructor() {
-    this.id;
-    this.email = "u";
-    this.username = "u";
-    this.password = "u";
-    this.name = "u";
-  }
-}
-
-var user = new Users();
-
-create(user);
+addresses.map(row => {
+  console.info(row)
+  db.insert(row)
+})
 
 // check if a super generic insert command makes sense
-function create(object) {
+/*function create(object) {
   var columnNames = "";
   var values = "";
 
@@ -79,12 +40,11 @@ function create(object) {
   columnNames = columnNames.slice(0, -1);
   values = values.slice(0, -1);
 
-  // restriction: class has same name as table 
+  // restriction: class has same name as table
   // another solution: have a property type which will refer to the table name
   var sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
   db.con.query(sql, [values], function (err, result) {
     if (err) throw err;
     console.log("1 record inserted");
   });
-}
-
+}*/
