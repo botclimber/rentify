@@ -18,33 +18,37 @@ const DB = require('./Db.js')
   });
 }*/
 console.log(DB)
-
 const db = new DB;
-const addresses = new Array(5).fill().map((_, key) => new addr(city = 'city '+key, street = 'street' + key, nr = 'nr '+key, floor = 'floor '+key, direction = 'dir '+key, lat = key, lng = key+1, postalCode = 'posCode '+key, country = 'country '+key))
+//const addresses = new Array(5).fill().map((_, key) => new addr(city = 'city '+key, street = 'street' + key, nr = 'nr '+key, floor = 'floor '+key, direction = 'dir '+key, lat = key, lng = key+1, postalCode = 'posCode '+key, country = 'country '+key))
 
-addresses.map(row => {
-  console.info(row)
-  db.insert(row)
+
+// MULTIPLE INSERTS EXAMPLE
+/*addresses.map(row => {
+	console.info(row)
+	db.insert(row)
+	.then(res => console.log('returned ID: '+res))
+	.catch(err => console.log(err))
+})*/
+var toTestWith = new addr(city = 'city drake', street = 'street drake', nr = 162, floor = 'floor drake', direction = 'dir drake', lat = 27, lng = 27, postalCode = 'posCode drake', country = 'country drake') 
+
+// SINGLE INSERT EXAMPLE
+db.insert(toTestWith)
+.then(res => console.log('ID: '+res))
+.catch(err => console.log(err))
+
+// SELECT ALL EXAMPLE
+db.selectAll('Addresses')
+.then(res => {
+	console.table(res)
 })
+.catch(err => console.log(err))
 
-// check if a super generic insert command makes sense
-/*function create(object) {
-  var columnNames = "";
-  var values = "";
+// UPDATE EXAMPLE
+db.update({tableName: 'Addresses', id: 2, columns: ['city', 'street'], values: ['Travis Scott', 'sicko mode']})
 
-  for (let [key, value] of Object.entries(object)) {
-    if (key === "id") continue
-    columnNames += key + ",";
-    values += value + ",";
-  }
-  columnNames = columnNames.slice(0, -1);
-  values = values.slice(0, -1);
+// SELECT ONE EXAMPLE
+db.selectOne('Addresses', 2)
+.then(res => console.log('Single get: '+res.city))
+.catch(err => console.log(err))
 
-  // restriction: class has same name as table
-  // another solution: have a property type which will refer to the table name
-  var sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
-  db.con.query(sql, [values], function (err, result) {
-    if (err) throw err;
-    console.log("1 record inserted");
-  });
-}*/
+db.close()

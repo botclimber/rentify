@@ -15,7 +15,6 @@ var mysql = require('mysql2');
 module.exports = class DB{
 
 	#sqlValuesTypeSafer = (value) => {
-		console.log(value)
 		switch (typeof(value)) {
 			case 'string': return '"'+value+'"';break;
 			default: return value
@@ -30,7 +29,8 @@ module.exports = class DB{
 		  host: "localhost",
 		  user: "root"  , // switch to your current user
 		  password: "greedisgood", // switch to your current password
-		  database: "renReviews_db"
+		  database: "renReviews_db",
+		  waitForConnections: true
 		});
 
 		// test connection
@@ -45,21 +45,15 @@ module.exports = class DB{
 	    		console.log("Connected to DB!");
 	  	});
 	}
-
-
-
-	/* TODO:
-	- generic CRUD methods
-	*/
-
+	
+	
 	/**
-	TODO - change return state
 	return value for this method should be the id from new created/inserted row
 
 	@method insert
 	@retrun unit
 	*/
-	insert(object) {
+	async insert(object) {
 		console.log('Inserting data into '+object.constructor.name+'...')
 
 		const columnNames = Object.keys(object).join(',')
@@ -67,31 +61,69 @@ module.exports = class DB{
 
 		const sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
 
-		/* Maybe we can replace this with the functional approach above
-		var columnNames = "";
-	  var values = "";
+		const res = await this.con.promise().execute(sql);
+		return res[0].insertId
+	}
+	
 
-		for (let [key, value] of Object.entries(object)) {
-	    if (key === "id") continue // not sure if this will be really needed
-	    columnNames += key + ",";
-	    values += value + ",";
-	  }
+	/**
+	@tableName: String
+	*/
+	async selectAll(tableName){
+		console.log('Getting all data from '+tableName+'...')
+		
+		const sql = 'SELECT * FROM '+tableName
+		
+		const res = await this.con.promise().execute(sql)
+		return res[0]
+	}	
 
-	  columnNames = columnNames.slice(0, -1);
-	  values = values.slice(0, -1);
-		*/
+	async selectOne(tableName, id){
 
-	  // restriction: class has same name as table
-	  // another solution: have a property type which will refer to the table name
+		console.log('Getting data from '+tableName+' where id is '+id)
+		
+		const sql = 'SELECT * FROM '+tableName+' WHERE id = ?' 
+		
+		const res = await this.con.promise().execute(sql, [id])
+		return res[0][0]
+	}
+	
 
-		console.log(columnNames)
-		console.log(values)
-		console.log(sql)
+	/**
+	@chgConfig= {tableName: ,id: , columns: [], values: []} :object
+	@return void
+	*/
+	async update(chgConfig){
+			
+		console.log('Updating data on table '+chgConfig.tableName)		
 
-	  this.con.query(sql, [values], function (err, result) {
-	    if (err) throw err;
-	    console.log("record inserted "+ result);
-	  });
+		const toBeUpdated = chgConfig.columns.map( (value, key) => value+'='+this.#sqlValuesTypeSafer(chgConfig.values[key])).join()
+		const sql = 'UPDATE '+chgConfig.tableName+' SET '+toBeUpdated+' WHERE id = '+chgConfig.id
+
+		const res = await this.con.execute(sql, function(err, result){
+			if(err) throw err;
+			else console.log(result.changedRows+" row(s) updated")
+		})
+
 	}
 
+	/**
+	we should think about what we really want to delete
+	*/
+	//del(){}
+
+	close(){
+		this.con.end(function(err){
+			if(err) throw err;
+			console.log("Connection closed!");
+		})
+	}
 }
+
+
+
+
+
+
+
+
