@@ -4,7 +4,7 @@ const exec  = require('child_process').exec;
 
 gulp.task('start', function (cb) {
 	
-    exec('npm start >> log.txt', {
+    exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
         cwd: 'ReviewsService/',
     },function (err, stdout, stderr) {
         console.log(stdout);
