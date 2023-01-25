@@ -1,10 +1,16 @@
 const conv = require("./convertLocation.js")
-const addrInfo= require("./modules/Address.js")
-const R = require("./modules/Reviews.js")
-const Reviews = new R.Reviews()
+// Classes
+const Db = require("./Db.js")
+const addrInfo = require("./model/Address.js")
+const Review = require("./model/Review.js")
+
+const helper = {
+
+}
 
 // ws is an array or list of clients
 exports.actions = (function(ws){
+	const DbInstance = new Db()
 
 	// ACTION TO SEARCH FOR ADDRESS
 	function address(data){
@@ -13,21 +19,74 @@ exports.actions = (function(ws){
         .then(res => {
 
 					console.info("Getting all reviews ...")
-					var allReviews = Reviews.getAll()
-					console.log(allReviews)
 
-					console.info("assembling response ...")
-					var response = {
-						type: data.type,
-						address: {lat: res[0].latitude, lng: res[0].longitude},
-						locations: JSON.parse(allReviews.locations())
-					}
-					console.log(response)
+					DbInstance.selectAll('Reviews')
+					.then(res => {
+						const assembledData = res.map(row => {
+							DbInstance.selectOne('ResidenceAddress', row.residenceId)
+							.then(resRow => {
+								resRow.map(resDataRow => {
+									DbInstance.selectOne('Addresses', resDataRow.addressId)
+									.then(addrRes => addrResult)
+									.catch(err => console.log(err))
+								})
+							})
+							.catch(err => console.log(err))
+						})
 
-					console.log("sending response to client")
-					ws.forEach((client) => {
-						 client.send(JSON.stringify(response));
-					});
+						console.info("assembling response ...")
+						console.log(assembledData)
+						var response = {
+							type: data.type,
+							address: {lat: res[0].latitude, lng: res[0].longitude},
+							locations: "none",
+							data: assembledData
+						}
+						console.log(response)
+
+						console.log("sending response to client")
+						ws.forEach((client) => {
+							 client.send(JSON.stringify(response));
+						});
+
+					})
+					.catch(err => console.log(err))
+
+					// PROMISES ARE SO FKING VERBOSE
+					/*DbInstance.selectAll('Reviews')
+					.then(res => res.forEach(row => {
+						console.log("Review: "+row)
+
+						DbInstance.selectOne('ResidenceAddresses', row.residenceId)
+						.then( residenceData => {
+							console.log("ResidenceAddress: "+residenceData)
+
+							residenceData.forEach(addrId => {
+								DbInstance.selectOne('Addresses', residenceData.addrId)
+								.then(addrData => {
+									console.log("Address: "+addrData)
+									// TODO: use all get data and assemble a response from it
+									console.info("assembling response ...")
+									const response = {
+										type: data.type,
+										address: {lat: res[0].latitude, lng: res[0].longitude},
+										locations: "none for now",
+										reviews:
+									}
+									console.log(response)
+
+									console.log("sending response to client")
+									ws.forEach((client) => {
+										 client.send(JSON.stringify(response));
+									});
+
+								})
+								.catch(err => console.log(err))
+							})
+						})
+						.catch(err => console.log(err))
+					}))
+					.catch(err => console.log(err)) */
 
         }).catch( reason => {
 

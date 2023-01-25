@@ -18,7 +18,7 @@ sockserver.on('connection', (ws) => {
 
   	switch(action){
   		case "address": actions.actions([ws]).address(dataRec); break;
-  		case "createReview": actions.actions([ws]).createReview(dataRec); break;
+  		//case "createReview": actions.actions([ws]).createReview(dataRec); break;
   	}
    });
 

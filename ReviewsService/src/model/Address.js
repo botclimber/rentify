@@ -12,7 +12,7 @@ class Addresses {
 
 class ResidenceAddresses{
 	constructor(addrId, floor, direction){
-		
+
 		this.addressId = addrId
 		this.floor = floor
 		this.direction = direction
@@ -20,4 +20,6 @@ class ResidenceAddresses{
 }
 
 
-module.exports = {Addresses, ResidenceAddresses} 
+module.exports = {
+  Addresses: Addresses,
+  ResidenceAddresses: ResidenceAddresses}
