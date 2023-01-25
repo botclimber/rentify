@@ -1,5 +1,5 @@
 const conv = require("./convertLocation.js")
-const Address = require("./modules/Address.js")
+const addrInfo= require("./modules/Address.js")
 const R = require("./modules/Reviews.js")
 const Reviews = new R.Reviews()
 

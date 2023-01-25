@@ -1,11 +1,23 @@
-module.exports = class Address {
-  constructor(city, street, nr, floor, direction, lat, lng){
+class Addresses {
+  constructor(lat, lng, city, street, nr, postalCode, country){
+    this.lat = lat
+    this.lng = lng
     this.city = city
     this.street = street
     this.nr = nr
-    this.floor = floor
-    this.direction = direction
-    this.coords = {lat: lat, lng: lng}
+    this.postalCode = postalCode
+    this.country = country
   }
-
 }
+
+class ResidenceAddresses{
+	constructor(addrId, floor, direction){
+		
+		this.addressId = addrId
+		this.floor = floor
+		this.direction = direction
+	}
+}
+
+
+module.exports = {Addresses, ResidenceAddresses} 

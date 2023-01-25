@@ -8,8 +8,6 @@ Create Table Addresses (
   city varchar(100) not null,
   street varchar(255) not null,
   nr varchar(5) not null,
-  floor varchar(50) not null,
-  direction varchar(50) not null,
   postalCode varchar(20) not null,
   country varchar(100) not null,
   PRIMARY KEY (id)
@@ -20,7 +18,6 @@ Create Table ResidenceAddresses (
   addressId int not null,
   floor varchar(50) not null,
   direction varchar(50) not null,
-  nr varchar(5) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
 );
@@ -30,7 +27,7 @@ Create Table Reviews (
   userId int not null,
   adminId int not null,
   residenceId int not null,
-  description text not null,
+  review text not null,
   rating int not null,
   createdOn datetime not null,
   approvedOn datetime,

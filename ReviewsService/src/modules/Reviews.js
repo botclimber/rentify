@@ -1,14 +1,18 @@
 const Db = require("./Db.js")
 
 class Review {
-  constructor(address, comment, anon, rating){
-      this.address = address
-      this.comment = [comment]
-      this.anon = anon
-      this.rating = rating
-  }
+  constructor(userId, residenceId, review, rating, anon){
 
-  addComment(comment){this.comment.push(comment)}
+	this.userId = userId
+	this.adminId = 0
+	this.residenceId = residenceId
+	this.review = review
+	this.rating = rating
+	this.createdOn = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+	this.approvedOn = "0000-00-00";
+	this.anonymous = anon
+	this.approved = false
+  }
 }
 
 class Reviews extends Db{
