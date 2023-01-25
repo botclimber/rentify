@@ -1,18 +1,23 @@
-var gulp = require('gulp');
-var nodemon = require('nodemon');
-const { exec } = require('child_process');
+const gulp = require('gulp');
+const nodemon = require('nodemon');
+const exec  = require('child_process').exec;
 
-gulp.task('start', function (done) {
-    exec('npm start ', {
+gulp.task('start', function (cb) {
+	
+    exec('npm start >> log.txt', {
         cwd: 'ReviewsService/',
-    }, (error, stdout, stderr) => {
-        console.log(stdout)
+    },function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
     });
 
     exec('npm start ', {
         cwd: 'MapsView/app/',
-    }, (error, stdout, stderr) => {
-        console.log(stdout)
+    }, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
     });
 
 })

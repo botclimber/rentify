@@ -27,8 +27,9 @@ console.log("Running Sql seed ...")
 
 // please if not a new or clean DB check what is the lastId and sent it as parameter
 connection.query(seed(), (result, err) => {
-	if(err) throw err
-	else {
+	if(err) {
+		throw err
+	}else {
 		console.log(result)
 		console.log("DB seeded, enjoy!")
 	}

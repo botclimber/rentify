@@ -23,7 +23,8 @@ exports.actions = (function(ws){
 					DbInstance.selectAll('Reviews')
 					.then(res => {
 						const assembledData = res.map(row => {
-							DbInstance.selectOne('ResidenceAddress', row.residenceId)
+							console.log(row)
+							DbInstance.selectOne('ResidenceAddresses', row.residenceId)
 							.then(resRow => {
 								resRow.map(resDataRow => {
 									DbInstance.selectOne('Addresses', resDataRow.addressId)
@@ -35,7 +36,7 @@ exports.actions = (function(ws){
 						})
 
 						console.info("assembling response ...")
-						console.log(assembledData)
+						console.log(JSON.stringify(assembledData))
 						var response = {
 							type: data.type,
 							address: {lat: res[0].latitude, lng: res[0].longitude},
