@@ -1,5 +1,8 @@
 const mysql = require("mysql2")
 const fs = require("fs")
+const seedSql = fs.readFileSync("db/seedDiffUC.sql", {
+	encoding: "utf-8"
+})
 
 /**
 @seed | generates some data for tables Addresses, ResidenceAddresses and Reviews
@@ -26,7 +29,7 @@ connection.connect()
 console.log("Running Sql seed ...")
 
 // please if not a new or clean DB check what is the lastId and sent it as parameter
-connection.query(seed(), (result, err) => {
+connection.query(seedSql, (result, err) => {
 	if(err) {
 		throw err
 	}else {
@@ -37,4 +40,3 @@ connection.query(seed(), (result, err) => {
 
 console.log("Closing Connection!")
 connection.end()
-

@@ -23,7 +23,7 @@ const apiOptions = {
 
 // ------------ websocket connection --------------
 var location =function(city = "", street = "", nr = "", floor = "", side = ""){
-	return {type: "address", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
+	return {type: "search", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
 }
 
 const socket = new WebSocket('ws://localhost:8000/');

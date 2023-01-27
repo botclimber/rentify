@@ -14,10 +14,10 @@ sockserver.on('connection', (ws) => {
     const dataRec = JSON.parse(data);
 
   	console.log(dataRec)
-  	var action = dataRec.type || "address"
+  	var action = dataRec.type || "search"
 
   	switch(action){
-  		case "address": actions.actions([ws]).address(dataRec); break;
+  		case "search": actions.actions([ws]).search(dataRec); break;
   		//case "createReview": actions.actions([ws]).createReview(dataRec); break;
   	}
    });
