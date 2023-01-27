@@ -10,5 +10,4 @@ module.exports = class Addresses {
     this.postalCode = postalCode
     this.country = country
   }
-
 }
