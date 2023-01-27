@@ -1,8 +1,6 @@
 // server init goes here
 const { Server } = require('ws');
-
 const actions = require("./src/actions.js")
-
 const sockserver = new Server({ port: process.env.PORT});
 const connections = new Set();
 
