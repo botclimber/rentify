@@ -66,6 +66,21 @@ module.exports = class DB{
 		return res[0]
 	}
 
+	/**
+	@chgConfig= {tableName: String, columns: [], values: [], operator: String (or/and)} :object
+
+	@returns Int | number of records found
+	*/
+	async exists(chgConfig){
+		console.log('Checking if record exists in db ...')
+
+		const check = chgConfig.columns.map( (value, key) => value+' = ?').join(' '+chgConfig.operator+' ')
+		const sql = 'SELECT 1 FROM '+chgConfig.tableName+' WHERE '+check
+
+		const res = await this.con.promise().execute(sql, chgConfig.values)
+		return res[0]
+	}
+
 	async selectOne(tableName, id){
 
 		console.log('Getting data from '+tableName+' where id is '+id)
@@ -78,7 +93,7 @@ module.exports = class DB{
 
 
 	/**
-	@chgConfig= {tableName: ,id: , columns: [], values: []} :object
+	@chgConfig= {tableName: String, id: Int, columns: [], values: []} :object
 	@return void
 	*/
 	async update(chgConfig){

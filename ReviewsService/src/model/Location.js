@@ -6,6 +6,7 @@ module.exports = class Locations {
   }
 
   #transform(reviews){
+    // "view" 
     return reviews
   }
 }

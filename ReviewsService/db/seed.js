@@ -10,7 +10,7 @@ const seedSql = fs.readFileSync("db/seedDiffUC.sql", {
 @param {int} lastId | when seeding no empty table check what is the last ID
 @note: Maybe it would be nice if we could create some struture to generate random between given range foreach table column
 */
-const seed = (lastId = 0) => new Array(10).fill().map((_, key) => [
+const seed = (lastId = 0) => new Array(1000).fill().map((_, key) => [
 "INSERT INTO Addresses(lat,lng,city,street,nr,postalCode,country)VALUES( 1.0, 1.0, 'city "+key+"', 'street "+key+"', '000', '0000-000', 'Portugal')",
 "INSERT INTO ResidenceAddresses(addressId, floor, direction)VALUES("+(key+1+lastId)+", '5','left')",
 "INSERT INTO Reviews(userId,adminId,residenceId,review,rating,createdOn,approvedOn,anonymous,approved)VALUES(0,0,"+(key+1+lastId)+",'teste de teste', 5, '1000-01-01 00:00:00', '1000-01-01 00:00:00', false, false)"
