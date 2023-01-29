@@ -27,7 +27,7 @@ gulp.task('build', async function (done) {
     });
 
     exec('npm install', {
-        cwd: 'MapsView/'
+        cwd: 'Views/Maps'
     }, (error, stdout, stderr) => {
         let logmessage = stdout + "\nMAPS_VIEW PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
         console.log(logmessage)
@@ -35,11 +35,19 @@ gulp.task('build', async function (done) {
     });
 
     exec('npm install', {
-        cwd: 'ReviewsService/'
+        cwd: 'Services/Reviews'
     }, (error, stdout, stderr) => {
-        let logmessage = stdout + "\nREVIEW_SERVICE PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
+        let logmessage = stdout + "\nREVIEW SERVICE PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
         console.log(logmessage)
-        if (stderr) console.log("Error instaling packages for ReviewsService")
+        if (stderr) console.log("Error instaling packages for REVIEW SERVICE")
+    });
+
+    exec('npm install', {
+        cwd: 'Services/Users'
+    }, (error, stdout, stderr) => {
+        let logmessage = stdout + "\nUSER SERVICE PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
+        console.log(logmessage)
+        if (stderr) console.log("Error instaling packages for USER SERVICE")
     });
 })
 
