@@ -1,4 +1,4 @@
-import Db from "./Db.js"
+const Db = require("../../../../Database/Db.js")
 
 class Review {
   constructor(address, comment, anon, rating) {
@@ -94,5 +94,7 @@ class Reviews extends Db {
 }
 
 
-export const Review = Review
-export const Reviews = Reviews
+module.exports = {
+  Review: Review,
+  Reviews: Reviews
+}

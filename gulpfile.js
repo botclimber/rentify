@@ -4,13 +4,13 @@ const { exec } = require('child_process');
 
 gulp.task('start', function (done) {
     exec('npm start ', {
-        cwd: 'ReviewsService/',
+        cwd: 'Services/Review',
     }, (error, stdout, stderr) => {
         console.log(stdout)
     });
 
     exec('npm start ', {
-        cwd: 'MapsView/app/',
+        cwd: 'Views/Maps/app/',
     }, (error, stdout, stderr) => {
         console.log(stdout)
     });
