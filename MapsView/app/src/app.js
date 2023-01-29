@@ -132,7 +132,7 @@ newReview.addEventListener('click', (event) => {
 			nrFloor: nrFloor.value,
 			nrSide: nrSide.value,
 			nrRating: nrRating.value,
-			nrAnon: nrAnon.value,
+			nrAnon: parseInt(nrAnon.value),
 			nrReview: nrReview.value
 		}
 
@@ -181,9 +181,9 @@ iBNumber.addEventListener('focusout', (event) => {
 })
 nrAnon.addEventListener('change', (event) => {
 
-	switch(nrAnon.value){
-		case "true": nrAnon.value = "false"; break;
-		case "false": nrAnon.value = "true"; break;
+	switch(parseInt(nrAnon.value)){
+		case 1: nrAnon.value = 0; break;
+		case 0: nrAnon.value = 1; break;
 	}
 
 })

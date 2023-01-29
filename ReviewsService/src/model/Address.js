@@ -5,8 +5,8 @@ class Addresses {
     this.city = city
     this.street = street
     this.nr = nr
-    this.postalCode = postalCode
-    this.country = country
+    this.postalCode = postalCode || "0000-000" //must be specified by user ? is this really needed ?
+    this.country = country || "Portugal" // need to find a way of getting it by some hidden logic
   }
 }
 

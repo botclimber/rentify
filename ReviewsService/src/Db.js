@@ -49,6 +49,7 @@ module.exports = class DB{
 
 		const sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
 
+		console.log("[SQL - INSERT]: "+sql)
 		const res = await this.con.promise().execute(sql);
 		return res[0].insertId
 	}
@@ -62,6 +63,7 @@ module.exports = class DB{
 
 		const sql = 'SELECT * FROM '+tableName
 
+		console.log("[SQL - SELECTALL]: "+sql)
 		const res = await this.con.promise().execute(sql)
 		return res[0]
 	}
@@ -69,14 +71,15 @@ module.exports = class DB{
 	/**
 	@chgConfig= {tableName: String, columns: [], values: [], operator: String (or/and)} :object
 
-	@returns Int | number of records found
+	@returns Int | id(s)
 	*/
 	async exists(chgConfig){
 		console.log('Checking if record exists in db ...')
 
 		const check = chgConfig.columns.map( (value, key) => value+' = ?').join(' '+chgConfig.operator+' ')
-		const sql = 'SELECT 1 FROM '+chgConfig.tableName+' WHERE '+check
+		const sql = 'SELECT id FROM '+chgConfig.tableName+' WHERE '+check
 
+		console.log("[SQL - EXISTS]: "+sql)
 		const res = await this.con.promise().execute(sql, chgConfig.values)
 		return res[0]
 	}
@@ -87,6 +90,7 @@ module.exports = class DB{
 
 		const sql = 'SELECT * FROM '+tableName+' WHERE id = ?'
 
+		console.log("[SQL - SELECTONE]: "+sql)
 		const res = await this.con.promise().execute(sql, [id])
 		return res[0][0]
 	}
@@ -103,6 +107,7 @@ module.exports = class DB{
 		const toBeUpdated = chgConfig.columns.map( (value, key) => value+'='+this.#sqlValuesTypeSafer(chgConfig.values[key])).join()
 		const sql = 'UPDATE '+chgConfig.tableName+' SET '+toBeUpdated+' WHERE id = '+chgConfig.id
 
+		console.log("[SQL - UPDATE]: "+sql)
 		const res = await this.con.execute(sql, function(err, result){
 			if(err) throw err;
 			else console.log(result.changedRows+" row(s) updated")

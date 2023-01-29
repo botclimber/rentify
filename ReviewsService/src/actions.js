@@ -2,7 +2,7 @@ const conv = require("./convertLocation.js")
 // Classes
 const Db = require("./Db.js")
 const addrInfo = require("./model/Address.js")
-const Review = require("./model/Review.js")
+const Reviews = require("./model/Review.js")
 const Location = require("./model/Location.js")
 
 class Helper extends Db{
@@ -33,7 +33,7 @@ class Helper extends Db{
 			console.log("Mounting response ...")
 			const response = {
 				type: data.type,
-				address: {lat: lat, lng: lng},
+				address: {lat: parseFloat(lat), lng: parseFloat(lng)},
 				locations: assembleData // TODO: implemnet transform method
 			}
 
@@ -47,22 +47,41 @@ class Helper extends Db{
 	}
 
 	createReview(lat, lng, data){
-		// TODO: change logic
-		//var address = new Address(data.city, data.street, data.buildingNumber, data.nrFloor, data.nrSide, lat, lng)
-		//var review = new R.Review(address, data.nrReview, data.nrAnon, data.nrRating)
+		const call = (addrId) => {
+			const residenceAddresses = new addrInfo.ResidenceAddresses(addrId, data.nrFloor, data.nrSide)
+			const residenceId = this.insert(residenceAddresses)
+
+			residenceId
+			.then(resId => {
+				const review = new Reviews(1, resId, data.nrReview, data.nrRating, data.nrAnon)
+				this.insert(review)
+				.then( _ => this.defaultResp(data, lat, lng) )
+				.catch(err => console.log(err))
+
+			})
+			.catch(err => console.log(err))
+		}
 
 		//Reviews.addReview(review)
 		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [lat, lng], operator: "and"})
 		.then(res => {
-			if(res.length) console.log("EXISTS ATLEAST ONE")
-			else console.log("NONE EXISTING")
 
-			//this.defaultResp(data, lat, lng)
+			if(res.length) { // for this case if existing, expects only one record
+				console.log("Address already registed ...")
+				call(res[0].id)
+
+			}else{
+				console.log("None existing address, registering it ...")
+				const newAddress = new addrInfo.Addresses(lat, lng, data.city, data.street, data.buildingNumber, data.postalCode, data.country)
+				this.insert(newAddress)
+				.then(addressId => call(addressId))
+				.catch(err => console.log(err))
+
+			}
 		})
 		.catch(err => console.log(err))
 
 	}
-
 }
 
 // ws is an array or list of clients
