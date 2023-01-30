@@ -124,6 +124,7 @@ exports.actions = (function(ws){
 				ws.forEach((client) => {
 					 client.send(JSON.stringify({status: "rejected",msg: reason}));
 				});
+			});
 		}
 	}
 

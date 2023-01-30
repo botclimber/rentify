@@ -65,6 +65,9 @@ socket.onopen = function(e) {
     console.log("Sending to server");
 
 	const urlParams = new URLSearchParams(window.location.search)
+
+  // doesnt persist url
+  history.pushState({},null,"/mainPage.html?#")
 	socket.send(JSON.stringify(location(urlParams.get('city'))));
 };
 
