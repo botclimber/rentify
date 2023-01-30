@@ -6,7 +6,9 @@ module.exports = class Locations {
   }
 
   #transform(reviews){
-    // "view" 
-    return reviews
+   
+	// enchance this in order to return all needed data 
+	const transformedReviews = "<ul>"+reviews.map( comment => "<li>"+comment.review+ "</li>").join("")+"</ul>"
+	return transformedReviews
   }
 }
