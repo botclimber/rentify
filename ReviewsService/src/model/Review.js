@@ -13,5 +13,5 @@ module.exports = class Reviews {
 	this.approvedOn = "1000-01-01";
 	this.anonymous = anon
 	this.approved = 0
-  }
+	}
 }

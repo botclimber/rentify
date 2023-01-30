@@ -182,8 +182,8 @@ iBNumber.addEventListener('focusout', (event) => {
 nrAnon.addEventListener('change', (event) => {
 
 	switch(parseInt(nrAnon.value)){
-		case 1: nrAnon.value = 0; break;
 		case 0: nrAnon.value = 1; break;
+		case 1: nrAnon.value = 0; break;
 	}
 
 })

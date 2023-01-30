@@ -31,8 +31,8 @@ Create Table Reviews (
   rating int not null,
   createdOn datetime not null,
   approvedOn datetime,
-  anonymous bit not null,
-  approved bit not null,
+  anonymous boolean not null,
+  approved int not null, # 0 - pending, 1 - approved, 3 - rejected
   PRIMARY KEY (id),
   FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
 );
