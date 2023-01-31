@@ -1,3 +1,13 @@
+<script>
+
+export default {
+  name: "Basic_Elements",
+  props: {
+   socket: String
+  },
+}
+
+</script>
 
   <template>
 
@@ -15,7 +25,7 @@
               <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Default form</h4>
+                    <h4 class="card-title">Default form {{socket}}</h4>
                     <p class="card-description"> Basic form layout </p>
                     <form class="forms-sample">
                       <div class="form-group">

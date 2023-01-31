@@ -10,3 +10,12 @@ What was done to create this:
 -npm init vite (project name)
 -npm install
 -npm run dev
+
+---
+// an overview of what i understood about vue dev:
+(data, methods, computed, props, components, ...)
+- data deals with data and return it to be used in the html
+- methods are the logic and controllers
+- computed is something that im not sure yet
+- props are values from parent components
+- components are other pages with diff logic

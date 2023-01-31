@@ -1,4 +1,4 @@
-<script>
+<script >
 import Home from './components/Home.vue'
 import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
@@ -10,9 +10,13 @@ const routes = {
 }
 
 export default {
+  name: "App",
+
   data() {
     return {
-      currentPath: window.location.hash
+      msg: "NO FKING WAY",
+      currentPath: window.location.hash,
+      socket: "works!"
     }
   },
   computed: {
@@ -47,7 +51,7 @@ export default {
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
-                <h5 class="mb-0 font-weight-normal">Anon</h5>
+                <h5 class="mb-0 font-weight-normal">Anon {{msg}}</h5>
                 <span>Admin</span>
               </div>
             </div>
@@ -233,7 +237,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" />
+        <component :is="currentView" :socket="socket" />
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
