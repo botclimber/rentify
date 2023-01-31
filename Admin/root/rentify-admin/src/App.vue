@@ -9,16 +9,19 @@ const routes = {
   '/basic_elements': Basic_Elements
 }
 
+const socket = new WebSocket('ws://localhost:8000/');
+console.log(socket, typeof(socket))
+
 export default {
   name: "App",
 
   data() {
     return {
-      msg: "NO FKING WAY",
+      socket: socket,
       currentPath: window.location.hash,
-      socket: "works!"
     }
   },
+
   computed: {
     currentView() {
       return routes[this.currentPath.slice(1) || '/'] || NotFound

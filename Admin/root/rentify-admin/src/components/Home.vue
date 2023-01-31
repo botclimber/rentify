@@ -1,3 +1,47 @@
+<script>
+export default{
+  name:"Home",
+
+  props:{
+    socket: Object
+  },
+
+  data(){
+    return {
+      msg: null
+    }
+  },
+
+  //watch:{},
+  /* Working dope!
+  methods:{
+    testingOnMsg(){
+      this.socket.send(JSON.stringify({type:"search",city:'Braga',street: "", buildingNumber: "", floor: "", side: ""}))
+    }
+  },*/
+
+  created(){
+    this.socket.onopen = (e) => {
+      console.log("[open] Connection established");
+      console.log("Sending to server");
+      // this.msg = "Testing" // works ! :)
+    },
+
+    this.socket.onmessage =  (event) => {
+      console.log(`[message] Data received from server: ${event.data}`);
+      //document.getElementById("resp").innerHTML += event.data+"<br>"
+      //this.msg = event.data // works ! :)
+    },
+
+    this.socket.onerror = (error) => {
+      console.log(`[error]`);
+    }
+  }
+  
+}
+</script>
+
+
 <template>
       <div class="content-wrapper">
         <div class="row">

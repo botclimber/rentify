@@ -5,7 +5,7 @@ const sockserver = new Server({ port: process.env.PORT});
 const connections = new Set();
 
 sockserver.on('connection', (ws) => {
-   console.log('New client connected!');
+   console.log('New client connected!'+ws);
    connections.add(ws)
 
    ws.on('message', (data) => {
@@ -17,6 +17,8 @@ sockserver.on('connection', (ws) => {
   	switch(action){
   		case "search": actions.actions([ws]).search(dataRec); break;
   		case "createReview": actions.actions([ws]).insertReview(dataRec); break;
+      
+      // TODO: some admin dedicated requests 
   	}
    });
 
