@@ -19,6 +19,7 @@ sockserver.on('connection', (ws) => {
   		case "createReview": actions.actions([ws]).insertReview(dataRec); break;
       
       // TODO: some admin dedicated requests 
+      case "pendingReviews": actions.actions([ws]).getPendingForApprovalReviews(dataRec); break;
   	}
    });
 

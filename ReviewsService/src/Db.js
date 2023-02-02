@@ -56,8 +56,10 @@ module.exports = class DB{
 
 
 	/**
-	@tableName: String
-	*/
+	 * 
+	 * @param {*} tableName 
+	 * @returns 
+	 */
 	async selectAll(tableName){
 		console.log('Getting all data from '+tableName+'...')
 
@@ -71,7 +73,7 @@ module.exports = class DB{
 	/**
 	@chgConfig= {tableName: String, columns: [], values: [], operator: String (or/and)} :object
 
-	@returns Int | id(s)
+	@returns [Int] | id(s)
 	*/
 	async exists(chgConfig){
 		console.log('Checking if record exists in db ...')
