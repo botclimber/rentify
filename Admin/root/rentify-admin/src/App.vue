@@ -2,11 +2,14 @@
 import Home from './components/Home.vue'
 import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
+import Pending_Reviews from './components/approvals/pending_reviews.vue'
 
 const routes = {
   '/': Home,
   '/chartjs': Chartjs,
-  '/basic_elements': Basic_Elements
+  '/basic_elements': Basic_Elements,
+  '/pending_reviews': Pending_Reviews
+
 }
 
 const socket = new WebSocket('ws://localhost:8000/');
@@ -54,7 +57,7 @@ export default {
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
-                <h5 class="mb-0 font-weight-normal">Anon {{msg}}</h5>
+                <h5 class="mb-0 font-weight-normal">Anon</h5>
                 <span>Admin</span>
               </div>
             </div>
@@ -85,6 +88,14 @@ export default {
               <i class="mdi mdi-chart-bar"></i>
             </span>
             <span class="menu-title">Charts</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="#/pending_reviews">
+            <span class="menu-icon">
+              <i class="mdi mdi-chart-bar"></i>
+            </span>
+            <span class="menu-title">Pending Reviews</span>
           </a>
         </li>
       </ul>

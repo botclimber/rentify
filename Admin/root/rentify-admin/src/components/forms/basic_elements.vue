@@ -3,7 +3,7 @@
 export default {
   name: "Basic_Elements",
   props: {
-   socket: String
+   socket: Object
   },
 }
 
