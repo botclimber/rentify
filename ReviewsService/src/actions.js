@@ -1,9 +1,6 @@
 const conv = require("./convertLocation.js")
 // Classes
 const Helper = require("./Helper.js")
-const addrInfo = require("./model/Address.js")
-const Reviews = require("./model/Review.js")
-const Location = require("./model/Location.js")
 const { filter } = require("rxjs/operators")
 
 // ws is an array or list of clients
@@ -51,7 +48,7 @@ exports.actions = (function(ws){
 	}
 
 	//ACTION TO SEND DATA FOR ADMIN PAGE
-	function getPendingForApprovalReviews(data){
+	function getPendingForApprovalReviews(){
 		helper.getAllFromDb()
 		.then(res => {
 			console.log("assembling all pending reviews...")
@@ -64,7 +61,7 @@ exports.actions = (function(ws){
 			}) // continue map tree constuction
 			
 			const reponse = {
-				type: data.type,
+				type: "pendingReviews",
 				reviews: pendReviews
 			}
 
@@ -77,6 +74,12 @@ exports.actions = (function(ws){
 
 	}
 
-	return { search, insertReview, getPendingForApprovalReviews }
+	function updateReviewState(data){
+		helper.changeReviewApprovalState(data.revId, data.decision)
+		this.getPendingForApprovalReviews()	
+
+	}
+
+	return { search, insertReview, getPendingForApprovalReviews, updateReviewState }
 
 })

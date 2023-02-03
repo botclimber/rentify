@@ -1,4 +1,8 @@
 const Db = require("./Db.js")
+const date = require('date-and-time')
+const Location = require('./model/Location.js')
+const addrInfo = require('./model/Address.js')
+const Reviews = require('./model/Review.js')
 
 module.exports = class Helper extends Db{
 	constructor(ws){
@@ -8,10 +12,10 @@ module.exports = class Helper extends Db{
 
 	// get ResidenceAddress for specific Address
 	/**
-	 * 
-	 * @param {*} addressId 
-	 * @param {*} residenceData 
-	 * @returns 
+	 *
+	 * @param {*} addressId
+	 * @param {*} residenceData
+	 * @returns
 	 */
 	getResForA(addressId, residenceData){
 		console.log("Getting all RESIDENCES for addressId: "+addressId)
@@ -20,11 +24,11 @@ module.exports = class Helper extends Db{
 
 	// get Reviews for specific residenceAddress
 	/**
-	 * 
-	 * @param {*} addressId 
-	 * @param {*} residences 
-	 * @param {*} unmappedReviews 
-	 * @returns 
+	 *
+	 * @param {*} addressId
+	 * @param {*} residences
+	 * @param {*} unmappedReviews
+	 * @returns
 	 */
 	getRevForRA(addressId, residences, unmappedReviews){
 		console.log("Getting all REVIEWS for addressId: "+addressId)
@@ -36,8 +40,8 @@ module.exports = class Helper extends Db{
 
 	// returns a promise with all reviews, addresses and residenceAddresses
 	/**
-	 * 
-	 * @returns 
+	 *
+	 * @returns
 	 */
 	getAllFromDb(){
 		console.log("Getting needed data from DB and Resolving promise ...")
@@ -48,11 +52,11 @@ module.exports = class Helper extends Db{
 
 	// create Location data types data which is transformed and orginzed data
 	/**
-	 * 
-	 * @param {*} addresses 
-	 * @param {*} residenceAddresses 
-	 * @param {*} reviews 
-	 * @returns 
+	 *
+	 * @param {*} addresses
+	 * @param {*} residenceAddresses
+	 * @param {*} reviews
+	 * @returns
 	 */
 	generateLocations(addresses, residenceAddresses, reviews){
 		console.log("Assembling location data ...")
@@ -64,17 +68,18 @@ module.exports = class Helper extends Db{
 
 	/**
 	 * Some common response format
-	 * 
-	 * @param {*} data 
-	 * @param {*} lat 
-	 * @param {*} lng 
+	 *
+	 * @param {*} data
+	 * @param {*} lat
+	 * @param {*} lng
 	 */
 	defaultResp(data, lat, lng){
 		this.getAllFromDb()
 		.then(allDataRes /* 3 arrays of dictionary */=> {
 
 			// logic goes here
-			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location => location.transform())
+//			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location => location.transform())
+			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location => {return location.transform()})
 
 			console.log("Locations: "+assembleData)
 			console.log("Mounting response ...")
@@ -86,17 +91,17 @@ module.exports = class Helper extends Db{
 
 			console.log("Sending response to client ...")
 			this.returnResponse(response)
-			
+
 		})
 		.catch(err => console.log(err))
 
 	}
 
 	/**
-	 * 
-	 * @param {*} lat 
-	 * @param {*} lng 
-	 * @param {*} data 
+	 *
+	 * @param {*} lat
+	 * @param {*} lng
+	 * @param {*} data
 	 */
 	createReview(lat, lng, data){
 		const call = (addrId) => {
@@ -136,12 +141,20 @@ module.exports = class Helper extends Db{
 	}
 
 	/**
-	 * 
-	 * @param {*} response 
+	 *
+	 * @param {*} response
 	 */
 	returnResponse(response){
 		this.ws.forEach((client) => {
 			client.send(JSON.stringify(response));
 	   });
+	}
+
+	changeReviewApprovalState(revId, state){
+		const chgConfig = {tableName: 'Reviews', id: revId, columns: ['approved','approvedOn'], values: [state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
+		this.update(chgConfig)
+		.then(res => console.log(res+" row changed!"))
+		.catch(err => console.log(err))
+
 	}
 }

@@ -19,6 +19,14 @@ gulp.task('start', function (cb) {
         console.log(stderr);
         cb(err);
     });
+    
+    exec('npm run dev', {
+        cwd: 'Admin/root/rentify-admin/',
+    }, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
 
 })
 
@@ -45,6 +53,14 @@ gulp.task('build', async function (done) {
         let logmessage = stdout + "\nREVIEW_SERVICE PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
         console.log(logmessage)
         if (stderr) console.log("Error instaling packages for ReviewsService")
+    });
+
+    exec('npm install', {
+        cwd: 'Admin/root/rentify-admin/'
+    }, (error, stdout, stderr) => {
+        let logmessage = stdout + "\nRentify-Admin PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
+        console.log(logmessage)
+        if (stderr) console.log("Error instaling packages for rentify-admin")
     });
 })
 

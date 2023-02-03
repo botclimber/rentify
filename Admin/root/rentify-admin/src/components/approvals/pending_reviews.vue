@@ -1,4 +1,5 @@
 <script>
+
 export default{
   name:"Pending_Reviews",
 
@@ -8,7 +9,7 @@ export default{
 
   data(){
     this.sendMessage({type: 'pendingReviews'})
-    
+
     return {
       allData: []
     }
@@ -17,15 +18,20 @@ export default{
   //watch:{},
 
   methods:{
-    sendMessage(msg){this.socket.send(JSON.stringify(msg))}
+	sendMessage(msg){this.socket.send(JSON.stringify(msg))},
+	decision(res, revId){
+		console.log(res, revId)
+		if(confirm('Are you sure about your decision?')){
+			this.sendMessage({type:'updateReview', revId: revId, decision: res})
+		}
+	}
   },
 
   created(){
     this.socket.onopen = (e) => {
         console.log("[open] Connection established");
         console.log("Sending to server");
-        // this.msg = "Testing" // works ! :)
-        
+
     },
 
     this.socket.onmessage =  (event) => {
@@ -39,7 +45,7 @@ export default{
       console.log(`[error]`);
     }
   }
-  
+
 }
 </script>
 
@@ -67,10 +73,9 @@ export default{
                     <p>{{ row.rev.review }}</p>
                   </td>
                   <td>
-                    <iframe
+                    <iframe style="border-radius:10px"
                       width="300"
                       height="250"
-                      style="border: 0"
                       loading="lazy"
                       allowfullscreen
                       referrerpolicy="no-referrer-when-downgrade"
@@ -89,12 +94,14 @@ export default{
                   </td>
                   <td>
                     <div
+			@click="decision(1, row.rev.id)"
                       class="badge badge-outline-success asBtn"
                     >
                       Approve
                     </div>
                     <div
                       class="badge badge-outline-danger asBtn"
+			@click="decision(2, row.rev.id)"
                     >
                       Reject
                     </div>
@@ -111,7 +118,7 @@ export default{
 
 <style>
 .asBtn{
-  margin: 5px; 
+  margin: 5px;
   cursor:pointer
 }
 </style>

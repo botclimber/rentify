@@ -9,7 +9,8 @@ module.exports = class Locations {
   transform(){
   	const state = {
 		0: "<b style='font-size:5pt;padding:5px;color:orange;'>pending ...</b>",
-		1: "<b style='font-size:5pt;padding:5px;color:green;'>verified</b>"
+		1: "<b style='font-size:5pt;padding:5px;color:green;'>verified</b>",
+		2: "<b style='font-size:5pt;padding:5px;color:red;'>rejected</b>"
 	}
 
     // enchance this in order to return all needed data
