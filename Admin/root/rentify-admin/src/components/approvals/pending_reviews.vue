@@ -7,8 +7,10 @@ export default{
   },
 
   data(){
+    this.sendMessage({type: 'pendingReviews'})
+    
     return {
-      allData: this.sendMessage({type: 'pendingReviews'})
+      allData: []
     }
   },
 
@@ -31,7 +33,6 @@ export default{
       const data = JSON.parse(event.data)
 
       this.allData = data.reviews
-      
     },
 
     this.socket.onerror = (error) => {
@@ -87,18 +88,16 @@ export default{
                     <p>{{ row.rev.createdOn }}</p>
                   </td>
                   <td>
-                    <button
-                      style="margin: 5px"
-                      class="badge badge-outline-success"
+                    <div
+                      class="badge badge-outline-success asBtn"
                     >
                       Approve
-                    </button>
-                    <button
-                      style="margin: 5px"
-                      class="badge badge-outline-danger"
+                    </div>
+                    <div
+                      class="badge badge-outline-danger asBtn"
                     >
                       Reject
-                    </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -109,3 +108,10 @@ export default{
     </div>
   </div>
 </template>
+
+<style>
+.asBtn{
+  margin: 5px; 
+  cursor:pointer
+}
+</style>
