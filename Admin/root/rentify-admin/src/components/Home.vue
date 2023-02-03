@@ -30,11 +30,15 @@ export default{
     },
 
     this.socket.onmessage =  (event) => {
-      console.log(`[message] Data received from server: ${event.data}`);
+      //console.log(`[message] Data received from server: ${event.data}`);
       //document.getElementById("resp").innerHTML += event.data+"<br>"
       //this.msg = event.data // works ! :)
-      console.log(event)
-      this.allData = event.reviews
+      const data = JSON.parse(event.data)
+      
+      //console.log(data.reviews)
+      for(let x of data.reviews){ console.log(x.rev.review)}
+      this.allData = data.reviews
+      
     },
 
     this.socket.onerror = (error) => {
@@ -206,13 +210,13 @@ export default{
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="row in allData" :key="row.id">
-                        <td>{{row.userId}}</td>
+                      <tr v-for="row of allData" :key="row.rev.id">
+                        <td>{{row.rev.userId}}</td>
                         <td>
-                          <p>{{row.review}}</p>
+                          <p>{{row.rev.review}}</p>
                         </td>
-                        <td> <p>{{row.lat}} - {{row.lng}}</p> </td>
-                        <td> <p>{{row.createdDate}}</p> </td>
+                        <td> <p>{{row.addr.lat}}, {{row.addr.lng}}</p> </td>
+                        <td> <p>{{row.rev.createdOn}}</p> </td>
                         <td>
                           <button style="margin:5px" class="badge badge-outline-success">Approve</button>
                           <button style="margin:5px" class="badge badge-outline-danger">Reject</button>

@@ -55,10 +55,22 @@ exports.actions = (function(ws){
 		helper.getAllFromDb()
 		.then(res => {
 			console.log("assembling all pending reviews...")
-			const pendReviews = res[0].filter(review => review.approved == 0) // continue map tree constuction
+			const pendReviews = res[0].filter(review => review.approved == 0)
+			.map(rev => {
+				const residence = res[1].find(res => res.id == rev.residenceId)
+				const addr = res[2].find(address => address.id == residence.addressId)
+				
+				return {rev: rev, res: residence, addr: addr}
+			}) // continue map tree constuction
+			
+			const reponse = {
+				type: data.type,
+				reviews: pendReviews
+			}
 
-			//console.log("Sending response to client ...")
-			//helper.returnResponse(response)
+			console.log(reponse)
+			console.log("Sending response to client ...")
+			helper.returnResponse(reponse)
 
 		})
 		.catch(err => console.log(err)) 
