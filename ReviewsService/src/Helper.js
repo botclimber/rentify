@@ -78,10 +78,8 @@ module.exports = class Helper extends Db{
 		.then(allDataRes /* 3 arrays of dictionary */=> {
 
 			// logic goes here
-//			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location => location.transform())
-			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location => {return location.transform()})
+			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location =>{ location.transform(); return location})
 
-			console.log("Locations: "+assembleData)
 			console.log("Mounting response ...")
 			const response = {
 				type: data.type,
