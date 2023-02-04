@@ -19,10 +19,9 @@ export default{
 
   methods:{
 	sendMessage(msg){this.socket.send(JSON.stringify(msg))},
-	decision(res, revId){
-		console.log(res, revId)
+	decision(res, revId, lat, lng){
 		if(confirm('Are you sure about your decision?')){
-			this.sendMessage({type:'updateReview', revId: revId, decision: res})
+			this.sendMessage({type:'updateReview', revId: revId, decision: res, lat: lat, lng: lng})
 		}
 	}
   },
@@ -94,14 +93,14 @@ export default{
                   </td>
                   <td>
                     <div
-			@click="decision(1, row.rev.id)"
+			@click="decision(1, row.rev.id, row.addr.lat, row.addr.lng)"
                       class="badge badge-outline-success asBtn"
                     >
                       Approve
                     </div>
                     <div
                       class="badge badge-outline-danger asBtn"
-			@click="decision(2, row.rev.id)"
+			@click="decision(2, row.rev.id, row.addr.lat, row.addr.lng)"
                     >
                       Reject
                     </div>

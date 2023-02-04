@@ -36,7 +36,9 @@ exports.actions = (function(ws){
 		}else{
 			console.info("Lat and Lng not defined ... requesting it by using address ("+data.city+", "+data.street+", "+data.buildingNumber+")")
 			conv.getLatLng(data)
-			.then(res => helper.createReview(res[0].latitude, res[0].longitude, data))
+			.then(res => {
+				this.getPendingForApprovalReviews();
+				helper.createReview(res[0].latitude, res[0].longitude, data); })
 			.catch( reason => {
 
 				console.log(reason)
@@ -60,14 +62,14 @@ exports.actions = (function(ws){
 				return {rev: rev, res: residence, addr: addr}
 			}) // continue map tree constuction
 			
-			const reponse = {
+			const response = {
 				type: "pendingReviews",
 				reviews: pendReviews
 			}
 
-			console.log(reponse)
+			console.log(response)
 			console.log("Sending response to client ...")
-			helper.returnResponse(reponse)
+			helper.returnResponse(response)
 
 		})
 		.catch(err => console.log(err)) 

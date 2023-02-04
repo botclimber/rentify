@@ -145,7 +145,7 @@ module.exports = class Helper extends Db{
 	returnResponse(response){
 		this.ws.forEach((client) => {
 			client.send(JSON.stringify(response));
-	   });
+	   	});
 	}
 
 	changeReviewApprovalState(revId, state){

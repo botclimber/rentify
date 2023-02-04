@@ -2,11 +2,11 @@
 const { Server } = require('ws');
 const actions = require("./src/actions.js")
 const sockserver = new Server({ port: process.env.PORT});
-const connections = new Set();
+const connections = [];
 
 sockserver.on('connection', (ws) => {
    console.log('New client connected!'+ws);
-   connections.add(ws)
+   connections.push(ws)
 
    ws.on('message', (data) => {
     const dataRec = JSON.parse(data);
@@ -25,7 +25,7 @@ sockserver.on('connection', (ws) => {
    });
 
   ws.on('close', () => {
-    connections.delete(ws);
+    connections.splice(connections.indexOf(ws));
     console.log('Client has disconnected!');
   });
 });
