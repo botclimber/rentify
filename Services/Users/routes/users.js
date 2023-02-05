@@ -1,9 +1,8 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const { auth, requiresAuth } = require('express-openid-connect');
-require('dotenv').config();
 
-app.use(
+router.use(
     auth({
         authRequired: false,
         auth0Logout: true,
@@ -14,15 +13,15 @@ app.use(
     })
 );
 
-app.get('/', (req, res) => {
-   res.send(req.oidc.isAuthenticated() ? 'Logged In': 'Logged Out');
+router.get('/', (req, res) => {
+    res.send(req.oidc.isAuthenticated() ? 'Logged In' : 'Logged Out');
 })
 
-const port = process.env.PORT || 8000;
-app.listen(port, () => {
-    console.log(`${port}`);
-})
-
-app.get('/profile', requiresAuth(), (req, res) => {
+// requiresAuth function is used when the specific route needs authentication
+// For example, add a review needs auth but viewing a review not
+router.get('/profile/:id', requiresAuth(), (req, res) => {
+    req.params.id
     res.send(JSON.stringify(req.oidc.user));
-  });
+});
+
+module.exports = router;
