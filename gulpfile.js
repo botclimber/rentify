@@ -15,6 +15,11 @@ gulp.task('start', function (done) {
         console.log(stdout)
     });
 
+    exec('node server.js', {
+        cwd: 'Services/Users',
+    }, (error, stdout, stderr) => {
+        console.log(stdout)
+    });
 })
 
 gulp.task('build', async function (done) {
