@@ -1,6 +1,6 @@
-import { myDataSource } from "../../Database/src/data-source"
-import { User } from "../../Database/src/entity/User";
-import * as express from 'express';
+import { myDataSource } from "../../../Database/src/data-source"
+import { User } from "../../../Database/src/entities/User";
+import express from 'express';
 import userRouter from "./routes/userRouter"
 require('dotenv').config();
 
@@ -10,6 +10,16 @@ export const userRepository = myDataSource.getRepository(User)
 myDataSource
     .initialize()
     .then(() => {
+
+        const app = express();
+
+        app.use('/users', userRouter);
+
+        const port = process.env.PORT || 8000;
+        app.listen(port, () => {
+            console.log(`${port}`);
+        })
+
         console.log("Data Source has been initialized!")
     })
     .catch((err) => {
@@ -19,12 +29,5 @@ myDataSource
 
 // app.set("view engine", "ejs")
 
-const app = express();
 
-app.use('/users', userRouter);
-
-const port = process.env.PORT || 8000;
-app.listen(port, () => {
-    console.log(`${port}`);
-})
 

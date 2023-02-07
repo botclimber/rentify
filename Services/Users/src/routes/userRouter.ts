@@ -1,14 +1,10 @@
-import { User } from "../../../Database/src/entity/User";
+import { User } from "../../../../Database/src/entities/User";
 import { userRepository } from "../server";
 import { Router, Request, Response, NextFunction } from 'express';
 import express = require("express");
 
 export const userRouter = Router();
 userRouter.use(express.json());
-
-userRouter.get('/', (req, res) => {
-    res.json("Ola");
-})
 
 const users = [];
 userRouter.post('/newUser', async (req: Request, res: Response) => {
@@ -33,22 +29,3 @@ userRouter.post('/newUser', async (req: Request, res: Response) => {
 })
 
 export default userRouter;
-
-
-// router.post('/login', async (req, res) => {
-//     console.log(users);
-//     const user = users.find(user => user.username === req.body.username);
-//     console.log(user);
-//     if (user == null) {
-//         return res.status(404).json({ message: "User not found" })
-//     }
-//     try {
-//         if (await bcrypt.compare(req.body.password, user.password)) {
-//             res.send('Success')
-//         } else {
-//             res.send('Failed')
-//         }
-//     } catch {
-//         res.status(500).json({ message: "Internal Server Error" })
-//     }
-// })
