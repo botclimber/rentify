@@ -1,10 +1,9 @@
 import { myDataSource } from "../../../Database/src/data-source"
 import { User } from "../../../Database/src/entities/User";
 import express from 'express';
-import userRouter from "./routes/userRouter"
+import routes from "./routes/routes"
 require('dotenv').config();
 
-export const userRepository = myDataSource.getRepository(User)
 
 // establish database connection
 myDataSource
@@ -12,8 +11,8 @@ myDataSource
     .then(() => {
 
         const app = express();
-
-        app.use('/users', userRouter);
+        app.use(express.json());
+        app.use('/user', routes);
 
         const port = process.env.PORT || 8000;
         app.listen(port, () => {

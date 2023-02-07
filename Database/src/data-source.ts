@@ -1,6 +1,5 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { User } from "./entities/User"
 import 'dotenv/config'
 
 export const myDataSource = new DataSource({
