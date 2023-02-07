@@ -4,9 +4,9 @@
   "description": "hello world",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
-  },
+      "start": "ts-node server.ts",
+      "typeorm": "typeorm-ts-node-commonjs"
+   },
   "author": "",
   "license": "ISC",
   "dependencies": {

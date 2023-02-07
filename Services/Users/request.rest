@@ -1,9 +1,11 @@
 # GET http://localhost:8000/users
 
-POST http://localhost:8000/users/login
+POST http://localhost:8000/users/newUser
 Content-Type: application/json
 
 {
     "username" : "walter",
-    "password" : "password"
+    "password" : "123"
 }
+
+###

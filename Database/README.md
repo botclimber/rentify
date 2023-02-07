@@ -1,11 +1,7 @@
-# Database
-Database for all the web app information
+# Awesome Project Build with TypeORM
 
-## Setup
-1. install mySql app in OS (https://www.youtube.com/watch?v=u96rVINbAUI&ab_channel=WebDevSimplified)
-2. Run DatabaseCreationQuery.sql in mySql app
-3. npm install mysql2
+Steps to run this project:
 
-## Documentation
-
-https://www.w3schools.com/nodejs/nodejs_mysql.asp
+1. Run `npm i` command
+2. Setup database settings inside `data-source.ts` file
+3. Run `npm start` command
