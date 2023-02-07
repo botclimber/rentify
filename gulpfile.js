@@ -3,19 +3,19 @@ var nodemon = require('nodemon');
 const { exec } = require('child_process');
 
 gulp.task('start', function (done) {
-    exec('npm start ', {
+    exec('npm start', {
         cwd: 'Services/Review',
     }, (error, stdout, stderr) => {
         console.log(stdout)
     });
 
-    exec('npm start ', {
+    exec('npm start', {
         cwd: 'Views/Maps/app/',
     }, (error, stdout, stderr) => {
         console.log(stdout)
     });
 
-    exec('node server.js', {
+    exec('npm start', {
         cwd: 'Services/Users',
     }, (error, stdout, stderr) => {
         console.log(stdout)
