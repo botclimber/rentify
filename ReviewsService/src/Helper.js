@@ -142,11 +142,7 @@ module.exports = class Helper extends Db{
 	 *
 	 * @param {*} response
 	 */
-	returnResponse(response){
-		this.ws.forEach((client) => {
-			client.send(JSON.stringify(response));
-	   	});
-	}
+	returnResponse(response){ this.ws.send(JSON.stringify(response)); }
 
 	changeReviewApprovalState(revId, state){
 		const chgConfig = {tableName: 'Reviews', id: revId, columns: ['approved','approvedOn'], values: [state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}

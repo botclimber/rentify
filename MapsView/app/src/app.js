@@ -26,8 +26,6 @@ var location =function(city = "", street = "", nr = "", floor = "", side = ""){
 	return {type: "search", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
 }
 
-const socket = new WebSocket('ws://localhost:8000/');
-
 var locations = {}
 var data = {
 	address: {lat: 41.1579438, lng:-8.629105299999999}
@@ -60,27 +58,13 @@ loader.load().then(() => {
 	markers = addMarkers(map, locations);
 });
 
-socket.onopen = function(e) {
-    console.log("[open] Connection established");
-    console.log("Sending to server");
-
-	const urlParams = new URLSearchParams(window.location.search)
-
-  // doesnt persist url
-  history.pushState({},null,"/mainPage.html?#")
-	socket.send(JSON.stringify(location(urlParams.get('city'))));
-};
-
-socket.onerror = function(error) {
-   console.log(`[error]`);
-};
-
-
-socket.onmessage = function(event) {
-    console.log(`[message] Data received from server: ${event.data}`);
-    //document.getElementById("resp").innerHTML += event.data+"<br>"
-
-	var data = JSON.parse(event.data)
+const urlParams = new URLSearchParams(window.location.search)
+fetch('http://127.0.0.1:8000/search?city='+urlParams.get('city'))
+.then(res => res.json())
+.then((data) => {
+  //console.log(`[message] Data received from server: ${response.data} + ${JSON.stringify(response)}`);
+  //document.getElementById("resp").innerHTML += event.data+"<br>"
+  
 	var locations = data.locations
 
 	//if(data.type == "address") map = displayMap(data.address);
@@ -98,7 +82,8 @@ socket.onmessage = function(event) {
     reviewFromExisting(coords.lat, coords.lng)
 	});
 
-};
+})
+.catch(err => console.log(err))
 
 function reviewFromExisting(lat, lng){
   console.log('Place registed! complete Form and add review ('+lat+', '+lng+')')

@@ -9,7 +9,7 @@ exports.actions = (function(ws){
 
 	// ACTION TO SEARCH FOR ADDRESS
 	function search(data){
-		console.info("Starting search action for "+JSON.stringify(ws)+" client containing following data: "+JSON.stringify(data))
+		console.info("Starting search action for "+ws+" client containing following data: "+JSON.stringify(data))
 
 		conv.getLatLng(data)
 			.then(res => {
