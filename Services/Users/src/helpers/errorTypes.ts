@@ -7,19 +7,19 @@ export class ErrorHandler extends Error {
   }
 }
 
-export class BadRequestError extends ErrorHandler {
+export class BadRequest extends ErrorHandler {
   constructor(message: string) {
     super(message, 400);
   }
 }
 
-export class NotFoundError extends ErrorHandler {
+export class NotFound extends ErrorHandler {
   constructor(message: string) {
     super(message, 404);
   }
 }
 
-export class UnauthorizedError extends ErrorHandler {
+export class Unauthorized extends ErrorHandler {
   constructor(message: string) {
     super(message, 401);
   }
