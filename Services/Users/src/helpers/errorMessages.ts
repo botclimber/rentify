@@ -1,1 +1,3 @@
-export const USERNAME_REQUIRED = "Username is required";
+export const ErrorMessages = {
+  USERNAME_REQUIRED: "Username is required",
+} as const;
