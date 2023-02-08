@@ -1,27 +1,66 @@
 import { NextFunction, Response, Request } from "express";
-import { User } from "../../../../Database/src/entities/User";
 import { userRepository } from "../../../../Database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/errorMessages";
 import { BadRequest, Unauthorized } from "../helpers/errorTypes";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config";
+
+type JwtPayload = {
+  id: number;
+};
 
 export class UserController {
-  async create(req: Request, res: Response, next: NextFunction) {
-    if (!req.body.username) {
-      throw new BadRequest(ErrorMessages.USERNAME_REQUIRED);
+  async register(req: Request, res: Response, next: NextFunction) {
+    const { name, password, email, username } = req.body;
+
+    const userExists = await userRepository.findOneBy({ email });
+
+    if (userExists) {
+      throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
     }
 
-    const user = new User();
-    user.username = req.body.username;
-    user.password = req.body.password;
-    user.email = req.body.email;
-    user.name = req.body.name;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    await userRepository.save(user);
-    console.log("User saved");
+    const newUser = userRepository.create({
+      name,
+      password: hashedPassword,
+      email,
+      username,
+    });
+
+    await userRepository.save(newUser);
+
+    const { password: _, ...user } = newUser;
+
     return res.status(201).json(user);
   }
 
-  get(req: Request, res: Response, next: NextFunction) {
-    throw new Unauthorized("Method not implemented.");
+  async login(req: Request, res: Response, next: NextFunction) {
+    const { password, email } = req.body;
+
+    const user = await userRepository.findOneBy({ email });
+
+    if (!user) {
+      throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
+    }
+
+    const verifyPassword = await bcrypt.compare(password, user.password);
+
+    if (!verifyPassword) {
+      throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET ?? "", {
+      expiresIn: "8h",
+    });
+
+    const { password: _, ...userLogin } = user;
+
+    return res.status(200).json({ user: userLogin, token: token });
+  }
+
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+    return res.status(200).json(req.user);
   }
 }

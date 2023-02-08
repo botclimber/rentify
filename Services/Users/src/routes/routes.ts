@@ -1,12 +1,16 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import { UserController } from "../controllers/UserController";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 const routes = Router();
 
 const users = [];
 
-routes.post("/newUser", new UserController().create);
+routes.post("/register", new UserController().register);
+routes.post("/login", new UserController().login);
 
-routes.get("/", new UserController().get);
+// Routes for users that need to be authenticated
+routes.use(authMiddleware);
+routes.get("/profile", new UserController().getProfile);
 
 export default routes;
