@@ -20,9 +20,7 @@ exports.actions = (function(ws){
 			}).catch(reason => {
 
 				console.log("Couldnt handle request " + reason)
-				ws.forEach((client) => {
-					client.send(JSON.stringify({ status: "rejected", msg: reason }));
-				});
+				ws.send(JSON.stringify({ status: "rejected", msg: reason }));
 			});
 	}
 
@@ -37,14 +35,13 @@ exports.actions = (function(ws){
 			console.info("Lat and Lng not defined ... requesting it by using address ("+data.city+", "+data.street+", "+data.buildingNumber+")")
 			conv.getLatLng(data)
 			.then(res => {
-				this.getPendingForApprovalReviews();
+
 				helper.createReview(res[0].latitude, res[0].longitude, data); })
 			.catch( reason => {
 
 				console.log(reason)
-				ws.forEach((client) => {
-					 client.send(JSON.stringify({status: "rejected",msg: reason}));
-				});
+				ws.send(JSON.stringify({status: "rejected",msg: reason}));
+
 			});
 		}
 	}
