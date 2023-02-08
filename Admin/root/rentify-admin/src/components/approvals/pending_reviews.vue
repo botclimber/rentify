@@ -1,50 +1,42 @@
 <script>
 
+const reviewsApi = "http://localhost:8000/api/adm/"
+
 export default{
   name:"Pending_Reviews",
 
-  props:{
-    socket: Object
-  },
-
   data(){
-    this.sendMessage({type: 'pendingReviews'})
-
     return {
       allData: []
     }
   },
 
   //watch:{},
-
-  methods:{
-	sendMessage(msg){this.socket.send(JSON.stringify(msg))},
-	decision(res, revId, lat, lng){
-		if(confirm('Are you sure about your decision?')){
-			this.sendMessage({type:'updateReview', revId: revId, decision: res, lat: lat, lng: lng})
-		}
-	}
-  },
-
   created(){
-    this.socket.onopen = (e) => {
-        console.log("[open] Connection established");
-        console.log("Sending to server");
-
-    },
-
-    this.socket.onmessage =  (event) => {
-      console.log(`[message] Data received from server: ${event.data}`);
-      const data = JSON.parse(event.data)
-
+      this.getPendingReviews()
+  },
+  
+  methods:{
+    async getPendingReviews(){
+      const res = await fetch(reviewsApi+'getPendReviews').catch(err => console.log(err))
+      const data = await res.json()
+      
       this.allData = data.reviews
+
     },
+    async updateReview(revId, dec){
+      if(confirm("Are you sure ?")){
+        const res = await fetch(reviewsApi+'updateReview/'+revId,{
+          method: 'PATCH',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({decision: dec})
+        })
+        const data = await res.json()
 
-    this.socket.onerror = (error) => {
-      console.log(`[error]`);
+        this.allData = data.reviews
+      }
     }
-  }
-
+  },
 }
 </script>
 
@@ -66,6 +58,7 @@ export default{
                 </tr>
               </thead>
               <tbody>
+
                 <tr v-for="row of allData" :key="row.rev.id">
                   <td>{{ row.rev.userId }}</td>
                   <td>
@@ -93,19 +86,20 @@ export default{
                   </td>
                   <td>
                     <div
-			@click="decision(1, row.rev.id, row.addr.lat, row.addr.lng)"
+      @click="updateReview(row.rev.id, 1)"
                       class="badge badge-outline-success asBtn"
                     >
                       Approve
                     </div>
                     <div
                       class="badge badge-outline-danger asBtn"
-			@click="decision(2, row.rev.id, row.addr.lat, row.addr.lng)"
+      @click="updateReview(row.rev.id, 2)"
                     >
                       Reject
                     </div>
                   </td>
                 </tr>
+
               </tbody>
             </table>
           </div>

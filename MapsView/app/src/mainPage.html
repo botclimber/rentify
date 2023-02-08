@@ -104,8 +104,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
         	<input type="text" id="iCity" placeholder="City/State" value = ""/>
         	<input type="text" id="iStreet" placeholder="Street" value = ""/>
         	<input type="text" id="iBNumber" placeholder="building number" value =""/>
-        	<button id="sAddress">Search</button>
-          <button id="openNReviewForm" style="display:none" >New Review</button>
+        	<button type="button" id="sAddress">Search</button>
+          <button type="button" id="openNReviewForm" style="display:none" >New Review</button>
 		</form>
 
 	</div>
@@ -123,7 +123,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 		Review as Anonymous: <input type="checkbox" id="nrAnon" value = "0"><br/><br/>
 		<input type="hidden" id="nrLat" value="">
 		<input type="hidden"  id="nrLng" value="">
-		<button id="newReview" class="btn">Add</button>
+		<button type="button" id="newReview" class="btn">Add</button>
 		<button type="button" class="btn cancel" id="closeNReviewForm" >Close</button>
 	</form>
 </div>

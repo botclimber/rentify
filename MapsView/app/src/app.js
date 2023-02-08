@@ -21,7 +21,6 @@ const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
 
-// ------------ websocket connection --------------
 var location =function(city = "", street = "", nr = "", floor = "", side = ""){
 	return {type: "search", city: city, street: street, buildingNumber: nr, floor: floor, side: side }
 }
@@ -31,7 +30,6 @@ var data = {
 	address: {lat: 41.1579438, lng:-8.629105299999999}
 }
 
-var mapCounter = 0
 var map
 var markers = []
 
@@ -59,31 +57,37 @@ loader.load().then(() => {
 });
 
 const urlParams = new URLSearchParams(window.location.search)
-fetch('http://127.0.0.1:8000/search?city='+urlParams.get('city'))
-.then(res => res.json())
-.then((data) => {
-  //console.log(`[message] Data received from server: ${response.data} + ${JSON.stringify(response)}`);
-  //document.getElementById("resp").innerHTML += event.data+"<br>"
-  
-	var locations = data.locations
+const city = urlParams.get("city") || "Braga"
 
-	//if(data.type == "address") map = displayMap(data.address);
+function mountPage(data){
+  var locations = data.locations
+
+  //if(data.type == "address") map = displayMap(data.address);
   map = displayMap(data.address);
   markers = addMarkers(map, locations, markers[0]);
 
   //clustering marks is a bit buggy so lets remove it for now
-	//clusterMarkers(map, markers[0]);
-	addPanToMarker(map, markers[0], markers[1]);
+  //clusterMarkers(map, markers[0]);
+  addPanToMarker(map, markers[0], markers[1]);
 
   // Configure the click listener.
-	map.addListener("click", (mapsMouseEvent) => {
+  map.addListener("click", (mapsMouseEvent) => {
 
-		var coords = mapsMouseEvent.latLng.toJSON()
+    var coords = mapsMouseEvent.latLng.toJSON()
     reviewFromExisting(coords.lat, coords.lng)
-	});
+  });
+}
 
-})
-.catch(err => console.log(err))
+function search(city, street = "", nr = ""){
+  
+  fetch('http://127.0.0.1:8000/search?city='+city+"&street="+street+"&nr="+nr)
+  .then(res => res.json())
+  .then((data) => mountPage(data))
+  .catch(err => console.log(err))
+
+}
+
+search(city)
 
 function reviewFromExisting(lat, lng){
   console.log('Place registed! complete Form and add review ('+lat+', '+lng+')')
@@ -103,14 +107,15 @@ function reviewFromExisting(lat, lng){
 
 document.getElementById("sAddress").onclick = function(){
 
-	socket.send(JSON.stringify(location(iCity.value, iStreet.value, iBNumber.value)))
+  search(iCity.value, iStreet.value, iBNumber.value)
 }
 
 /* NEW REVIEW */
 newReview.addEventListener('click', (event) => {
 
 	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
-		var nReview = {
+
+    cReview({
 			type: "createReview",
 			lat: nrLat.value,
 			lng: nrLng.value,
@@ -122,25 +127,24 @@ newReview.addEventListener('click', (event) => {
 			nrRating: nrRating.value,
 			nrAnon: parseInt(nrAnon.value),
 			nrReview: nrReview.value
-		}
+		})
 
-		console.log("ANON VALUE: "+nrAnon.value)
-		socket.send(JSON.stringify(nReview))
-	}
+	}else console.log("Fill required fields!")
 });
-/* NEW REVIEW*/
 
-
-/*	socket.onclose = function(event) {
-		if (event.wasClean) {
-			console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-		} else {
-			// e.g. server process killed or network down
-			// event.code is usually 1006 in this case
-			console.log('[close] Connection died');
-		}
-	};*/
-// ------------ websocket connection --------------
+async function cReview(data){
+  await fetch('http://127.0.0.1:8000/create',{
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    })
+  .then(res => res.json())
+  .then((data) => mountPage(data))
+  .catch(err => console.log(err))
+}
 
 function isInputsFilled(){
 	return (iCity.value !== "" && iStreet.value !== "" && iBNumber.value !== "")

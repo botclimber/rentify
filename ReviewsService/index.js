@@ -21,6 +21,15 @@ app.post('/create', (req, res) => {
   actions.actions(res).insertReview(req.body)
 })
 
+// admin only requests
+app.get('/api/adm/getPendReviews', (req, res) => {
+  actions.actions(res).getPendingForApprovalReviews()
+})
+
+app.patch('/api/adm/updateReview/:revId', (req, res) => {
+  actions.actions(res).updateReviewState({revId: req.params.revId, decision: req.body.decision})
+})
+
 app.listen(port, () => {
   console.log(`Host listening to port: ${port}`)
 })

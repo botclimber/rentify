@@ -12,15 +12,11 @@ const routes = {
 
 }
 
-const socket = new WebSocket('ws://localhost:8000/');
-console.log(socket, typeof(socket))
-
 export default {
   name: "App",
 
   data() {
     return {
-      socket: socket,
       currentPath: window.location.hash,
     }
   },
@@ -251,7 +247,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" :socket="socket" />
+        <component :is="currentView" />
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
