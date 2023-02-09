@@ -46,12 +46,11 @@ exports.actions = (function(ws){
 		}
 	}
 
-	//ACTION TO SEND DATA FOR ADMIN PAGE
-	function getPendingForApprovalReviews(){
+	function getAllReviews(){
 		helper.getAllFromDb()
 		.then(res => {
-			console.log("assembling all pending reviews...")
-			const pendReviews = res[0].filter(review => review.approved == 0)
+			console.log("assembling all reviews...")
+			const pendReviews = res[0]
 			.map(rev => {
 				const residence = res[1].find(res => res.id == rev.residenceId)
 				const addr = res[2].find(address => address.id == residence.addressId)
@@ -60,7 +59,7 @@ exports.actions = (function(ws){
 			}) // continue map tree constuction
 			
 			const response = {
-				type: "pendingReviews",
+				type: "allReviews",
 				reviews: pendReviews
 			}
 
@@ -75,10 +74,10 @@ exports.actions = (function(ws){
 
 	function updateReviewState(data){
 		helper.changeReviewApprovalState(data.revId, data.decision)
-		this.getPendingForApprovalReviews()	
+		this.getAllReviews()	
 
 	}
 
-	return { search, insertReview, getPendingForApprovalReviews, updateReviewState }
+	return { search, insertReview, getAllReviews, updateReviewState }
 
 })

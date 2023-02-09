@@ -21,9 +21,10 @@ app.post('/create', (req, res) => {
   actions.actions(res).insertReview(req.body)
 })
 
-// admin only requests
-app.get('/api/adm/getPendReviews', (req, res) => {
-  actions.actions(res).getPendingForApprovalReviews()
+// admin only requests (for now) ----
+app.get('/api/adm/reviews', (req, res) => {
+  console.log("We here")
+  actions.actions(res).getAllReviews()
 })
 
 app.patch('/api/adm/updateReview/:revId', (req, res) => {

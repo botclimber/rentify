@@ -5,25 +5,18 @@ const reviewsApi = "http://localhost:8000/api/adm/"
 export default{
   name:"Pending_Reviews",
 
+  props:{
+    reviews: Object
+  },
+
   data(){
     return {
-      allData: []
+      allData: this.reviews.filter(row => row.rev.approved == 0)
     }
   },
 
-  //watch:{},
-  created(){
-      this.getPendingReviews()
-  },
-  
   methods:{
-    async getPendingReviews(){
-      const res = await fetch(reviewsApi+'getPendReviews').catch(err => console.log(err))
-      const data = await res.json()
-      
-      this.allData = data.reviews
 
-    },
     async updateReview(revId, dec){
       if(confirm("Are you sure ?")){
         const res = await fetch(reviewsApi+'updateReview/'+revId,{
@@ -33,10 +26,10 @@ export default{
         })
         const data = await res.json()
 
-        this.allData = data.reviews
+        this.allData = data.reviews.filter(row => row.rev.approved == 0)
       }
     }
-  },
+  }
 }
 </script>
 
@@ -60,7 +53,7 @@ export default{
               <tbody>
 
                 <tr v-for="row of allData" :key="row.rev.id">
-                  <td>{{ row.rev.userId }}</td>
+                  <td>{{ row.rev.id }}</td>
                   <td>
                     <p>{{ row.rev.review }}</p>
                   </td>

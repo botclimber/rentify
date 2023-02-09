@@ -4,6 +4,8 @@ import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
 import Pending_Reviews from './components/approvals/pending_reviews.vue'
 
+const reviewsApi = "http://localhost:8000/api/adm/"
+
 const routes = {
   '/': Home,
   '/chartjs': Chartjs,
@@ -17,8 +19,13 @@ export default {
 
   data() {
     return {
+      reviews: null,
       currentPath: window.location.hash,
     }
+  },
+
+  created(){
+      this.getAllReviews()
   },
 
   computed: {
@@ -26,11 +33,22 @@ export default {
       return routes[this.currentPath.slice(1) || '/'] || NotFound
     }
   },
+
+  methods: {
+    async getAllReviews(){
+      const res = await fetch(reviewsApi+'reviews').catch(err => console.log(err))
+      const data = await res.json()
+      
+      this.reviews = data.reviews
+
+    },
+  },
   mounted() {
     window.addEventListener('hashchange', () => {
 		  this.currentPath = window.location.hash
 		})
   }
+
 }
 
 </script>
@@ -247,7 +265,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" />
+        <component :is="currentView"  :reviews="reviews"/>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
