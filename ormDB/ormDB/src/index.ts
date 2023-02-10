@@ -35,7 +35,7 @@ AppDataSource.initialize().then(async () => {
     await AppDataSource.manager.save(review)
 
     console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(Reviews)
+    const users = await AppDataSource.manager.find({relations:{Addresses: true, ResidenceAddresses: true, Reviews: true}})
     console.log("Loaded users: ", users)
 
     console.log("Here you can setup and run express / fastify / any other framework.")
