@@ -5,6 +5,7 @@ import { BadRequest, Unauthorized } from "../helpers/errorTypes";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import { EmailHelper } from "../helpers/emailHelper";
 
 type JwtPayload = {
   id: number;
@@ -30,6 +31,8 @@ export class UserController {
     });
 
     await userRepository.save(newUser);
+
+    EmailHelper.sendVerifyEmail(newUser);
 
     const { password: _, ...user } = newUser;
 
@@ -61,6 +64,22 @@ export class UserController {
   }
 
   async getProfile(req: Request, res: Response, next: NextFunction) {
+    return res.status(200).json(req.user);
+  }
+
+  async verifyUser(req: Request, res: Response, next: NextFunction) {
+    let { userId, emailToken } = req.params;
+
+    const user = await userRepository.findOneBy({ id: +userId });
+
+    if (!user) {
+      throw new BadRequest("User does not exist");
+    }
+
+    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "");
+    user.confirmed = true;
+    await userRepository.save(user);
+
     return res.status(200).json(req.user);
   }
 }

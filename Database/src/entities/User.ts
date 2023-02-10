@@ -1,21 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity('user')
+@Entity("user")
 export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column()
+  email: string;
 
-    @Column()
-    email: string
+  @Column()
+  username: string;
 
-    @Column()
-    username: string
+  @Column()
+  name: string;
 
-    @Column()
-    name: string
+  @Column()
+  password: string;
 
-    @Column()
-    password: string
-
+  @Column("boolean", { default: false })
+  confirmed: boolean = false;
 }

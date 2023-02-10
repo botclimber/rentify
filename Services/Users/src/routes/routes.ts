@@ -6,6 +6,7 @@ const routes = Router();
 
 routes.post("/register", new UserController().register);
 routes.post("/login", new UserController().login);
+routes.get("/verify/:userId/:emailToken", new UserController().verifyUser);
 
 // Routes for users that need to be authenticated
 routes.use(authMiddleware);

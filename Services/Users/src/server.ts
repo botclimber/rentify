@@ -4,6 +4,21 @@ import express from "express";
 import routes from "./routes/routes";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
+import nodemailer from "nodemailer";
+
+const SMTP_CONFIG = require("./config/smtp");
+export const transporter = nodemailer.createTransport({
+  host: SMTP_CONFIG.host,
+  port: SMTP_CONFIG.port,
+  secure: false,
+  auth: {
+    user: SMTP_CONFIG.user,
+    pass: SMTP_CONFIG.pass,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 // establish database connection
 myDataSource
