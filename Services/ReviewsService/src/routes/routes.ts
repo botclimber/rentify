@@ -3,6 +3,6 @@ import { ReviewsController } from "../controllers/ReviewsController";
 
 const routes = Router();
 
-routes.post("/getAll", new ReviewsController().getAll);
+routes.get("/getAll", new ReviewsController().getAll);
 
 export default routes;
