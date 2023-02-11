@@ -1,12 +1,50 @@
 <template>
-  <div>
-    <h1>Login</h1>
-    <div>
-      <input type="text" v-model="email" placeholder="Enter Email" />
-      <br />
-      <input type="password" v-model="password" placeholder="Enter Password" />
-      <br />
-      <button v-on:click="login">Login</button>
+  <div class="container-fluid">
+    <!-- Image and text -->
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#"> Rentify </a>
+    </nav>
+    <div class="container" style="margin-top: 60px">
+      <form>
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input
+            type="email"
+            id="form2Example1"
+            class="form-control"
+            v-model="email"
+          />
+          <label class="form-label" for="form2Example1">Email address</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input
+            type="password"
+            id="form2Example2"
+            class="form-control"
+            v-model="password"
+          />
+          <label class="form-label" for="form2Example2">Password</label>
+        </div>
+
+        <!-- 2 column grid layout for inline styling -->
+        <div class="row mb-4">
+          <div class="col">
+            <!-- Simple link -->
+            <a href="#!">Forgot password?</a>
+          </div>
+        </div>
+
+        <!-- Submit button -->
+        <button
+          type="button"
+          class="btn btn-primary btn-block mb-4"
+          v-on:click="login"
+        >
+          Sign in
+        </button>
+      </form>
     </div>
   </div>
 </template>
