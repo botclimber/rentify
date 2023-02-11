@@ -44,6 +44,8 @@ export class UserController {
 
     const user = await userRepository.findOneBy({ email });
 
+    console.log("received");
+
     if (!user) {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }

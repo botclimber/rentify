@@ -25,12 +25,20 @@ myDataSource
   .initialize()
   .then(() => {
     const app = express();
-    app.use(helmet());
+    //app.use(helmet());
+    const cors = require("cors");
+    const corsOptions = {
+      origin: "*",
+      credentials: true, //access-control-allow-credentials:true
+      optionSuccessStatus: 200,
+    };
+
     app.use(express.json());
+    app.use(cors(corsOptions)); // Use this after the variable declaration
     app.use("/user", routes);
     app.use(errorMiddleware);
 
-    const port = process.env.PORT || 8080;
+    const port = process.env.PORT || 7000;
     app.listen(port, () => {
       console.log(`${port}`);
     });

@@ -12,7 +12,10 @@
 </template>
 
 <script lang="ts">
-export default {
+import axios from "axios";
+import { defineComponent } from "vue";
+
+export default defineComponent({
   data() {
     return {
       email: "",
@@ -21,9 +24,21 @@ export default {
   },
   methods: {
     login() {
+      axios
+        .post("http://localhost:7000/user/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+
       console.log(this.email, this.password);
     },
   },
-};
+});
 </script>
 <style></style>
