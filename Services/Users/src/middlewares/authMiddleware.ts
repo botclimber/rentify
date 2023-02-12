@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { userRepository } from "../../../../Database/src/repositories/userRepository";
+import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/errorMessages";
 import { Unauthorized } from "../helpers/errorTypes";
 import jwt from "jsonwebtoken";

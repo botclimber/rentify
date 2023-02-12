@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { userRepository } from "../../../../Database/src/repositories/userRepository";
+import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/errorMessages";
 import { BadRequest, Unauthorized } from "../helpers/errorTypes";
 import bcrypt from "bcrypt";

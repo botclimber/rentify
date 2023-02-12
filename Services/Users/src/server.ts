@@ -1,5 +1,5 @@
 import "express-async-errors";
-import { myDataSource } from "../../../Database/src/data-source";
+import { myDataSource } from "../database/src/data-source";
 import express from "express";
 import routes from "./routes/routes";
 import { errorMiddleware } from "./middlewares/errorMiddleware";

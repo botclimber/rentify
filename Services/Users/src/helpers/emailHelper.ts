@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { User } from "../../../../Database/src/entities/User";
+import { User } from "../../database/src/entities/User";
 import bcrypt from "bcrypt";
 import { transporter } from "../server";
 import jwt from "jsonwebtoken";
