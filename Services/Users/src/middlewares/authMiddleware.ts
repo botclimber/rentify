@@ -3,6 +3,8 @@ import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/errorMessages";
 import { Unauthorized } from "../helpers/errorTypes";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
+
 type JwtPayload = {
   id: number;
 };

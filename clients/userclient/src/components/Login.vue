@@ -79,7 +79,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AuthenticationService from "../services/AuthenticationService";
+import UserService from "../services/UserService";
 import Modal from "../components/Modal.vue";
 
 export default defineComponent({
@@ -97,7 +97,7 @@ export default defineComponent({
   },
   methods: {
     async login() {
-      await AuthenticationService.login(this.email, this.password)
+      await UserService.login(this.email, this.password)
         .then((response) => {
           console.log(response.data);
           this.isLogged = true;
@@ -110,32 +110,32 @@ export default defineComponent({
       this.$router.push({ name: "Register-Form" });
     },
     async changePasswordRequest() {
-      const valid = await this.verifyUserInput();
-      if (valid) {
-        await AuthenticationService.changePasswordRequest(this.email)
+      if (this.email.length > 0) {
+        await UserService.changePasswordRequest(this.email)
           .then((response) => {
             console.log(response.data);
           })
           .catch((error) => {
             if (error.response.data.message === "User does not exist") {
-              this.modalBody = "No user was found with this email";
-              this.modalHeader = "No user found";
-              this.isShow = true;
+              this.setModalValues(
+                "No user found",
+                "No user was found with this email"
+              );
             }
           });
       } else {
-        this.modalBody = "Please fill email field";
-        this.modalHeader = "No Email";
-        this.isShow = true;
+        this.setModalValues("No Email", "Please fill email field");
       }
-    },
-    async verifyUserInput() {
-      return this.email.length > 0;
     },
     async onModalClose() {
       this.modalBody = "";
       this.modalHeader = "";
       this.isShow = false;
+    },
+    async setModalValues(header: string, body: string) {
+      this.modalBody = body;
+      this.modalHeader = header;
+      this.isShow = true;
     },
   },
 });

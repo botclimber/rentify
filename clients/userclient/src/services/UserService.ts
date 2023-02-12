@@ -7,9 +7,16 @@ export default {
     return Api().post(`${baseURL}/login`, { email, password });
   },
 
-  register(email: string, password: string, name: string, username: string) {
+  register(
+    firstName: string,
+    lastName: string,
+    username: string,
+    email: string,
+    password: string
+  ) {
     return Api().post(`${baseURL}/register`, {
-      name,
+      firstName,
+      lastName,
       username,
       email,
       password,

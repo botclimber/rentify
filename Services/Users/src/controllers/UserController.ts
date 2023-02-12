@@ -13,7 +13,9 @@ type JwtPayload = {
 
 export class UserController {
   async register(req: Request, res: Response, next: NextFunction) {
-    const { name, password, email, username } = req.body;
+    const { firstName, lastName, password, email, username } = req.body;
+
+    console.log(`Registration Request for email: ${email}`);
 
     const userExists = await userRepository.findOneBy({ email });
 
@@ -24,15 +26,18 @@ export class UserController {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = userRepository.create({
-      name,
+      firstName,
+      lastName,
       password: hashedPassword,
       email,
       username,
     });
 
     await userRepository.save(newUser);
+    console.log(`Registration Successful for email: ${email}`);
 
     EmailHelper.sendVerifyEmail(newUser);
+    console.log(`Sending verification email to: ${email}`);
 
     const { password: _, ...user } = newUser;
 
@@ -42,9 +47,9 @@ export class UserController {
   async login(req: Request, res: Response, next: NextFunction) {
     const { password, email } = req.body;
 
-    const user = await userRepository.findOneBy({ email });
+    console.log(`Login Request for email: ${email}`);
 
-    console.log("received");
+    const user = await userRepository.findOneBy({ email });
 
     if (!user) {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
@@ -62,6 +67,8 @@ export class UserController {
 
     const { password: _, ...userLogin } = user;
 
+    console.log(`Login Successful for email: ${email}`);
+
     return res.status(200).json({ user: userLogin, token: token });
   }
 
@@ -72,6 +79,8 @@ export class UserController {
   async verifyUser(req: Request, res: Response, next: NextFunction) {
     let { userId, emailToken } = req.params;
 
+    console.log(`verifyUser Request for userId: ${userId}`);
+
     const user = await userRepository.findOneBy({ id: +userId });
 
     if (!user) {
@@ -79,8 +88,9 @@ export class UserController {
     }
 
     const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "");
-    user.confirmed = true;
+    user.verified = true;
     await userRepository.save(user);
+    console.log(`User with ID ${userId} verified`);
 
     return res.status(200).json(req.user);
   }
@@ -88,7 +98,7 @@ export class UserController {
   async changePasswordRequest(req: Request, res: Response, next: NextFunction) {
     let { email } = req.params;
 
-    console.log("change password");
+    console.log(`changePasswordRequest Request for email: ${email}`);
 
     const user = await userRepository.findOneBy({ email: email });
 
@@ -97,6 +107,7 @@ export class UserController {
     }
 
     EmailHelper.sendChangePasswordEmail(user);
+    console.log(`Send password reset email to: ${email}`);
 
     return res.status(200).json(req.user);
   }
@@ -104,7 +115,7 @@ export class UserController {
   async updateUserPassword(req: Request, res: Response, next: NextFunction) {
     let { userId, emailToken } = req.params;
 
-    console.log("update password");
+    console.log(`updateUserPassword Request for userId: ${userId}`);
 
     const user = await userRepository.findOneBy({ id: +userId });
 
@@ -118,7 +129,7 @@ export class UserController {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-    console.log("sucessfully updated password");
+    console.log("Sucessfully updated password");
 
     await userRepository.save(user);
 

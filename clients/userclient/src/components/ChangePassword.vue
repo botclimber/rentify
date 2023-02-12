@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AuthenticationService from "../services/AuthenticationService";
+import UserService from "../services/UserService";
 
 export default defineComponent({
   name: "ChangePassword-Form",
@@ -41,7 +41,7 @@ export default defineComponent({
   },
   methods: {
     async changePassword() {
-      await AuthenticationService.updatePassword(
+      await UserService.updatePassword(
         +this.$route.params.id,
         this.password,
         this.$route.params.passwordToken as string

@@ -15,22 +15,36 @@
       </div>
     </div>
     <div v-else>
-      <form>
+      <Form @submit="register">
         <!-- Name input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="firstName"
+            type="text"
+            class="form-control"
+            id="form2Example1"
+            v-model="firstName"
+            placeholder="First Name"
+          />
+        </div>
+
+        <!-- Name input -->
+        <div class="form-outline mb-4">
+          <Field
+            name="lastName"
             type="text"
             id="form2Example1"
             class="form-control"
-            v-model="name"
-            placeholder="Name"
+            v-model="lastName"
+            placeholder="Last Name"
             required
           />
         </div>
 
         <!-- Username input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="username"
             type="text"
             id="form2Example1"
             class="form-control"
@@ -42,7 +56,8 @@
 
         <!-- Email input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="email"
             type="email"
             id="form2Example1"
             class="form-control"
@@ -54,7 +69,8 @@
 
         <!-- Password input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="password"
             type="password"
             id="form2Example2"
             class="form-control"
@@ -67,27 +83,34 @@
         <div class="row mb-4">
           <!-- Submit button -->
           <button
-            type="button"
+            title="Register"
             class="btn btn-primary btn-md btn-block"
-            v-on:click="register"
+            type="submit"
           >
             Register
           </button>
         </div>
-      </form>
+      </Form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AuthenticationService from "../services/AuthenticationService";
+import UserService from "../services/UserService";
+import { Form, Field } from "vee-validate";
 
 export default defineComponent({
   name: "Register-Form",
+  components: {
+    Form,
+    Field,
+  },
   data() {
     return {
-      name: "",
+      loginForm: "loginform",
+      firstName: "",
+      lastName: "",
       username: "",
       email: "",
       password: "",
@@ -95,12 +118,15 @@ export default defineComponent({
     };
   },
   methods: {
-    register() {
-      AuthenticationService.register(
+    async register() {
+      const validInputs = await this.validateInputs();
+      if (!validInputs) return;
+      UserService.register(
+        this.firstName,
+        this.lastName,
+        this.username,
         this.email,
-        this.password,
-        this.name,
-        this.username
+        this.password
       )
         .then((response) => {
           console.log(response.data);
@@ -112,6 +138,18 @@ export default defineComponent({
     },
     goToLogin() {
       this.$router.push({ name: "Login-Form" });
+    },
+    async validateInputs() {
+      const { firstName, lastName, username, email, password } = this;
+      console.log(firstName, lastName, username, email, password);
+
+      return (
+        firstName != "" &&
+        lastName != "" &&
+        username != "" &&
+        email != "" &&
+        password != ""
+      );
     },
   },
 });

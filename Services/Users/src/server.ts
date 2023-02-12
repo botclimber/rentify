@@ -5,6 +5,9 @@ import routes from "./routes/routes";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
 import nodemailer from "nodemailer";
+import "dotenv/config";
+
+const cors = require("cors");
 
 const SMTP_CONFIG = require("./config/smtp");
 export const transporter = nodemailer.createTransport({
@@ -26,7 +29,7 @@ myDataSource
   .then(() => {
     const app = express();
     //app.use(helmet());
-    const cors = require("cors");
+
     const corsOptions = {
       origin: "*",
       credentials: true, //access-control-allow-credentials:true
@@ -38,7 +41,7 @@ myDataSource
     app.use("/user", routes);
     app.use(errorMiddleware);
 
-    const port = process.env.PORT || 7000;
+    const port = process.env.SERVER_PORT || 7000;
     app.listen(port, () => {
       console.log(`${port}`);
     });
