@@ -1,31 +1,29 @@
 <template>
   <div class="container" style="margin-top: 60px; width: 30%">
-    <div v-if="isLogged">Login successful for user with email {{ email }}</div>
-    <div v-else>
-      <form>
-        <!-- Password input -->
-        <div class="form-outline mb-4">
-          <input
-            type="password"
-            id="form2Example2"
-            class="form-control"
-            v-model="password"
-            placeholder="Password"
-          />
-        </div>
+    <form>
+      <!-- Password input -->
+      <div class="form-outline mb-4">
+        <input
+          type="password"
+          id="form2Example2"
+          class="form-control"
+          v-model="password"
+          placeholder="Password"
+        />
+      </div>
 
-        <div class="row mb-4">
-          <!-- Submit button -->
-          <button
-            type="button"
-            class="btn btn-primary btn-md btn-block"
-            v-on:click="changePassword"
-          >
-            Change Password
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="row mb-4">
+        <!-- Submit button -->
+        <button
+          type="button"
+          class="btn btn-primary btn-md btn-block"
+          v-on:click="changePassword"
+        >
+          Change Password
+        </button>
+      </div>
+    </form>
+    <div v-if="changedPasswordSuccess">Password updated successfully</div>
   </div>
 </template>
 
@@ -37,6 +35,7 @@ export default defineComponent({
   name: "ChangePassword-Form",
   data() {
     return {
+      changedPasswordSuccess: false,
       password: "",
     };
   },
@@ -49,6 +48,7 @@ export default defineComponent({
       )
         .then((response) => {
           console.log(response.data);
+          this.changedPasswordSuccess = true;
         })
         .catch((error) => {
           console.error(error);
