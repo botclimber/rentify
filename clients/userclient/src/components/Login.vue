@@ -65,6 +65,14 @@
           <p>Not a member? <a href="" @click="register">Register</a></p>
         </div>
       </form>
+      <Teleport to="body">
+        <!-- use the modal component, pass in the prop -->
+        <modal :show="isShow" :message="modalBody" @close="onModalClose">
+          <template #header>
+            <h3>{{ modalHeader }}</h3>
+          </template>
+        </modal>
+      </Teleport>
     </div>
   </div>
 </template>
@@ -72,14 +80,19 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AuthenticationService from "../services/AuthenticationService";
+import Modal from "../components/Modal.vue";
 
 export default defineComponent({
   name: "Login-Form",
+  components: { Modal },
   data() {
     return {
       email: "",
       password: "",
       isLogged: false,
+      isShow: false,
+      modalHeader: "",
+      modalBody: "",
     };
   },
   methods: {
@@ -97,14 +110,32 @@ export default defineComponent({
       this.$router.push({ name: "Register-Form" });
     },
     async changePasswordRequest() {
-      console.log(this.email);
-      await AuthenticationService.changePasswordRequest(this.email)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const valid = await this.verifyUserInput();
+      if (valid) {
+        await AuthenticationService.changePasswordRequest(this.email)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            if (error.response.data.message === "User does not exist") {
+              this.modalBody = "No user was found with this email";
+              this.modalHeader = "No user found";
+              this.isShow = true;
+            }
+          });
+      } else {
+        this.modalBody = "Please fill email field";
+        this.modalHeader = "No Email";
+        this.isShow = true;
+      }
+    },
+    async verifyUserInput() {
+      return this.email.length > 0;
+    },
+    async onModalClose() {
+      this.modalBody = "";
+      this.modalHeader = "";
+      this.isShow = false;
     },
   },
 });
