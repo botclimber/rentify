@@ -28,7 +28,9 @@
             :rules="isRequired"
           />
           <ErrorMessage as="div" name="firstName" v-slot="{ message }">
-            <p>{{ message }}</p></ErrorMessage
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
           >
         </div>
 
@@ -44,7 +46,9 @@
             :rules="isRequired"
           />
           <ErrorMessage as="div" name="lastName" v-slot="{ message }">
-            <p>{{ message }}</p></ErrorMessage
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
           >
         </div>
 
@@ -60,7 +64,9 @@
             :rules="isRequired"
           />
           <ErrorMessage as="div" name="username" v-slot="{ message }">
-            <p>{{ message }}</p></ErrorMessage
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
           >
         </div>
 
@@ -76,7 +82,9 @@
             :rules="emailRule"
           />
           <ErrorMessage as="div" name="email" v-slot="{ message }">
-            <p>{{ message }}</p></ErrorMessage
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
           >
         </div>
 
@@ -92,7 +100,9 @@
             :rules="passwordRule"
           />
           <ErrorMessage as="div" name="password" v-slot="{ message }">
-            <p>{{ message }}</p></ErrorMessage
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
           >
         </div>
 

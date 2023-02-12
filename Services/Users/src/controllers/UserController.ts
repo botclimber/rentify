@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import { userRepository } from "../../database/src/repositories/userRepository";
-import { ErrorMessages } from "../helpers/errorMessages";
+import { ErrorMessages } from "../helpers/constants";
 import { BadRequest, Unauthorized } from "../helpers/errorTypes";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

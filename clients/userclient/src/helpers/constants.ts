@@ -9,6 +9,6 @@ export const Yup = {
       /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/,
       "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character."
     ),
-  required: yup.string().required(),
-  email: yup.string().required().email(),
+  required: yup.string().required("This is a required field"),
+  email: yup.string().required("This is a required field").email(),
 } as const;

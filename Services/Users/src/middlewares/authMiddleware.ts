@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { userRepository } from "../../database/src/repositories/userRepository";
-import { ErrorMessages } from "../helpers/errorMessages";
+import { ErrorMessages } from "../helpers/constants";
 import { Unauthorized } from "../helpers/errorTypes";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
