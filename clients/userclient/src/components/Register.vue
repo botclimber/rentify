@@ -16,7 +16,7 @@
     </div>
     <div v-else>
       <Form @submit="register">
-        <!-- Name input -->
+        <!-- First Name input -->
         <div class="form-outline mb-4">
           <Field
             name="firstName"
@@ -25,10 +25,14 @@
             id="form2Example1"
             v-model="firstName"
             placeholder="First Name"
+            :rules="isRequired"
           />
+          <ErrorMessage as="div" name="firstName" v-slot="{ message }">
+            <p>{{ message }}</p></ErrorMessage
+          >
         </div>
 
-        <!-- Name input -->
+        <!-- Last Name input -->
         <div class="form-outline mb-4">
           <Field
             name="lastName"
@@ -37,8 +41,11 @@
             class="form-control"
             v-model="lastName"
             placeholder="Last Name"
-            required
+            :rules="isRequired"
           />
+          <ErrorMessage as="div" name="lastName" v-slot="{ message }">
+            <p>{{ message }}</p></ErrorMessage
+          >
         </div>
 
         <!-- Username input -->
@@ -50,8 +57,11 @@
             class="form-control"
             v-model="username"
             placeholder="Username"
-            required
+            :rules="isRequired"
           />
+          <ErrorMessage as="div" name="username" v-slot="{ message }">
+            <p>{{ message }}</p></ErrorMessage
+          >
         </div>
 
         <!-- Email input -->
@@ -63,8 +73,11 @@
             class="form-control"
             v-model="email"
             placeholder="Email"
-            required
+            :rules="emailRule"
           />
+          <ErrorMessage as="div" name="email" v-slot="{ message }">
+            <p>{{ message }}</p></ErrorMessage
+          >
         </div>
 
         <!-- Password input -->
@@ -76,8 +89,11 @@
             class="form-control"
             v-model="password"
             placeholder="Password"
-            required
+            :rules="passwordRule"
           />
+          <ErrorMessage as="div" name="password" v-slot="{ message }">
+            <p>{{ message }}</p></ErrorMessage
+          >
         </div>
 
         <div class="row mb-4">
@@ -98,17 +114,25 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import UserService from "../services/UserService";
-import { Form, Field } from "vee-validate";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { Yup } from "../helpers/constants";
 
 export default defineComponent({
   name: "Register-Form",
   components: {
     Form,
     Field,
+    ErrorMessage,
+  },
+  setup() {
+    return {
+      passwordRule: Yup.password,
+      isRequired: Yup.required,
+      emailRule: Yup.email,
+    };
   },
   data() {
     return {
-      loginForm: "loginform",
       firstName: "",
       lastName: "",
       username: "",
@@ -119,8 +143,6 @@ export default defineComponent({
   },
   methods: {
     async register() {
-      const validInputs = await this.validateInputs();
-      if (!validInputs) return;
       UserService.register(
         this.firstName,
         this.lastName,
@@ -138,18 +160,6 @@ export default defineComponent({
     },
     goToLogin() {
       this.$router.push({ name: "Login-Form" });
-    },
-    async validateInputs() {
-      const { firstName, lastName, username, email, password } = this;
-      console.log(firstName, lastName, username, email, password);
-
-      return (
-        firstName != "" &&
-        lastName != "" &&
-        username != "" &&
-        email != "" &&
-        password != ""
-      );
     },
   },
 });
