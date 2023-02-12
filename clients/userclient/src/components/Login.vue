@@ -45,7 +45,7 @@
 
           <div class="col">
             <!-- Simple link -->
-            <a href="#!">Forgot password?</a>
+            <a href="#!" @click="changePasswordRequest">Forgot password?</a>
           </div>
         </div>
 
@@ -92,11 +92,19 @@ export default defineComponent({
         .catch((error) => {
           console.error(error);
         });
-      console.log(this.isLogged);
-      console.log(this.email, this.password);
     },
     register() {
       this.$router.push({ name: "Register-Form" });
+    },
+    async changePasswordRequest() {
+      console.log(this.email);
+      await AuthenticationService.changePasswordRequest(this.email)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 });

@@ -84,4 +84,44 @@ export class UserController {
 
     return res.status(200).json(req.user);
   }
+
+  async changePasswordRequest(req: Request, res: Response, next: NextFunction) {
+    let { email } = req.params;
+
+    console.log("change password");
+
+    const user = await userRepository.findOneBy({ email: email });
+
+    if (!user) {
+      throw new BadRequest("User does not exist");
+    }
+
+    EmailHelper.sendChangePasswordEmail(user);
+
+    return res.status(200).json(req.user);
+  }
+
+  async updateUserPassword(req: Request, res: Response, next: NextFunction) {
+    let { userId, emailToken } = req.params;
+
+    console.log("update password");
+
+    const user = await userRepository.findOneBy({ id: +userId });
+
+    if (!user) {
+      throw new BadRequest("User does not exist");
+    }
+
+    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "");
+
+    const { password } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    console.log("sucessfully updated password");
+
+    await userRepository.save(user);
+
+    return res.status(200).json(req.user);
+  }
 }

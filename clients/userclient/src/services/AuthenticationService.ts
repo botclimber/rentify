@@ -15,4 +15,14 @@ export default {
       password,
     });
   },
+
+  updatePassword(id: number, password: string, token: string) {
+    return Api().post(`${baseURL}/updatePassword/${id}/${token}`, {
+      password,
+    });
+  },
+
+  changePasswordRequest(email: string) {
+    return Api().get(`${baseURL}/changePassword/${email}`);
+  },
 };
