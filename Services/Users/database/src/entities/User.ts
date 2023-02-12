@@ -1,22 +1,25 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity("user")
+@Entity("User")
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column("varchar", { unique: true, length: 60 })
   email: string;
 
-  @Column()
+  @Column("varchar", { unique: true, length: 30 })
   username: string;
 
-  @Column()
-  name: string;
+  @Column("varchar", { length: 30 })
+  firstName: string;
 
-  @Column()
+  @Column("varchar", { length: 30 })
+  lastName: string;
+
+  @Column("varchar", { length: 128 })
   password: string;
 
   @Column("boolean", { default: false })
-  confirmed: boolean = false;
+  verified: boolean = false;
 }
