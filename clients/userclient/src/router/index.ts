@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     component: changePassword,
   },
   {
-    path: "/changePassword/",
+    path: "/recoverPassword",
     name: "RecoverPassword-Form",
     component: recoverPassword,
   },
