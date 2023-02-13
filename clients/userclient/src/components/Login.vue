@@ -2,27 +2,41 @@
   <div class="container" style="margin-top: 60px; width: 30%">
     <div v-if="isLogged">Login successful for user with email {{ email }}</div>
     <div v-else>
-      <form>
+      <Form @submit="login">
         <!-- Email input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="email"
             type="email"
             id="form2Example1"
             class="form-control"
             v-model="email"
             placeholder="Email"
+            :rules="emailRule"
           />
+          <ErrorMessage as="div" name="email" v-slot="{ message }">
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
+          >
         </div>
 
         <!-- Password input -->
         <div class="form-outline mb-4">
-          <input
+          <Field
+            name="password"
             type="password"
             id="form2Example2"
             class="form-control"
             v-model="password"
             placeholder="Password"
+            :rules="passwordRule"
           />
+          <ErrorMessage as="div" name="password" v-slot="{ message }">
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              {{ message }}
+            </small></ErrorMessage
+          >
         </div>
 
         <!-- 2 column grid layout for inline styling -->
@@ -52,9 +66,9 @@
         <div class="row mb-4">
           <!-- Submit button -->
           <button
-            type="button"
+            title="Register"
             class="btn btn-primary btn-md btn-block"
-            v-on:click="login"
+            type="submit"
           >
             Sign in
           </button>
@@ -64,7 +78,7 @@
         <div class="text-center">
           <p>Not a member? <a href="" @click="register">Register</a></p>
         </div>
-      </form>
+      </Form>
       <Teleport to="body">
         <!-- use the modal component, pass in the prop -->
         <modal :show="isShow" :message="modalBody" @close="onModalClose">
@@ -81,10 +95,18 @@
 import { defineComponent } from "vue";
 import UserService from "../services/UserService";
 import Modal from "../components/Modal.vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { Yup } from "../helpers/constants";
 
 export default defineComponent({
   name: "Login-Form",
-  components: { Modal },
+  components: { Modal, Form, Field, ErrorMessage },
+  setup() {
+    return {
+      passwordRule: Yup.password,
+      emailRule: Yup.email,
+    };
+  },
   data() {
     return {
       email: "",
