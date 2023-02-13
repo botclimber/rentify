@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import login from "../components/Login.vue";
 import register from "../components/Register.vue";
 import changePassword from "../components/ChangePassword.vue";
+import recoverPassword from "../components/RecoverPassword.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/changePassword/:id/:passwordToken",
     name: "ChangePassword-Form",
     component: changePassword,
+  },
+  {
+    path: "/changePassword/",
+    name: "RecoverPassword-Form",
+    component: recoverPassword,
   },
 ];
 

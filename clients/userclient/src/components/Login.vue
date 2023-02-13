@@ -79,14 +79,6 @@
           <p>Not a member? <a href="" @click="register">Register</a></p>
         </div>
       </Form>
-      <Teleport to="body">
-        <!-- use the modal component, pass in the prop -->
-        <modal :show="isShow" :message="modalBody" @close="onModalClose">
-          <template #header>
-            <h3>{{ modalHeader }}</h3>
-          </template>
-        </modal>
-      </Teleport>
     </div>
   </div>
 </template>
@@ -94,13 +86,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import UserService from "../services/UserService";
-import Modal from "../components/Modal.vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { Yup } from "../helpers/constants";
 
 export default defineComponent({
   name: "Login-Form",
-  components: { Modal, Form, Field, ErrorMessage },
+  components: { Form, Field, ErrorMessage },
   setup() {
     return {
       passwordRule: Yup.password,
@@ -132,32 +123,7 @@ export default defineComponent({
       this.$router.push({ name: "Register-Form" });
     },
     async changePasswordRequest() {
-      if (this.email.length > 0) {
-        await UserService.changePasswordRequest(this.email)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            if (error.response.data.message === "User does not exist") {
-              this.setModalValues(
-                "No user found",
-                "No user was found with this email"
-              );
-            }
-          });
-      } else {
-        this.setModalValues("No Email", "Please fill email field");
-      }
-    },
-    async onModalClose() {
-      this.modalBody = "";
-      this.modalHeader = "";
-      this.isShow = false;
-    },
-    async setModalValues(header: string, body: string) {
-      this.modalBody = body;
-      this.modalHeader = header;
-      this.isShow = true;
+      this.$router.push({ name: "RecoverPassword-Form" });
     },
   },
 });
