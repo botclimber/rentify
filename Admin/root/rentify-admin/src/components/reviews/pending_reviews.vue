@@ -46,6 +46,7 @@ export default{
                   <th>User</th>
                   <th>Review</th>
                   <th>Location</th>
+                  <th></th>
                   <th>Creation Date</th>
                   <th></th>
                 </tr>
@@ -55,12 +56,13 @@ export default{
                 <tr v-for="row of allData" :key="row.rev.id">
                   <td>{{ row.rev.id }}</td>
                   <td>
-                    <p>{{ row.rev.review }}</p>
+                    {{ row.rev.review }}
                   </td>
+                  <td>{{ row.addr.city}}, {{row.addr.street}} {{row.addr.nr }}</td>
                   <td>
                     <iframe style="border-radius:10px"
-                      width="300"
-                      height="250"
+                      width="200"
+                      height="150"
                       loading="lazy"
                       allowfullscreen
                       referrerpolicy="no-referrer-when-downgrade"
@@ -82,13 +84,13 @@ export default{
       @click="updateReview(row.rev.id, 1)"
                       class="badge badge-outline-success asBtn"
                     >
-                      Approve
+                      Y
                     </div>
                     <div
                       class="badge badge-outline-danger asBtn"
       @click="updateReview(row.rev.id, 2)"
                     >
-                      Reject
+                      X
                     </div>
                   </td>
                 </tr>

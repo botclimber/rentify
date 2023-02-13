@@ -50,7 +50,7 @@ exports.actions = (function(ws){
 		helper.getAllFromDb()
 		.then(res => {
 			console.log("assembling all reviews...")
-			const pendReviews = res[0]
+			const allReviews = res[0]
 			.map(rev => {
 				const residence = res[1].find(res => res.id == rev.residenceId)
 				const addr = res[2].find(address => address.id == residence.addressId)
@@ -60,7 +60,7 @@ exports.actions = (function(ws){
 			
 			const response = {
 				type: "allReviews",
-				reviews: pendReviews
+				reviews: allReviews
 			}
 
 			console.log(response)

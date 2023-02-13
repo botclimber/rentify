@@ -2,7 +2,8 @@
 import Home from './components/Home.vue'
 import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
-import Pending_Reviews from './components/approvals/pending_reviews.vue'
+import Pending_Reviews from './components/reviews/pending_reviews.vue'
+import All_Reviews from './components/reviews/all_reviews.vue'
 
 const reviewsApi = "http://localhost:8000/api/adm/"
 
@@ -10,7 +11,8 @@ const routes = {
   '/': Home,
   '/chartjs': Chartjs,
   '/basic_elements': Basic_Elements,
-  '/pending_reviews': Pending_Reviews
+  '/pending_reviews': Pending_Reviews,
+  '/all_reviews': All_Reviews
 
 }
 
@@ -59,8 +61,8 @@ export default {
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="#/"><img src="./assets/images/logo.svg" alt="logo" /></a>
-        <a class="sidebar-brand brand-logo-mini" href="#/"><img src="./assets/images/logo-mini.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo" href="#/"><b style="color:white">RENTIFY</b></a>
+        <a class="sidebar-brand brand-logo-mini" href="#/"><b style="color:white">R</b></a>
       </div>
       <ul class="nav">
         <li class="nav-item profile">
@@ -89,29 +91,20 @@ export default {
           </a>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="#/basic_elements">
-            <span class="menu-icon">
-              <i class="mdi mdi-playlist-play"></i>
-            </span>
-            <span class="menu-title">Form Elements</span>
-          </a>
-        </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#/chartjs">
-            <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
-            </span>
-            <span class="menu-title">Charts</span>
-          </a>
-        </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="#/pending_reviews">
-            <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
-            </span>
-            <span class="menu-title">Pending Reviews</span>
-          </a>
-        </li>
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <span class="menu-icon">
+                <i class="mdi mdi-table-large"></i>
+              </span>
+              <span class="menu-title">Reviews</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="#/all_reviews"> All </a></li>
+                <li class="nav-item"> <a class="nav-link" href="#/pending_reviews"> To be Reviewed </a></li>
+              </ul>
+            </div>
+          </li>
       </ul>
     </nav>
     <!-- partial -->
@@ -133,47 +126,6 @@ export default {
             </li>
           </ul>
           <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item dropdown border-left">
-              <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
-                <i class="mdi mdi-email"></i>
-                <span class="count bg-success"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                <h6 class="p-3 mb-0">Messages</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                    <p class="text-muted mb-0"> 1 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
-                    <p class="text-muted mb-0"> 15 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <img src="./assets/images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
-                  </div>
-                  <div class="preview-item-content">
-                    <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
-                    <p class="text-muted mb-0"> 18 Minutes ago </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <p class="p-3 mb-0 text-center">4 new messages</p>
-              </div>
-            </li>
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell"></i>
@@ -253,8 +205,6 @@ export default {
                     <p class="preview-subject mb-1">Log out</p>
                   </div>
                 </a>
-                <div class="dropdown-divider"></div>
-                <p class="p-3 mb-0 text-center">Advanced settings</p>
               </div>
             </li>
           </ul>
