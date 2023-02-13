@@ -49,8 +49,7 @@ export default {
     window.addEventListener('hashchange', () => {
 		  this.currentPath = window.location.hash
 		})
-  }
-
+  },
 }
 
 </script>
