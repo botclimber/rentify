@@ -5,7 +5,7 @@ import Basic_Elements from './components/forms/basic_elements.vue'
 import Pending_Reviews from './components/reviews/pending_reviews.vue'
 import All_Reviews from './components/reviews/all_reviews.vue'
 
-const reviewsApi = "http://localhost:8000/api/adm/"
+const reviewsApi = "http://localhost:8000/api/v1/"
 
 const routes = {
   '/': Home,

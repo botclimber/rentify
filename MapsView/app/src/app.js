@@ -80,9 +80,9 @@ function mountPage(data){
 
 function search(city, street = "", nr = ""){
   
-  fetch('http://127.0.0.1:8000/search?city='+city+"&street="+street+"&nr="+nr)
+  fetch('http://127.0.0.1:8000/api/v1/search?city='+city+"&street="+street+"&nr="+nr)
   .then(res => res.json())
-  .then((data) => mountPage(data))
+  .then((data) => {console.log(data); mountPage(data)})
   .catch(err => console.log(err))
 
 }
@@ -133,7 +133,7 @@ newReview.addEventListener('click', (event) => {
 });
 
 async function cReview(data){
-  await fetch('http://127.0.0.1:8000/create',{
+  await fetch('http://127.0.0.1:8000/api/v1/create',{
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
