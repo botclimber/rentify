@@ -11,14 +11,24 @@ export default {
     data(){
         console.log(this.reviews)
         return {
-            allData: this.reviews,
-            showModal: false
+          modals: this.getModals(),
+          allData: this.reviews
+            
         }
     },
 
     methods: {
-        close(){this.showModal = false},
-        callModal(){this.showModal = true}
+        getModals (){
+          const modals = new Map()
+          if(this.reviews) this.reviews.map(row => modals.set('modal'+row.rev.id, false)) 
+          else "???"
+
+          console.log(modals)
+          return modals
+
+        },
+        close(key){this.modals.set('modal'+key, false)},
+        callModal(key){this.modals.set('modal'+key, true)}
     }
   }
 
@@ -45,16 +55,33 @@ export default {
                         </thead>
                         <tbody>
                           <tr v-for="row of allData" :key="row.rev.id">
-                            <SimpleModal v-if="showModal" :title="'teste de teste'" @close="close"> 
+                            <SimpleModal v-if="modals.get('modal'+row.rev.id)" :title="'teste de teste'" > 
                                 <template #body>
-                                Modal Body
+                                <div>
+                                  <div>
+                                    <h2>Address ({{row.addr.lat}}, {{row.addr.lng}})</h2>
+                                    <p>{{row.addr.country}}, {{row.addr.city}}, {{row.addr.street}} nr. {{row.addr.nr}}, {{row.addr.postalCode}}, {{row.res.floor}} {{row.res.direction}}</p>
+                                  </div>
+                                  <div>
+                                    <h2>Review</h2>
+                                    <p>id: {{row.rev.id}}</p>
+                                    <p>UserID: {{row.rev.userId}}</p>
+                                    <p>Approved by AdminID: {{row.rev.adminId}}</p>
+                                    <p>anonymous: {{row.rev.anonymous ? 'Yes' : 'No'}}</p>
+                                    <p>review: {{row.rev.review}}</p>
+                                    <p>rating: {{row.rev.rating}}</p>
+                                    <p>approved: {{row.rev.approved ? 'Yes' : 'No'}}</p>
+                                    <p>approved on: {{row.rev.approvedOn}}</p>
+                                    <p>created on: {{row.rev.createdOn}}</p>
+                                  </div>
+                                </div>
                                 </template>
                                 <template #footer>
-                                <button>Close</button>
+                                <button @click="close(row.rev.id)">Close</button>
                                 </template>
                             </SimpleModal>
                             <td class="py-1">
-                              <button @click="callModal()"><img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /></button>
+                              <button @click="callModal(row.rev.id)"><img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /></button>
                             </td>
                             <td> {{ row.rev.review }} </td>
                             <td>

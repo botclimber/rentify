@@ -1,9 +1,8 @@
 <template >
-    <div class="modal-backdrop" @click="close">
+    <div class="modal-backdrop">
       <div class="modal">
         <header class="modal-header">
           <span class="modal__title">{{title}}</span>
-          <button>X</button>
         </header>
         <section class="modal-body">
           <slot name="body"></slot>
@@ -24,11 +23,7 @@
           required: false
         }
       },
-      methods: {
-        close() {
-          this.$emit('close')
-        }
-      }
+      methods: {}
     };
   </script>
   
