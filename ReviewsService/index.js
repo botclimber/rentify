@@ -26,6 +26,7 @@ app.get('/api/v1/reviews', (req, res) => {
 })
 
 // needs token/auth ----
+// implement handle of token
 app.post('/api/v1/create', (req, res) => {
   actions.actions(res).insertReview(req.body)
 })
