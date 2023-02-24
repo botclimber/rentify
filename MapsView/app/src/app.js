@@ -137,12 +137,13 @@ async function cReview(data){
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
+        'r-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJUeXBlIjoiYWRtaW4iLCJpYXQiOjE2NzcyNDkwMzMsImV4cCI6MTY3NzI1NjIzM30.u0YCIGGguROkgVQVvT7vCjvoESBc5G1gzQDmcQGaGrY',
         'Content-Type': 'application/json'
         // 'Content-Type': 'application/x-www-form-urlencoded',
       }
     })
   .then(res => res.json())
-  .then((data) => mountPage(data))
+  .then((data) => {console.log(data); mountPage(data)})
   .catch(err => console.log(err))
 }
 

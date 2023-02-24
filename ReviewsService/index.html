@@ -21,7 +21,11 @@
       <div id="sidenav" class="span2">
         <nav id="scrollingNav">
           <ul class="sidenav nav nav-list">
-            <li class="nav-header" data-group="User"><a href="#reviews">Reviews</a></li>
+            <li class="nav-header" data-group="Auth"><a href="#auth">Auth/Authz</a></li>
+            <li data-group="Auth" data-name="token" data-version="0.0.0">
+              <a href="#token">Token based</a>
+            </li>
+            <li class="nav-header" data-group="Reviews"><a href="#reviews">Reviews</a></li>
             <li data-group="Reviews" data-name="GetReviews" data-version="0.0.0">
               <a href="#get_all_reviews">Get All Reviews</a>
             </li>
@@ -47,6 +51,34 @@
         </div>
         <div id="header"></div>
         <div id="sections">
+          <section id="auth">
+            <div id="token">
+              <div class="pull-left">
+                <h1>Token based</h1>
+                For some requests a token is mandatory and so in the header the following parameter must exist. In this documentation token mandatory requests are mention as <p>Token required</p>
+                <br/><br/> 
+              </div>
+              
+              <div class="clearfix"></div>
+                <h2>Headers</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 30%">Header Name</th>
+                      <th style="width: 70%">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="code">r-access-token</td>
+                      <td>
+                        token goes as value of this parameter (r stands for rentify)
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </section>
           <section id="reviews">
             <div id="get_all_reviews">
 

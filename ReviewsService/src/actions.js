@@ -1,5 +1,4 @@
 const conv = require("./convertLocation.js")
-// Classes
 const Helper = require("./Helper.js")
 const { filter } = require("rxjs/operators")
 
@@ -20,7 +19,7 @@ exports.actions = (function(ws){
 			}).catch(reason => {
 
 				console.log("Couldnt handle request " + reason)
-				ws.send(JSON.stringify({ status: "rejected", msg: reason }));
+				ws.status(500).send(JSON.stringify({ msg: 'something went wrong'}));
 			});
 	}
 
@@ -40,12 +39,13 @@ exports.actions = (function(ws){
 			.catch( reason => {
 
 				console.log(reason)
-				ws.send(JSON.stringify({status: "rejected",msg: reason}));
+				ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
 
 			});
 		}
 	}
 
+	// ACTION TO GET ALL REVIEWS
 	function getAllReviews(){
 		helper.getAllFromDb()
 		.then(res => {
@@ -68,10 +68,15 @@ exports.actions = (function(ws){
 			helper.returnResponse(response)
 
 		})
-		.catch(err => console.log(err)) 
+		.catch(err => {
+
+			console.log(err)
+			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+		}) 
 
 	}
 
+	// ACTION TO UPDATE A REVIEW STATE (pending, approved, rejected)
 	function updateReviewState(data){
 		helper.changeReviewApprovalState(data.revId, data.decision)
 		this.getAllReviews()	

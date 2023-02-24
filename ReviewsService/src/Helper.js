@@ -142,13 +142,16 @@ module.exports = class Helper extends Db{
 	 *
 	 * @param {*} response
 	 */
-	returnResponse(response){ this.ws.send(JSON.stringify(response)); }
+	returnResponse(response){ this.ws.status(200).send(JSON.stringify(response)); }
 
 	changeReviewApprovalState(revId, state){
 		const chgConfig = {tableName: 'Reviews', id: revId, columns: ['approved','approvedOn'], values: [state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
 		this.update(chgConfig)
 		.then(res => console.log(res+" row changed!"))
-		.catch(err => console.log(err))
+		.catch(err =>{
+			 console.log(err) 
+			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+		})
 
 	}
 }

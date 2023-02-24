@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const port = process.env.PORT
 const actions = require("./src/actions.js")
+const th = require("./src/tokenHandler.js") // token handler
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -25,14 +26,37 @@ app.get('/api/v1/reviews', (req, res) => {
   actions.actions(res).getAllReviews()
 })
 
-// needs token/auth ----
-// implement handle of token
 app.post('/api/v1/create', (req, res) => {
-  actions.actions(res).insertReview(req.body)
+
+ th.tokenHandler(req)
+ .then(transfData => {
+   if(transfData) actions.actions(res).insertReview(transfData)
+ })
+ .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+
 })
 
+/*
+- some alternative approach 
+app.post('/api/v1/create', async (req, res) => {
+
+  try{
+    const transfData = await th.tokenHandler(req)
+    if(transfData) actions.actions(res).insertReview(transfData)
+
+  } catch(err) {
+    console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) 
+  }
+}) */
+
 app.patch('/api/v1/updateReview/:revId', (req, res) => {
-  actions.actions(res).updateReviewState({revId: req.params.revId, decision: req.body.decision})
+
+  th.tokenHandler(req)
+ .then(transfData => {
+   if(transfData) actions.actions(res).updateReviewState({revId: req.params.revId, decision: transfData.decision})
+ })
+ .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+
 })
 // ---------
 
