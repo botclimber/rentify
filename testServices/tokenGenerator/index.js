@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const secret = process.env.SECRET
 
-const token = jwt.sign({userId: 2, userType: 'admin'}, secret, {expiresIn: '2h'})
+const token = jwt.sign({email: 'cat@cat.pt',userId: 2, userType: 'admin'}, secret, {expiresIn: '2h'})
 const verToken = jwt.verify(token, secret)
 
 console.log(token)

@@ -10,6 +10,9 @@ exports.tokenHandler = function(req){
             jwt.verify(token, SECRET, function (err, decoded) {
                 if (err)
                     e({statusCode: 400, msg: 'Failed to auth token'})
+                
+                if(!(decoded.userId && decoded.userType && decoded.email)) 
+                    e({statusCode: 400, msg: 'missing required keys'})
 
                 r(Object.assign({}, req.body, decoded))
             })
