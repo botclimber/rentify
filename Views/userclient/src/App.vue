@@ -28,7 +28,7 @@ export default {
   name: "app",
   setup() {
     return {
-      baseUrl: process.env.BASE_URL,
+      baseUrl: '/user/login'
     };
   },
 };

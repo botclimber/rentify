@@ -27,7 +27,7 @@ gulp.task('start', function (cb) {
         cb(err);
     });
 
-    exec('npm serve', {
+    exec('npm run serve', {
         cwd: 'Views/userClient/',
     }, function (err, stdout, stderr) {
         console.log(stdout);

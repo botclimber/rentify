@@ -1,4 +1,4 @@
-import { User } from "../../database/src/entities/User";
+import { User } from "../../database/src/entities/Users";
 import { transporter } from "../server";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
