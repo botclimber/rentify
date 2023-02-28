@@ -3,8 +3,13 @@
     <v-app>
       <main>
         <nav class="navbar navbar-light bg-light justify-content-center">
-          <a :href="baseUrl" class="navbar-brand">Rentify</a>
+          <a :href="commonLogin" class="navbar-brand">Rentify</a>
         </nav>
+        <nav class="navbar justify-content-center">
+        <a :href="commonLogin" style="padding:15px" >Normal Login</a>
+        <a :href="adminLogin" style="padding:15px" >Admin Login</a>
+        </nav>
+
         <router-view />
         <footer
           class="fixed-bottom text-center text-lg-start"
@@ -15,7 +20,7 @@
             style="background-color: rgba(0, 0, 0, 0.2)"
           >
             © 2023 Copyright:
-            <a class="text-white" :href="baseUrl">Rentify.com</a>
+            <a class="text-white" :href="commonLogin">Rentify.com</a>
           </div>
         </footer>
       </main>
@@ -28,7 +33,8 @@ export default {
   name: "app",
   setup() {
     return {
-      baseUrl: '/user/login'
+      commonLogin: '/user/login',
+      adminLogin: '/user/loginAdmin'
     };
   },
 };

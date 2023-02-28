@@ -7,6 +7,10 @@ export default {
     return Api().post(`${baseURL}/login/platform`, { email, password });
   },
 
+  loginAdmin(email: string, password: string) {
+    return Api().post(`${baseURL}/login/admin`, { email, password });
+  },
+
   register(
     firstName: string,
     lastName: string,

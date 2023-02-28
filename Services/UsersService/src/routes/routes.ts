@@ -8,7 +8,7 @@ routes.post("/register/common", new UserController().registCommon);
 routes.post("/register/special", new UserController().registSpecial);
 routes.post("/login/platform", new UserController().loginPlatform);
 routes.post("/login/admin", new UserController().loginAdmin);
-routes.get("/verify/:userId/:emailToken", new UserController().verifyUser);
+routes.get("/verify/:userId/:token", new UserController().verifyUser);
 routes.get(
   "/changePassword/:email",
   new UserController().changePasswordRequest

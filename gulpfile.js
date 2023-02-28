@@ -10,7 +10,7 @@ gulp.task('start', function (cb) {
         console.log(stderr);
         cb(err);
     });
-	
+
     exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
         cwd: 'Services/ReviewsService/',
     },function (err, stdout, stderr) {
@@ -65,7 +65,7 @@ gulp.task('build', async function (done) {
     });*/
 
     exec('npm install', {
-        cwd: 'Views/MapsView/'
+        cwd: 'Views/MapsView/app/'
     }, (error, stdout, stderr) => {
         let logmessage = stdout + "\nMAPS_VIEW PACKAGES INSTALLED SUCCESSFULLY" + "\n\n---------------------------------\n";
         console.log(logmessage)
@@ -104,5 +104,3 @@ gulp.task('build', async function (done) {
         if (stderr) console.log("Error instaling packages for users database")
     });
 })
-
-

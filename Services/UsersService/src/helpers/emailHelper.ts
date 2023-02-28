@@ -5,9 +5,10 @@ import "dotenv/config";
 
 export class EmailHelper {
   static async sendVerifyEmail(user: User) {
-    const currentURL = `${process.env.HOST}${process.env.SERVER_PORT}`;
+    const currentURL = `${process.env.HOST}:${process.env.SERVER_PORT}`;
 
-    const emailToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET ?? "", {
+    // process.env.JWT_SECRET ?? "" can lead to security breach
+    const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
       expiresIn: "1h",
     });
 
@@ -17,7 +18,7 @@ export class EmailHelper {
       subject: "Welcome to Rentify",
       html: `<p>Welcome to Rentify, ${user.firstName} ${user.lastName}! Please confirm your email address clicking on the link below.</p>
           <p>Link expirers in 6 hours</p>
-          <p>Click<a href="${currentURL}/user/verify/${user.id}/${emailToken}" here</a> to verify.</p>`,
+          <p>Click<a href="${currentURL}/user/verify/${user.id}/${token}"> here to verify.</a></p>`,
     };
 
     transporter.sendMail(mailOptions);

@@ -17,6 +17,7 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
+const t = localStorage.getItem("t") || ""
 const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
@@ -79,7 +80,7 @@ function mountPage(data){
 }
 
 function search(city, street = "", nr = ""){
-  
+
   fetch('http://127.0.0.1:8000/api/v1/search?city='+city+"&street="+street+"&nr="+nr)
   .then(res => res.json())
   .then((data) => {console.log(data); mountPage(data)})
@@ -137,7 +138,7 @@ async function cReview(data){
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-        'r-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhdEBjYXQucHQiLCJ1c2VySWQiOjIsInVzZXJUeXBlIjoiYWRtaW4iLCJpYXQiOjE2NzcyNTk5OTAsImV4cCI6MTY3NzI2NzE5MH0.hy_JZKs6lQBXYeJ35XggBeX2HNT-b6Ig0DK8Yri6g_s',
+        'r-access-token': t,
         'Content-Type': 'application/json'
         // 'Content-Type': 'application/x-www-form-urlencoded',
       }

@@ -23,10 +23,14 @@ export default {
     return {
       reviews: null,
       currentPath: window.location.hash,
+      firstName: null,
+      lastName: null,
+      tk: null
     }
   },
 
   created(){
+      this.getToken()
       this.getAllReviews()
   },
 
@@ -37,13 +41,25 @@ export default {
   },
 
   methods: {
+    getToken(){
+      const urlParams = new URLSearchParams(window.location.search)
+
+      this.tk = urlParams.get('t')
+      this.firstName = urlParams.get("firstName")
+      this.lastName = urlParams.get("lastName")
+
+    },
     async getAllReviews(){
       const res = await fetch(reviewsApi+'reviews').catch(err => console.log(err))
       const data = await res.json()
-      
+
       this.reviews = data.reviews
 
     },
+    logout(){
+      window.location.href = "http://localhost:8081/"
+    }
+
   },
   mounted() {
     window.addEventListener('hashchange', () => {
@@ -72,7 +88,7 @@ export default {
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
-                <h5 class="mb-0 font-weight-normal">Anon</h5>
+                <h5 class="mb-0 font-weight-normal">{{firstName}} {{lastName}}</h5>
                 <span>Admin</span>
               </div>
             </div>
@@ -176,7 +192,7 @@ export default {
               <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                 <div class="navbar-profile">
                   <img class="img-xs rounded-circle" src="./assets/images/faces/face15.jpg" alt="">
-                  <p class="mb-0 d-none d-sm-block navbar-profile-name">Anon</p>
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name">{{firstName}} {{lastName}}</p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
               </a>
@@ -194,7 +210,7 @@ export default {
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a @click="logout" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-logout text-danger"></i>
@@ -214,7 +230,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView"  :reviews="reviews"/>
+        <component :is="currentView" :reviews="reviews" :tk="tk"/>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">

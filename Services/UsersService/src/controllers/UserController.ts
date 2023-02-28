@@ -23,10 +23,8 @@ export class UserController {
 
     const userExists = await userRepository.findOneBy({ email });
     if (userExists) throw new BadRequest(ErrorMessages.USER_ALREADY_EXISTS);
-    console.log("TRACE 0")
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("TRACE 1")
 
     const newUser = userRepository.create({
       firstName,
@@ -36,8 +34,6 @@ export class UserController {
       username,
       type
     });
-
-    console.log("TRACE 2")
 
     await userRepository.save(newUser);
     console.log(`Registration Successful for email: ${email}`);
@@ -89,8 +85,9 @@ export class UserController {
         return res.status(201).json(user);
 
       }else throw new Unauthorized(ErrorMessages.ADMIN_NOT_FOUND)
-    
-    }catch{
+
+    }catch (e){
+      console.log(e)
       throw new BadRequest(ErrorMessages.INVALID_TOKEN)
     }
   }
@@ -103,12 +100,14 @@ export class UserController {
     const user = await userRepository.findOneBy({ email });
 
     if (!user) {
+      console.log("INVALID EMAIL")
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
     const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (!verifyPassword) {
+      console.log("WRONG PASSWORD")
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
@@ -120,7 +119,7 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: userLogin, token: token });
+    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName}, token: token });
   }
 
   async loginAdmin(req: Request, res: Response, next: NextFunction) {
@@ -140,7 +139,7 @@ export class UserController {
       throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
     }
 
-    if(user.type == "common") throw new Unauthorized(ErrorMessages.NO_PERMISSION) 
+    if(user.type == "common") throw new Unauthorized(ErrorMessages.NO_PERMISSION)
 
     const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
       expiresIn: "8h",
@@ -150,15 +149,16 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: userLogin, token: token });
+    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName}, token: token });
   }
 
   async getProfile(req: Request, res: Response, next: NextFunction) {
     return res.status(200).json(req.user);
   }
 
+  // token in the url is a huge mistake, for now i will just workaround it
   async verifyUser(req: Request, res: Response, next: NextFunction) {
-    let { userId, emailToken } = req.params;
+    let { userId, token } = req.params;
 
     console.log(`verifyUser Request for userId: ${userId}`);
 
@@ -168,14 +168,22 @@ export class UserController {
       throw new BadRequest("User does not exist");
     }
 
-    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "");
-    user.verified = true;
-    await userRepository.save(user);
-    console.log(`User with ID ${userId} verified`);
+    try{
+      const decodedToken = jwt.verify(token.replaceAll("=",''), process.env.JWT_SECRET ?? ""); // if token wrong then triggers the catch exception
+      console.log(decodedToken)
+      user.verified = true;
+      await userRepository.save(user);
+      console.log(`User with ID ${userId} verified`);
 
-    return res.status(200).json(req.user);
+      return res.status(200).json(req.user);
+
+    }catch (e){
+      console.log("Exception: "+e)
+      throw new BadRequest(ErrorMessages.INVALID_TOKEN)
+    }
   }
 
+  // TODO: have a proper look on this method
   async changePasswordRequest(req: Request, res: Response, next: NextFunction) {
     let { email } = req.params;
 
@@ -193,6 +201,7 @@ export class UserController {
     return res.status(200).json(req.user);
   }
 
+  // TODO:  have look on this method and adapt it (add try catch scope for token verification)
   async updateUserPassword(req: Request, res: Response, next: NextFunction) {
     let { userId, emailToken } = req.params;
 

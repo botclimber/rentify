@@ -6,7 +6,8 @@ export default{
   name:"Pending_Reviews",
 
   props:{
-    reviews: Object
+    reviews: Object,
+    tk: String
   },
 
   data(){
@@ -21,7 +22,8 @@ export default{
       if(confirm("Are you sure ?")){
         const res = await fetch(reviewsApi+'updateReview/'+revId,{
           method: 'PATCH',
-          headers: {'Content-type': 'application/json'},
+          headers: {'Content-type': 'application/json',
+          'r-access-token': this.tk},
           body: JSON.stringify({decision: dec})
         })
         const data = await res.json()

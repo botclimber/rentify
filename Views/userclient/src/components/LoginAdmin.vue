@@ -66,7 +66,7 @@
         <div class="row mb-4">
           <!-- Submit button -->
           <button
-            title="Register"
+            title="Login"
             class="btn btn-primary btn-md btn-block"
             type="submit"
           >
@@ -74,10 +74,6 @@
           </button>
         </div>
 
-        <!-- Register buttons -->
-        <div class="text-center">
-          <p>Not a member? <a href="" @click="register">Register</a></p>
-        </div>
       </Form>
     </div>
   </div>
@@ -110,7 +106,7 @@ export default defineComponent({
   },
   methods: {
     async login() {
-      await UserService.login(this.email, this.password)
+      await UserService.loginAdmin(this.email, this.password)
         .then((response) => {
           console.log(response.data);
           // if true
@@ -118,15 +114,13 @@ export default defineComponent({
           // redirect to rentify home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost:8080/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token
+          window.location.href = "http://127.0.0.1:5173/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    register() {
-      this.$router.push({ name: "Register-Form" });
-    },
+
     async changePasswordRequest() {
       this.$router.push({ name: "RecoverPassword-Form" });
     },

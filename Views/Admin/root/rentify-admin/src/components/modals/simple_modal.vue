@@ -1,8 +1,9 @@
 <template >
     <div class="modal-backdrop">
       <div class="modal">
-        <header class="modal-header">
+        <header>
           <span class="modal__title">{{title}}</span>
+          <hr>
         </header>
         <section class="modal-body">
           <slot name="body"></slot>
@@ -13,7 +14,7 @@
       </div>
     </div>
   </template>
-  
+
   <script>
     export default {
       name: 'SimpleModal',
@@ -26,16 +27,14 @@
       methods: {}
     };
   </script>
-  
+
   <style lang="scss">
   .body{
     background-color: rgba(0, 0, 0, 0.3);
   }
     .modal-backdrop {
-      height: 80%;
       position: fixed;
       z-index: 999;
-      top: 8%;
       bottom: 0;
       left: 0;
       right: 0;
@@ -45,9 +44,11 @@
       align-items: center;
     }
     .modal {
+      height: 75%;
+      overflow-y: scroll;
       color:black;
       position: relative;
-      padding: 30px 30px 40px 30px;
+      padding: 10px 25px 10px 25px;
       width: 80%;
       z-index: 1000;
       background: #FFFFFF;
@@ -57,12 +58,10 @@
       &__title {
         font-weight: 600;
         font-size: 24px;
-        display: block;
         color: var(--black-title);
-        margin-bottom: 30px;
       }
       &-footer {
-        margin-top: 30px;
+        margin-top: 0px;
         display: flex;
         align-items: center;
       }
