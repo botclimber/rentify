@@ -113,6 +113,9 @@ export default defineComponent({
       await UserService.login(this.email, this.password)
         .then((response) => {
           console.log(response.data);
+          // if true
+          // regist token in localStorage
+          // redirect to rentify home page
           this.isLogged = true;
         })
         .catch((error) => {

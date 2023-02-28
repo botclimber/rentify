@@ -4,8 +4,10 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 
 const routes = Router();
 
-routes.post("/register", new UserController().register);
-routes.post("/login", new UserController().login);
+routes.post("/register/common", new UserController().registCommon);
+routes.post("/register/special", new UserController().registSpecial);
+routes.post("/login/platform", new UserController().loginPlatform);
+routes.post("/login/admin", new UserController().loginAdmin);
 routes.get("/verify/:userId/:emailToken", new UserController().verifyUser);
 routes.get(
   "/changePassword/:email",

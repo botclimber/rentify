@@ -24,5 +24,8 @@ export class User {
   type: string;
 
   @Column("boolean", { default: false })
+  blocked: boolean = false;
+
+  @Column("boolean", { default: false })
   verified: boolean = false;
 }

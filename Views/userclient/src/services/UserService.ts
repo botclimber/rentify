@@ -4,7 +4,7 @@ const baseURL = "user";
 
 export default {
   login(email: string, password: string) {
-    return Api().post(`${baseURL}/login`, { email, password });
+    return Api().post(`${baseURL}/login/platform`, { email, password });
   },
 
   register(
@@ -14,7 +14,7 @@ export default {
     email: string,
     password: string
   ) {
-    return Api().post(`${baseURL}/register`, {
+    return Api().post(`${baseURL}/register/common`, {
       firstName,
       lastName,
       username,
