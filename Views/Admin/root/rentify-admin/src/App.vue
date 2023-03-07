@@ -4,33 +4,32 @@ import Chartjs from './components/charts/chartjs.vue'
 import Basic_Elements from './components/forms/basic_elements.vue'
 import Pending_Reviews from './components/reviews/pending_reviews.vue'
 import All_Reviews from './components/reviews/all_reviews.vue'
-
-const reviewsApi = "http://localhost:8000/api/v1/"
+import User_Profile from './components/profile/user_profile.vue'
 
 const routes = {
   '/': Home,
   '/chartjs': Chartjs,
   '/basic_elements': Basic_Elements,
   '/pending_reviews': Pending_Reviews,
-  '/all_reviews': All_Reviews
+  '/all_reviews': All_Reviews,
+  '/user_profile': User_Profile
 
 }
 
 export default {
   name: "App",
 
+  inject: ['apis','tk','firstName','lastName'],
+
   data() {
     return {
+      apis: this.apis,
       reviews: null,
       currentPath: window.location.hash,
-      firstName: null,
-      lastName: null,
-      tk: null
     }
   },
 
   created(){
-      this.getToken()
       this.getAllReviews()
   },
 
@@ -41,26 +40,21 @@ export default {
   },
 
   methods: {
-    getToken(){
-      const urlParams = new URLSearchParams(window.location.search)
 
-      this.tk = urlParams.get('t')
-      this.firstName = urlParams.get("firstName")
-      this.lastName = urlParams.get("lastName")
-
-    },
     async getAllReviews(){
-      const res = await fetch(reviewsApi+'reviews').catch(err => console.log(err))
+      const res = await fetch(this.apis.reviewsApi+'reviews').catch(err => console.log(err))
       const data = await res.json()
 
       this.reviews = data.reviews
 
     },
+
     logout(){
       window.location.href = "http://localhost:8081/"
     }
 
   },
+
   mounted() {
     window.addEventListener('hashchange', () => {
 		  this.currentPath = window.location.hash
@@ -88,7 +82,7 @@ export default {
                 <span class="count bg-success"></span>
               </div>
               <div class="profile-name">
-                <h5 class="mb-0 font-weight-normal">{{firstName}} {{lastName}}</h5>
+                <h5 class="mb-0 font-weight-normal">{{firstName}} {{lastName}} {{test}}</h5>
                 <span>Admin</span>
               </div>
             </div>
@@ -199,14 +193,14 @@ export default {
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                 <h6 class="p-3 mb-0">Profile</h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a href = "#/user_profile" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
                       <i class="mdi mdi-settings text-success"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <p class="preview-subject mb-1">Settings</p>
+                    <p class="preview-subject mb-1">Profile</p>
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
@@ -230,7 +224,7 @@ export default {
       </nav>
       <div class="main-panel">
 
-        <component :is="currentView" :reviews="reviews" :tk="tk"/>
+        <component :is="currentView" :reviews="reviews" :tk="tk" :apis="apis"/>
 
       <footer class="footer">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">

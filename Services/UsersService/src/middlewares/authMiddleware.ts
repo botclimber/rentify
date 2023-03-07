@@ -6,7 +6,9 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 type JwtPayload = {
-  id: number;
+  userId: number,
+  userEmail: string,
+  userType: string
 };
 
 export const authMiddleware = async (
@@ -14,6 +16,7 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
+
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -22,9 +25,8 @@ export const authMiddleware = async (
 
   const token = authorization.split(" ")[1];
 
-  const { id } = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload;
-
-  const user = await userRepository.findOneById(id);
+  const { userId, userEmail, userType } = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload;
+  const user = await userRepository.findOneById(userId);
 
   if (!user) {
     throw new Unauthorized(ErrorMessages.USER_NOT_AUTHORIZED);

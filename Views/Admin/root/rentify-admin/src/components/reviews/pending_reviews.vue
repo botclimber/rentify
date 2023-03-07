@@ -1,11 +1,10 @@
 <script>
 
-const reviewsApi = "http://localhost:8000/api/v1/"
-
 export default{
   name:"Pending_Reviews",
 
   props:{
+    apis: Object,
     reviews: Object,
     tk: String
   },
@@ -20,7 +19,7 @@ export default{
 
     async updateReview(revId, dec){
       if(confirm("Are you sure ?")){
-        const res = await fetch(reviewsApi+'updateReview/'+revId,{
+        const res = await fetch(this.apis.reviewsApi+'updateReview/'+revId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
           'r-access-token': this.tk},

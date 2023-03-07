@@ -201,7 +201,8 @@ export class UserController {
     return res.status(200).json(req.user);
   }
 
-  // TODO:  have look on this method and adapt it (add try catch scope for token verification)
+  // TODO:
+  // - have look on this method and adapt it (add try catch scope for token verification)
   async updateUserPassword(req: Request, res: Response, next: NextFunction) {
     let { userId, emailToken } = req.params;
 
@@ -213,7 +214,7 @@ export class UserController {
       throw new BadRequest("User does not exist");
     }
 
-    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? ""); // whats the purpose of this line ?
+    const decode = jwt.verify(emailToken, process.env.JWT_SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
 
     const { password } = req.body;
 
@@ -223,6 +224,8 @@ export class UserController {
 
     await userRepository.save(user);
 
-    return res.status(200).json(req.user);
+    return res.status(200).json({msg: "updated  "});
   }
+
+  // TODO: create method to change password with old password verification
 }

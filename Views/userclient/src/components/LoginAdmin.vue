@@ -30,7 +30,7 @@
             class="form-control"
             v-model="password"
             placeholder="Password"
-            :rules="passwordRule"
+
           />
           <ErrorMessage as="div" name="password" v-slot="{ message }">
             <small id="passwordHelpBlock" class="form-text text-muted">

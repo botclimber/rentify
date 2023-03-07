@@ -3,30 +3,6 @@ const nodemon = require('nodemon');
 const exec  = require('child_process').exec;
 
 gulp.task('start', function (cb) {
-    exec('npm run dev', {
-        cwd: 'Views/Admin/root/rentify-admin/',
-    }, function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
-    });
-
-    exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
-        cwd: 'Services/ReviewsService/',
-    },function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
-    });
-
-    exec('npm start', {
-        cwd: 'Views/MapsView/app/',
-    }, function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
-    });
-
     exec('npm run serve', {
         cwd: 'Views/userClient/',
     }, function (err, stdout, stderr) {
@@ -43,6 +19,29 @@ gulp.task('start', function (cb) {
         cb(err);
     });
 
+    exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
+        cwd: 'Services/ReviewsService/',
+    },function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+
+    exec('npm run dev', {
+        cwd: 'Views/Admin/root/rentify-admin/',
+    }, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+
+    exec('npm start', {
+        cwd: 'Views/MapsView/app/',
+    }, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
 })
 
 gulp.task('build', async function (done) {
