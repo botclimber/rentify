@@ -54,10 +54,10 @@ exports.actions = (function(ws){
 			.map(rev => {
 				const residence = res[1].find(res => res.id == rev.residenceId)
 				const addr = res[2].find(address => address.id == residence.addressId)
-				
+
 				return {rev: rev, res: residence, addr: addr}
 			}) // continue map tree constuction
-			
+
 			const response = {
 				type: "allReviews",
 				reviews: allReviews
@@ -72,14 +72,14 @@ exports.actions = (function(ws){
 
 			console.log(err)
 			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
-		}) 
+		})
 
 	}
 
 	// ACTION TO UPDATE A REVIEW STATE (pending, approved, rejected)
 	function updateReviewState(data){
-		helper.changeReviewApprovalState(data.revId, data.decision)
-		this.getAllReviews()	
+		helper.changeReviewApprovalState(data.adminId, data.revId, data.decision)
+		this.getAllReviews()
 
 	}
 

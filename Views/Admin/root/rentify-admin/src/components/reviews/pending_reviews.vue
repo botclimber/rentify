@@ -1,6 +1,6 @@
 <script>
 
-const reviewsApi = "http://localhost:8000/api/adm/"
+const reviewsApi = "http://localhost:8000/api/v1/"
 
 export default{
   name:"Pending_Reviews",

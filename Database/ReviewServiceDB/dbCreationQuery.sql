@@ -3,8 +3,8 @@ USE renReviews_db;
 
 Create Table Addresses (
   id int auto_increment,
-  lat float not null,
-  lng float not null,
+  lat double not null,
+  lng double not null,
   city varchar(100) not null,
   street varchar(255) not null,
   nr varchar(5) not null,

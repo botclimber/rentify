@@ -10,8 +10,8 @@ exports.tokenHandler = function(req){
             jwt.verify(token, SECRET, function (err, decoded) {
                 if (err)
                     e({statusCode: 400, msg: 'Failed to auth token'})
-                
-                if(!(decoded.userId && decoded.userType && decoded.email)) 
+
+                if(!(decoded.userId && decoded.userType && decoded.userEmail)) 
                     e({statusCode: 400, msg: 'missing required keys'})
 
                 r(Object.assign({}, req.body, decoded))
@@ -30,12 +30,12 @@ exports.tkHandler = async function(req){
     else {
         return new Promise( (resolve)  => {
             jwt.verify(token, SECRET, function (err, decoded) {
-                
+
                 if (err)
                     throw {statusCode: 400, msg: 'Failed to auth token'}
-    
+
                 resolve(Object.assign({}, req.body, decoded))
             })
-        }) 
+        })
     }
 }*/

@@ -37,7 +37,7 @@ app.post('/api/v1/create', (req, res) => {
 })
 
 /*
-- some alternative approach 
+- some alternative approach
 app.post('/api/v1/create', async (req, res) => {
 
   try{
@@ -45,7 +45,7 @@ app.post('/api/v1/create', async (req, res) => {
     if(transfData) actions.actions(res).insertReview(transfData)
 
   } catch(err) {
-    console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) 
+    console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg}))
   }
 }) */
 
@@ -53,7 +53,7 @@ app.patch('/api/v1/updateReview/:revId', (req, res) => {
 
   th.tokenHandler(req)
  .then(transfData => {
-   if(transfData) actions.actions(res).updateReviewState({revId: req.params.revId, decision: transfData.decision})
+   if(transfData) actions.actions(res).updateReviewState({adminId: transfData.userId, revId: req.params.revId, decision: transfData.decision})
  })
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 
