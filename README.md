@@ -21,3 +21,7 @@ enter these folder for more info
 
 ![Screenshot](imgs/arq.png)
 ![Screenshot](imgs/wAPIGAT.png)
+
+!IDEA:
+Discuss validation system:
+  - only reviews sent by clicking on map goes to validation others dont.

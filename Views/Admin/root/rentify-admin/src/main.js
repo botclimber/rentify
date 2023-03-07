@@ -1,8 +1,10 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 
-const apis = {reviewsApi: "http://localhost:8000/api/v1/",
-             usersApi: "http://localhost:8001/user/"}
+const apis = {
+  reviewsApi: "http://localhost:8000/api/v1/",
+  usersApi: "http://localhost:8001/user/"
+}
 
 const urlParams = new URLSearchParams(window.location.search)
 const tk = urlParams.get("t")
