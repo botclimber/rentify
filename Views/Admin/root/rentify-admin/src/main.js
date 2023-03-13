@@ -20,7 +20,7 @@ async function authVerification (){
     }).catch(err => console.log(err))
 
     const data = await res.json()
-    if( data.verified && !data.blocked){
+    if(!data.blocked && (data.type === "col" || data.type === "admin" || data.type === "superAdmin")){
 
       createApp(App)
 

@@ -49,6 +49,9 @@ export class UserController {
   async registSpecial(req: Request, res: Response, next: NextFunction) {
 
     const { firstName, lastName, password, email, username, type } = req.body;
+    const specFields = [firstName, lastName, password, email, username, type]
+
+    specFields.forEach(field =>{ if(field === ""){ throw new BadRequest(ErrorMessages.ALL_REQUIRED) }})
 
     console.log(`Registration Request for email: ${email}`);
 
@@ -228,4 +231,30 @@ export class UserController {
   }
 
   // TODO: create method to change password with old password verification
+  async manualPasswordChange(req: Request, res: Response, next: NextFunction) {
+    let { userId, token } = req.params;
+
+    console.log(`manualPasswordChange Request for userId: ${userId}`);
+
+    const user = await userRepository.findOneBy({ id: +userId });
+
+    if (!user) {
+      throw new BadRequest("User does not exist");
+    }
+
+    const decode = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload; // whats the purpose of this line ?
+
+    const { oldPassword, newPassword } = req.body;
+
+    const vPass = await bcrypt.compare(oldPassword, user.password);
+    if(!vPass) throw new BadRequest(ErrorMessages.INVALID_EMAIL_OR_PASSWORD);
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    console.log("Sucessfully updated password");
+
+    await userRepository.save(user);
+
+    return res.status(200).json({msg: "updated  "});
+  }
 }

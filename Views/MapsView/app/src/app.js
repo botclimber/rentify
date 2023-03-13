@@ -17,7 +17,7 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
-const t = localStorage.getItem("t") || ""
+const t = localStorage.getItem("t") || false
 const apiOptions = {
   apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
 }
@@ -49,6 +49,7 @@ var nrRating = document.getElementById("nrRating")
 var nrAnon = document.getElementById("nrAnon")
 var nrReview = document.getElementById("nrReview")
 var newReview = document.getElementById("newReview")
+var flag = document.getElementById("flag")
 
 
 const loader = new Loader(apiOptions)
@@ -74,8 +75,12 @@ function mountPage(data){
   // Configure the click listener.
   map.addListener("click", (mapsMouseEvent) => {
 
+    if(t){
     var coords = mapsMouseEvent.latLng.toJSON()
-    reviewFromExisting(coords.lat, coords.lng)
+    flag.value = "fromMapClick"
+    revFromClick(coords.lat, coords.lng)
+  }
+
   });
 }
 
@@ -90,7 +95,7 @@ function search(city, street = "", nr = ""){
 
 search(city)
 
-function reviewFromExisting(lat, lng){
+function revFromClick(lat, lng){
   console.log('Place registed! complete Form and add review ('+lat+', '+lng+')')
   console.info(lat, lng)
   nrLat.value = lat
@@ -103,6 +108,7 @@ function reviewFromExisting(lat, lng){
   nrCity.value = iCity.value
   nrStreet.value = iStreet.value
   nrBNumber.value = iBNumber.value
+
   document.getElementById("myForm").style.display = "block";
 }
 
@@ -114,7 +120,7 @@ document.getElementById("sAddress").onclick = function(){
 /* NEW REVIEW */
 newReview.addEventListener('click', (event) => {
 
-	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
+	if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !=="" && t){
 
     cReview({
 			type: "createReview",
@@ -127,7 +133,8 @@ newReview.addEventListener('click', (event) => {
 			nrSide: nrSide.value,
 			nrRating: nrRating.value,
 			nrAnon: parseInt(nrAnon.value),
-			nrReview: nrReview.value
+			nrReview: nrReview.value,
+      flag: flag
 		})
 
 	}else console.log("Fill required fields!")
@@ -183,14 +190,18 @@ nrAnon.addEventListener('change', (event) => {
 })
 
 document.getElementById("openNReviewForm").onclick = function(){
-	nrCity.value = iCity.value
-	nrStreet.value = iStreet.value
-	nrBNumber.value = iBNumber.value
 
-	nrLat.value = ""
-	nrLng.value = ""
+  if(t){
+    nrCity.value = iCity.value
+  	nrStreet.value = iStreet.value
+  	nrBNumber.value = iBNumber.value
 
-	document.getElementById("myForm").style.display = "block";
+  	nrLat.value = ""
+  	nrLng.value = ""
+    flag.value = ""
+
+  	document.getElementById("myForm").style.display = "block";
+  }else window.location.href = "http://localhost:8081"
 }
 
 document.getElementById("closeNReviewForm").onclick = function(){
@@ -272,7 +283,7 @@ function addPanToMarker(map, markers, reviews) {
     marker.addListener('click', event => {
       const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
 
-      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';})();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
+      infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = 'http://localhost:8081/'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; document.getElementById('myForm').style.display = 'block';} })();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
       infoWindow.open(map, marker);
 
     });

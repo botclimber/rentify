@@ -92,12 +92,12 @@ import { Yup } from "../helpers/constants";
 export default defineComponent({
   name: "Login-Form",
   components: { Form, Field, ErrorMessage },
-  setup() {
-    return {
-      passwordRule: Yup.password,
-      emailRule: Yup.email,
-    };
-  },
+  //setup() {
+  //  return {
+  //    passwordRule: Yup.password,
+  //    emailRule: Yup.email,
+  //  };
+  //},
   data() {
     return {
       email: "",

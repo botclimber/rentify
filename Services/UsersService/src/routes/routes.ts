@@ -20,4 +20,6 @@ routes.post(
 
 routes.get("/profile", authMiddleware, new UserController().getProfile);
 
+routes.put("/manualPassChange/:userId/:token", new UserController().manualPasswordChange);
+
 export default routes;

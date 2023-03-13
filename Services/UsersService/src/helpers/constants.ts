@@ -7,4 +7,5 @@ export const ErrorMessages = {
   INVALID_TOKEN: "Token not valid",
   ADMIN_NOT_FOUND: "This type of regist can only be done by specific users",
   NO_PERMISSION: "Not sufficient user rights",
+  ALL_REQUIRED: "All fields required"
 } as const;

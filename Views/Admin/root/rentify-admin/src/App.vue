@@ -5,6 +5,7 @@ import Basic_Elements from './components/forms/basic_elements.vue'
 import Pending_Reviews from './components/reviews/pending_reviews.vue'
 import All_Reviews from './components/reviews/all_reviews.vue'
 import User_Profile from './components/profile/user_profile.vue'
+import New_Col from './components/profile/new_col.vue'
 
 const routes = {
   '/': Home,
@@ -12,7 +13,8 @@ const routes = {
   '/basic_elements': Basic_Elements,
   '/pending_reviews': Pending_Reviews,
   '/all_reviews': All_Reviews,
-  '/user_profile': User_Profile
+  '/user_profile': User_Profile,
+  '/new_col': New_Col
 
 }
 
@@ -193,6 +195,16 @@ export default {
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                 <h6 class="p-3 mb-0">Profile</h6>
                 <div class="dropdown-divider"></div>
+                <a href = "#/new_col" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-user text-success"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Regist Colaborator</p>
+                  </div>
+                </a>
                 <a href = "#/user_profile" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-dark rounded-circle">
