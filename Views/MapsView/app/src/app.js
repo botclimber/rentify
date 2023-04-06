@@ -134,13 +134,14 @@ newReview.addEventListener('click', (event) => {
 			nrRating: nrRating.value,
 			nrAnon: parseInt(nrAnon.value),
 			nrReview: nrReview.value,
-      flag: flag
+      flag: flag.value
 		})
 
 	}else console.log("Fill required fields!")
 });
 
 async function cReview(data){
+  console.log(data)
   await fetch('http://127.0.0.1:8000/api/v1/create',{
       method: 'POST',
       body: JSON.stringify(data),
