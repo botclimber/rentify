@@ -45,6 +45,12 @@ import MarkerClusterer from '@google/markerclustererplus';
   var nrReview = document.getElementById("nrReview")
   var newReview = document.getElementById("newReview")
   var flag = document.getElementById("flag")
+
+  var st1 = document.getElementById("st1")
+  var st2 = document.getElementById("st2")
+  var st3 = document.getElementById("st3")
+  var st4 = document.getElementById("st4")
+  var st5 = document.getElementById("st5")
   
   
   const loader = new Loader(apiOptions)
@@ -112,13 +118,8 @@ import MarkerClusterer from '@google/markerclustererplus';
     search(iCity.value, iStreet.value, iBNumber.value)
   }
   
-  console.log(nrStreet)
-  console.log(flag)
-
-  console.log("page is fully loaded");
-  
   /* NEW REVIEW */
-  /*newReview.addEventListener('click', (event) => {
+  newReview.addEventListener('click', (event) => {
   
     if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !=="" && t){
   
@@ -138,7 +139,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       })
   
     }else console.log("Fill required fields!")
-  });*/
+  });
   
   async function cReview(data){
     console.log(data)
@@ -181,6 +182,42 @@ import MarkerClusterer from '@google/markerclustererplus';
     else formBtn.style.display="none"
   
   })
+
+  st1.addEventListener('click', (event) => {
+    starStatus({starsToCheck: {st1l: st1}, starsToUncheck: { st2l: st2, st3l: st3, st4l: st4, st5l: st5}})
+  })
+
+  st2.addEventListener('click', (event) => {
+    starStatus({starsToCheck: {st1l: st1, st2l: st2}, starsToUncheck: { st3l: st3, st4l: st4, st5l: st5}})
+  })
+  
+  st3.addEventListener('click', (event) => {
+    starStatus({starsToCheck: {st1l: st1, st2l: st2, st3l: st3}, starsToUncheck: { st4l: st4, st5l: st5}})
+  })
+
+  st4.addEventListener('click', (event) => {
+    starStatus({starsToCheck: {st1l:st1, st2l: st2, st3l: st3, st4l: st4}, starsToUncheck: { st5l: st5}})
+  })
+
+  st5.addEventListener('click', (event) => {
+    starStatus({starsToCheck: {st1l: st1, st2l: st2, st3l: st3, st4l: st4, st5l: st5}, starsToUncheck: {}})
+  })
+
+  // obj = {starsToCheck: [], starsToUncheck: []}
+  function starStatus(v){
+
+    for(let x in v.starsToCheck){
+
+      v.starsToCheck[x].checkVisibility = true
+      document.getElementById(x).style.color = "#ffbd00"
+    }
+
+    for(let y in v.starsToUncheck){
+
+      v.starsToUncheck[y].checkVisibility = false
+      document.getElementById(y).style.color = "#ccc"
+    }
+  }
   
   /*nrAnon.addEventListener('change', (event) => {
   
@@ -300,3 +337,9 @@ import MarkerClusterer from '@google/markerclustererplus';
     const circle = new google.maps.Circle(circleOptions);
     return circle;
   }
+
+  function changeStarStatus(v){
+    for (let x = v; x > 0; x--){
+        document.getElementById("st"+v).style.backgroundColor = "yellow"
+    }
+}

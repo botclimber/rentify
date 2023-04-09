@@ -28,6 +28,9 @@ limitations under the License.
     <!-- themefy-icon -->
     <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
 
+    <!-- Font Awesome Icon Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
     <!-- Main Stylesheet -->
     <link href="assets/style.css" rel="stylesheet" media="screen" />
@@ -43,6 +46,34 @@ limitations under the License.
           border: 1px solid #ccc;
           border-radius: 4px;
           box-sizing: border-box;
+        }
+
+        .wrapper input {
+        border: 0;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        position: absolute !important;
+        clip: rect(1px 1px 1px 1px);
+        clip: rect(1px, 1px, 1px, 1px);
+        opacity: 0;
+        }
+
+        .wrapper label {
+        position: relative;
+        color: #C8C8C8;
+        }
+
+        .wrapper label:before {
+        margin: 5px;
+        content: "\f005";
+        font-family: FontAwesome;
+        display: inline-block;
+        font-size: 1.5em;
+        
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
         }
 
     </style>
@@ -180,23 +211,47 @@ limitations under the License.
                       </div>
 
                       <!-- TODO: change Rating input to radio buton -->
+                      <div class="row">
+                        <div class="col-md-12">
                       <div class="form-group">
                         <label for="ratingInput">Rating</label>
-                        <input type="text" class="form-control" id="nrRating" aria-describedby="Rating" placeholder="Rating from 1 to 5">
+                        <div class="wrapper">
+                            <input type="checkbox" id="st1" value="1"/>
+                            <label id = "st1l" for="st1"></label>
+                            <input type="checkbox" id="st2" value="2"/>
+                            <label id = "st2l" for="st2"></label>
+                            <input type="checkbox" id="st3" value="3"/>
+                            <label id = "st3l" for="st3"></label>
+                            <input type="checkbox" id="st4" value="4"/>
+                            <label id = "st4l" for="st4"></label>
+                            <input type="checkbox" id="st5" value="5"/>
+                            <label id = "st5l" for="st5"></label>
+                          </div>
+                        <!-- <input type="text" class="form-control" id="nrRating" aria-describedby="Rating" placeholder="Rating from 1 to 5"> -->
                         <small id="ratingHelp" class="form-text text-muted"></small>
                       </div>
+                    </div>
+                </div>
                       
+                    <div class="row">
+                        <div class="col-md-12">
                       <div class="form-group">
                         <label for="reviewInput">Review</label>
                         <textarea style="border: 1px solid #ccc" class="form-control" id="nrReview" aria-describedby="Review" placeholder="Give us your feedback about this place"></textarea>
                         <small id="reviewHelp" class="form-text text-muted"></small>
                       </div>
+                    </div>
+                </div>
 
+                    <div class="row">
+                        <div class="col-md-12">
                       <div class="form-check">
                         <label for="anonInput">Review as Anonymous</label><br>
                         <input type="checkbox" class="form-check-input" id="nrAnon" aria-describedby="Anonymous" value="0" >
                         <small id="reviewHelp" class="form-text text-muted"></small>    
                       </div>
+                    </div>
+                </div>
                       <br/><br/>
 
                     <input type="hidden" id="nrLat" value="">
