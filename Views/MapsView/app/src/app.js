@@ -16,7 +16,22 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
+  const tTime = localStorage.getItem("tTime") || false
+
+  console.log(localStorage.getItem("t"))
+  if(!tTime){
+    // check if time has expired if yes remove actual token
+    var actDate = new Date()
+    var onlyDate = actDate.getUTCDay + "/" + actDate.getUTCMonth + "/" + actDate.getUTCFullYear
+
+    if(new Date(onlyDate).getTime() > new Date(tTime).getTime()){
+      localStorage.removeItem("t")
+    }
+  }
+
   const t = localStorage.getItem("t") || false
+  const tType = localStorage.getItem("tType") || false
+
   const apiOptions = {
     apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
   }
@@ -40,7 +55,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   var nrLng = document.getElementById("nrLng")
   var nrFloor = document.getElementById("nrFloor")
   var nrSide = document.getElementById("nrSide")
-  var nrRating = document.getElementById("nrRating")
+  var nrRating = 0
   var nrAnon = document.getElementById("nrAnon")
   var nrReview = document.getElementById("nrReview")
   var newReview = document.getElementById("newReview")
@@ -120,8 +135,8 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   /* NEW REVIEW */
   newReview.addEventListener('click', (event) => {
-  
-    if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !=="" && t){
+
+    if(nrCity.value !=="" && nrStreet.value !=="" && nrBNumber.value !=="" && nrReview.value !==""){
   
       cReview({
         type: "createReview",
@@ -132,7 +147,7 @@ import MarkerClusterer from '@google/markerclustererplus';
         buildingNumber: nrBNumber.value,
         nrFloor: nrFloor.value,
         nrSide: nrSide.value,
-        nrRating: nrRating.value,
+        nrRating: nrRating,
         nrAnon: parseInt(nrAnon.value),
         nrReview: nrReview.value,
         flag: flag.value
@@ -153,7 +168,7 @@ import MarkerClusterer from '@google/markerclustererplus';
         }
       })
     .then(res => res.json())
-    .then((data) => {console.log(data); mountPage(data)})
+    .then((data) => {console.log(data); $('#modalForm').trigger("reset"); $('#myForm').modal('hide'); mountPage(data)})
     .catch(err => console.log(err))
   }
   
@@ -184,22 +199,27 @@ import MarkerClusterer from '@google/markerclustererplus';
   })
 
   st1.addEventListener('click', (event) => {
+    nrRating = 1
     starStatus({starsToCheck: {st1l: st1}, starsToUncheck: { st2l: st2, st3l: st3, st4l: st4, st5l: st5}})
   })
 
   st2.addEventListener('click', (event) => {
+    nrRating = 2
     starStatus({starsToCheck: {st1l: st1, st2l: st2}, starsToUncheck: { st3l: st3, st4l: st4, st5l: st5}})
   })
   
   st3.addEventListener('click', (event) => {
+    nrRating = 3
     starStatus({starsToCheck: {st1l: st1, st2l: st2, st3l: st3}, starsToUncheck: { st4l: st4, st5l: st5}})
   })
 
   st4.addEventListener('click', (event) => {
+    nrRating = 4
     starStatus({starsToCheck: {st1l:st1, st2l: st2, st3l: st3, st4l: st4}, starsToUncheck: { st5l: st5}})
   })
 
   st5.addEventListener('click', (event) => {
+    nrRating = 5
     starStatus({starsToCheck: {st1l: st1, st2l: st2, st3l: st3, st4l: st4, st5l: st5}, starsToUncheck: {}})
   })
 

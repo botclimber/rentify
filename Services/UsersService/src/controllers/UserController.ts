@@ -1,11 +1,13 @@
 import { NextFunction, Response, Request } from "express";
+import dat from "date-and-time"
 import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/constants";
 import { BadRequest, Unauthorized } from "../helpers/errorTypes";
 import bcrypt from "bcrypt";
-import jwt, { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { EmailHelper } from "../helpers/emailHelper";
+
 
 type JwtPayload = {
   userId: number,
@@ -115,14 +117,14 @@ export class UserController {
     }
 
     const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
-      expiresIn: "8h",
+      expiresIn: "24h",
     });
 
     const { password: _, ...userLogin } = user;
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName}, token: token });
+    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
   }
 
   async loginAdmin(req: Request, res: Response, next: NextFunction) {
@@ -145,7 +147,7 @@ export class UserController {
     if(user.type == "common") throw new Unauthorized(ErrorMessages.NO_PERMISSION)
 
     const token = jwt.sign({ userId: user.id, userEmail: user.email, userType: user.type }, process.env.JWT_SECRET ?? "", {
-      expiresIn: "8h",
+      expiresIn: "24h",
     });
 
     const { password: _, ...userLogin } = user;
