@@ -2,6 +2,7 @@
   <div class="container" style="margin-top: 60px; width: 30%">
     <div v-if="isLogged">Login successful for user with email {{ email }}</div>
     <div v-else>
+    <p>{{qResponse}}</p>
       <Form @submit="login">
         <!-- Email input -->
         <div class="form-outline mb-4">
@@ -102,6 +103,7 @@ export default defineComponent({
       isShow: false,
       modalHeader: "",
       modalBody: "",
+      qResponse: ""
     };
   },
   methods: {
@@ -114,9 +116,10 @@ export default defineComponent({
           // redirect to rentify home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://127.0.0.1:5173/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token
+          window.location.href = "http://localhost:5173/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime
         })
         .catch((error) => {
+          this.qResponse = error["response"].data.message
           console.error(error);
         });
     },

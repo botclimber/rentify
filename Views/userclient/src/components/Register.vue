@@ -1,5 +1,7 @@
 <template>
-  <div class="container" style="margin-top: 60px; width: 30%">
+
+  <div class="container mt-3" style="width: 30%">
+  <div class="row" style="margin-bottom: 60px;"><a href="/user/login">go back</a></div>
     <div v-if="isRegistered">
       User registered successfully. Check your email to verify your account
 
@@ -7,7 +9,8 @@
         <!-- Submit button -->
         <button
           type="button"
-          class="btn btn-primary btn-md btn-block"
+          style="backgroundColor: rgb(221 131 92); color:white"
+          class="btn btn-default"
           v-on:click="goToLogin"
         >
           Redirect to login page
@@ -110,7 +113,8 @@
           <!-- Submit button -->
           <button
             title="Register"
-            class="btn btn-primary btn-md btn-block"
+            style="backgroundColor: rgb(221 131 92); color:white"
+            class="btn btn-default"
             type="submit"
           >
             Register

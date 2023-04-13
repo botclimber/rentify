@@ -50,12 +50,12 @@ export default {
 
       // when existing change this request to one where old password verification exists
       async changePassword(){
-      const res = await fetch(this.apis.usersApi+'updatePassword/'+this.userData.id+'/'+this.tk,{
-        method: 'POST',
+      const res = await fetch(this.apis.usersApi+'manualPassChange/'+this.userData.id+'/'+this.tk,{
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({password: this.cpForm.newPassword}),
+        body: JSON.stringify({oldPassword: this.cpForm.oldPassword, newPassword: this.cpForm.newPassword}),
       })
       .then(res => res.json())
       .then(data => console.log(data))
