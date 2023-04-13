@@ -2,6 +2,7 @@
   <div class="container" style="margin-top: 60px; width: 30%">
     <div v-if="isLogged">Login successful for user with email {{ email }}</div>
     <div v-else>
+    <p>{{qResponse}}</p>
       <Form @submit="login">
         <!-- Email input -->
         <div class="form-outline mb-4">
@@ -66,8 +67,9 @@
         <div class="row mb-4">
           <!-- Submit button -->
           <button
-            title="Register"
-            class="btn btn-primary btn-md btn-block"
+            title="Login"
+            style="backgroundColor: rgb(221 131 92); color:white"
+            class="btn btn-default"
             type="submit"
           >
             Sign in
@@ -106,6 +108,7 @@ export default defineComponent({
       isShow: false,
       modalHeader: "",
       modalBody: "",
+      qResponse: ""
     };
   },
   methods: {
@@ -118,9 +121,10 @@ export default defineComponent({
           // redirect to rentify home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost:8080/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token+"&ut="+response.data.user.userType+"&expTime="+response.data.user.expTime
+          window.location.href = "http://localhost:8080/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime
         })
         .catch((error) => {
+          this.qResponse = error["response"].data.message
           console.error(error);
         });
     },

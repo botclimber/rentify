@@ -2,13 +2,9 @@
   <div id="app">
     <v-app>
       <main>
-        <nav class="navbar navbar-light bg-light justify-content-center">
-          <a :href="commonLogin" class="navbar-brand">Rentify</a>
-        </nav>
-        <nav class="navbar justify-content-center">
-        <a :href="commonLogin" style="padding:15px" >Normal Login</a>
-        <a :href="adminLogin" style="padding:15px" >Admin Login</a>
-        </nav>
+        <nav style="backgroundColor: #B7410E;" class="navbar justify-content-center">
+          <a :href="rentifyPage" class="navbar-brand" style="color:white">Rentify</a>
+        </nav>  
 
         <router-view />
         <footer
@@ -20,7 +16,7 @@
             style="background-color: rgba(0, 0, 0, 0.2)"
           >
             © 2023 Copyright:
-            <a class="text-white" :href="commonLogin">Rentify.com</a>
+            <a class="text-white" :href="rentifyPage">Rentify.com</a>
           </div>
         </footer>
       </main>
@@ -33,8 +29,7 @@ export default {
   name: "app",
   setup() {
     return {
-      commonLogin: '/user/login',
-      adminLogin: '/user/loginAdmin'
+      rentifyPage: 'http://localhost:8080',
     };
   },
 };

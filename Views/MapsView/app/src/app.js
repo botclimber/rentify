@@ -89,7 +89,7 @@ import MarkerClusterer from '@google/markerclustererplus';
     addPanToMarker(map, markers[0], markers[1]);
   
     // Configure the click listener.
-    map.addListener("click", (mapsMouseEvent) => {
+    map.addListener("dblclick", (mapsMouseEvent) => {
   
       if(t){
       var coords = mapsMouseEvent.latLng.toJSON()
@@ -274,7 +274,7 @@ import MarkerClusterer from '@google/markerclustererplus';
     if searching for city zoom out
   
     */
-     zoom: 20
+     zoom: 18
   
       //mapId: 'YOUR_MAP_ID'
     };
@@ -338,7 +338,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       marker.addListener('click', event => {
         const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
   
-        infoWindow.setContent("<div style = 'width:500px;min-height:40px'><div><button onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = 'http://localhost:8081/'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; $('#myForm').modal('show');} })();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
+        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div><button onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = 'http://localhost:8081/'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; $('#myForm').modal('show');} })();\">Add Review</button></div><div>" + reviews[idx] + "</div></div>");
         infoWindow.open(map, marker);
   
       });
