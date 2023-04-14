@@ -2,9 +2,10 @@
 const date = require('date-and-time')
 
 module.exports = class Reviews {
-  constructor(userId, residenceId, review, rating, anon, approved){
+  constructor(userId, userName, residenceId, review, rating, anon, approved){
 
 	this.userId = userId
+	this.userName = userName
 	this.adminId = 0
 	this.residenceId = residenceId
 	this.review = review

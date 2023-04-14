@@ -7,19 +7,16 @@ module.exports = class Locations {
     this.reviews = reviews // array of reviews
   }
 
-  transform(){
-    console.log(this.reviews)
+  async transform(){
 
-    // enchance this in order to return all needed data
-    //this.reviews = 
-    this.reviews = "<ul class='list-group list-group-flush'>"+this.reviews.map( comment => 
+    this.reviews = "<ul class='list-group list-group-flush'>"+this.reviews.map(  comment =>
       "<li class='list-group-item'>"
       +"<div class='row'>"
       +"<div class='col-md-12'>"
       +(this.getResidenceForRev(comment.residenceId) || '')
       +"</div>"
       +"<div class='col-md-12'>"
-      +"<p class='float-left'>Daniel Silva</p>"
+      +"<p class='float-left'>"+comment.userName+"</p>"
       +this.getStars(comment.rating)
       +"</div>"
       +"</div>"
@@ -51,6 +48,4 @@ module.exports = class Locations {
       }
     }
   }
-
-  //getUserForRev(userId){}
 }

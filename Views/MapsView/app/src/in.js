@@ -1,6 +1,8 @@
 const tokenName = 't'
 const typeName = "tType"
 const timeName = "tTime"
+const firstName = "firstName"
+const lastName = "lastName"
 
 function checkLocalStorage(item){
     const urlParams = new URLSearchParams(window.location.search)
@@ -19,6 +21,8 @@ function checkLocalStorage(item){
 const t = checkLocalStorage(tokenName)
 const tType = checkLocalStorage(typeName)
 const tTime = checkLocalStorage(timeName)
+const fName = checkLocalStorage(firstName)
+const lName = checkLocalStorage(lastName)
 
 if(t != ""){
     document.getElementById("mLogin").style.display = "none"
@@ -33,6 +37,8 @@ document.getElementById("mLogout").onclick = function(){
     localStorage.removeItem(tokenName)
     localStorage.removeItem(typeName)
     localStorage.removeItem(timeName)
+    localStorage.removeItem(firstName)
+    localStorage.removeItem(lastName)
 
     window.location.href = "/"
 }

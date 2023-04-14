@@ -11,11 +11,15 @@ type JwtPayload = {
   userType: string
 };
 
+function deToken(token: string): JwtPayload { return jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload }
+
 export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+
+  console.log(req)
 
   const { authorization } = req.headers;
 
@@ -25,7 +29,7 @@ export const authMiddleware = async (
 
   const token = authorization.split(" ")[1];
 
-  const { userId, userEmail, userType } = jwt.verify(token, process.env.JWT_SECRET ?? "") as JwtPayload;
+  const {userId, userEmail, userType} = deToken(token)
   const user = await userRepository.findOneById(userId);
 
   if (!user) {

@@ -18,6 +18,9 @@ import MarkerClusterer from '@google/markerclustererplus';
 
   const tTime = localStorage.getItem("tTime") || false
 
+  const fName = localStorage.getItem("firstName") || "???"
+  const lName = localStorage.getItem("lastName") || "???"
+
   console.log(localStorage.getItem("t"))
   if(!tTime){
     // check if time has expired if yes remove actual token
@@ -150,6 +153,7 @@ import MarkerClusterer from '@google/markerclustererplus';
         nrRating: nrRating,
         nrAnon: parseInt(nrAnon.value),
         nrReview: nrReview.value,
+        userName: fName+" "+lName,
         flag: flag.value
       })
   

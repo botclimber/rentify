@@ -25,6 +25,7 @@ Create Table ResidenceAddresses (
 Create Table Reviews (
   id int auto_increment,
   userId int not null,
+  userName varchar(120) not null,
   adminId int not null,
   residenceId int not null,
   review text not null,
