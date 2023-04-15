@@ -1,3 +1,5 @@
+const date = require('date-and-time')
+
 module.exports = class Locations {
 
   constructor(lat, lng, residence, reviews){
@@ -9,8 +11,10 @@ module.exports = class Locations {
 
   async transform(){
 
-    this.reviews = "<ul class='list-group list-group-flush'>"+this.reviews.map(  comment =>
-      "<li class='list-group-item'>"
+    this.reviews = "<ul class='list-group list-group-flush'>"+this.reviews.map(  comment => {
+      const rev = (comment.review.length > 20)? "<p>"+comment.review.substring(0,20) +"<span id=\"dots"+comment.id+"\">...</span><span style=\"display:none\" id=\"more"+comment.id+"\">"+comment.review.substring(20, comment.review.length)+"</span></p><a href=\"#\" onclick=\"readMore("+comment.id+")\" id=\"readMore"+comment.id+"\">Read more</a>" :  "<p>"+comment.review +"</p>"   
+
+      return "<li class='list-group-item'>"
       +"<div class='row'>"
       +"<div class='col-md-12'>"
       +(this.getResidenceForRev(comment.residenceId) || '')
@@ -20,8 +24,16 @@ module.exports = class Locations {
       +this.getStars(comment.rating)
       +"</div>"
       +"</div>"
-      +comment.review
+      +"<div class='row'>"
+      +"<div class='col-md-12'>"
+      + rev
+      +"</div>"
+      +"<div class='col-md-12'>"
+      +"<p class='float-right' style='font-size:9pt'>"+date.format(comment.createdOn, "DD/MM/YYYY - HH:mm")+"</p>"
+      +"</div>"
+      +"</div>"
       +"</li>"
+    }
     ).join("")+"</ul>"
   }
 

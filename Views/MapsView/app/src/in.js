@@ -43,3 +43,19 @@ document.getElementById("mLogout").onclick = function(){
     window.location.href = "/"
 }
 
+function readMore(revId) {
+    var dots = document.getElementById("dots"+revId);
+    var moreText = document.getElementById("more"+revId);
+    var btnText = document.getElementById("readMore"+revId);
+
+    if (dots.style.display === "none") {
+      dots.style.display = "inline";
+      btnText.innerHTML = "Read more"; 
+      moreText.style.display = "none";
+    } else {
+      dots.style.display = "none";
+      btnText.innerHTML = "Read less"; 
+      moreText.style.display = "inline";
+    }
+  }
+
