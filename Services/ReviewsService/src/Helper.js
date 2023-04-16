@@ -69,16 +69,19 @@ module.exports = class Helper extends Db{
 	/**
 	 * Some common response format
 	 *
-	 * @param {*} data
-	 * @param {*} lat
-	 * @param {*} lng
+	 * @param {object} data
+	 * @param {number} lat
+	 * @param {number} lng
 	 */
 	defaultResp(data, lat, lng){
 		this.getAllFromDb()
 		.then(allDataRes /* 3 arrays of dictionary */=> {
+			
+			const isApproved = parseInt(data.onlyAppr)
+			const rev = (isApproved)? allDataRes[0].filter(row => row.approved == 1) : allDataRes[0]
 
 			// logic goes here
-			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], allDataRes[0]).map(location =>{ location.transform(); return location})
+			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], rev).map(location =>{ location.transform(); return location})
 			console.log(assembleData)
 			console.log("Mounting response ...")
 			const response = {
@@ -92,7 +95,6 @@ module.exports = class Helper extends Db{
 
 		})
 		.catch(err => console.log(err))
-
 	}
 
 	/**

@@ -38,6 +38,12 @@ import MarkerClusterer from '@google/markerclustererplus';
   const apiOptions = {
     apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
   }
+
+  /**
+   * global http values
+   */
+  const authPage = "http://localhost:8081"
+  const reviewsService = "http://localhost:8000"
   
   var locations = {}
   var data = {
@@ -105,7 +111,7 @@ import MarkerClusterer from '@google/markerclustererplus';
   
   function search(city, street = "", nr = ""){
   
-    fetch('http://127.0.0.1:8000/api/v1/search?city='+city+"&street="+street+"&nr="+nr)
+    fetch(reviewsService+'/api/v1/search?city='+city+"&street="+street+"&nr="+nr+"&onlyAppr=1")
     .then(res => res.json())
     .then((data) => {console.log(data); mountPage(data)})
     .catch(err => console.log(err))
@@ -264,7 +270,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       flag.value = ""
   
       document.getElementById("myForm").style.display = "block";
-    }else window.location.href = "http://localhost:8081"
+    }else window.location.href = authPage+"/user/login"
   }
   
   function displayMap(cityCoords) {
@@ -314,6 +320,8 @@ import MarkerClusterer from '@google/markerclustererplus';
     const reviews = [];
     for (const location in locations) {
   
+      if(locations[location].reviews === "") continue
+
       const markerOptions = {
         map: map,
         position: locations[location],
@@ -342,7 +350,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       marker.addListener('click', event => {
         const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
   
-        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = 'http://localhost:8081/'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input type='text' class='float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
+        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor | direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
         infoWindow.open(map, marker);
   
       });
