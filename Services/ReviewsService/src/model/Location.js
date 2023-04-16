@@ -11,12 +11,12 @@ module.exports = class Locations {
 
   async transform(){
 
-    this.reviews = "<ul class='list-group list-group-flush'>"+this.reviews.map(  comment => {
+    this.reviews = "<ul id='revContent"+(this.lat+this.lng)+"' class='list-group list-group-flush'>"+this.reviews.map(  comment => {
       const rev = (comment.review.length > 20)? "<p>"+comment.review.substring(0,20) +"<span id=\"dots"+comment.id+"\">...</span><span style=\"display:none\" id=\"more"+comment.id+"\">"+comment.review.substring(20, comment.review.length)+"</span></p><a href=\"#\" onclick=\"readMore("+comment.id+")\" id=\"readMore"+comment.id+"\">Read more</a>" :  "<p>"+comment.review +"</p>"   
 
       return "<li class='list-group-item'>"
       +"<div class='row'>"
-      +"<div class='col-md-12'>"
+      +"<div class='col-md-12 resContent"+(this.lat+this.lng)+"'>"
       +(this.getResidenceForRev(comment.residenceId) || '')
       +"</div>"
       +"<div class='col-md-12'>"
