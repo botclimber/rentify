@@ -23,7 +23,7 @@ module.exports = class Locations {
         +(this.getResidenceForRev(comment.residenceId) || '')
         +"</div>"
         +"<div class='col-md-12'>"
-        +"<p class='float-left' style='font-weight:normal'>"+comment.userName+": </p>"
+        +"<img class='float-left p-2' style='border-radius: 30%;width:50px;height:50px' src='images/"+comment.userImg+"'><p class='float-left' style='font-weight:normal;margin-top:16px'>"+comment.userName+": </p>"
         +this.getStars(comment.rating)
         +"</div>"
         +"</div>"
@@ -42,7 +42,7 @@ module.exports = class Locations {
   }
 
   getStars(rating){
-    var starBuild = "<div class='wrapper float-right'>"
+    var starBuild = "<div class='wrapper float-right' style='margin-top:12px'>"
     
     var countdown = rating
     do{

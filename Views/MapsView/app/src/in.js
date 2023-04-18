@@ -14,6 +14,7 @@ const firstName = "firstName"
 const lastName = "lastName"
 const userEmail = "userEmail"
 const userId = "uId"
+const uImg = "uImage"
 
 function checkLocalStorage(item){
     const urlParams = new URLSearchParams(window.location.search)
@@ -36,6 +37,7 @@ const fName = checkLocalStorage(firstName)
 const lName = checkLocalStorage(lastName)
 const uEmail = checkLocalStorage(userEmail)
 const uId = checkLocalStorage(userId)
+const uImage = checkLocalStorage(uImg)
 
 
 if(t != ""){
@@ -55,6 +57,7 @@ document.getElementById("mLogout").onclick = function(){
     localStorage.removeItem(lastName)
     localStorage.removeItem(userEmail)
     localStorage.removeItem(userId)
+    localStorage.removeItem(uImg)
 
     window.location.href = "/"
 }

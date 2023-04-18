@@ -13,6 +13,9 @@
  *  userService = "http://localhost:8001"
  */
 
+const proImg = document.getElementById("profileImage")
+proImg.src = "images/"+uImage
+
 document.getElementById("_userName").innerHTML = fName + " " + lName
 document.getElementById("_userEmail").innerHTML = uEmail
 
@@ -51,9 +54,15 @@ async function updateProfileImg(files){
     },
     body: data
   })
-  .then(res => res.json())
+  .then(res =>{ if(res.ok){ return res.json() } else return false })
   .then(data => {
       console.log(data); 
+      
+      if(data){
+
+        localStorage.setItem(uImg, data.img)
+        proImg.src = "images/"+data.img
+      }
   })
   .catch(err => console.log(err))
 

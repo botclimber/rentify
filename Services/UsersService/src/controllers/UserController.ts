@@ -8,6 +8,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { EmailHelper } from "../helpers/emailHelper";
+import { User } from "../../database/src/entities/Users";
+import { error } from "console";
 
 type JwtPayload = {
   userId: number,
@@ -15,7 +17,47 @@ type JwtPayload = {
   userType: string
 };
 
-export class UserController {
+/**
+ * @method _updateImgDB     update image name on Data Base
+ * @method _generateImgCode generate some random name for uploaded file in order to not have naming conflicts
+ */
+abstract class UserControllerHelper{
+
+  /**
+   * 
+   * @param finalFileName 
+   * @param userId 
+   */
+  protected async _updateImgDB(finalFileName: string, userId: number): Promise<void>{
+    const user = await userRepository.findOneBy({ id: +userId });
+    
+    if(user){
+      user.image = finalFileName
+      await userRepository.save(user);
+
+    }else {
+      throw new BadRequest("User does not exist");
+    }
+  }
+
+  /**
+   * 
+   * @param fileName 
+   * @returns 
+   */
+  protected async _generateImgCode(fileName: String): Promise<string>{ 
+    const max = 1000
+    const min = 1
+
+    return fileName.replaceAll(".", "") + Math.floor(Math.random() * (max - min + 1) + min).toString() + ".gif"
+  } 
+
+}
+
+export class UserController extends UserControllerHelper {
+  
+  constructor(){ super() }
+
   async registCommon(req: Request, res: Response, next: NextFunction) {
 
     const { firstName, lastName, password, email, username } = req.body;
@@ -29,7 +71,7 @@ export class UserController {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = userRepository.create({
-      image: "default.png",
+      image: "default.gif",
       firstName,
       lastName,
       password: hashedPassword,
@@ -72,7 +114,7 @@ export class UserController {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = userRepository.create({
-          image: "default.png",
+          image: "default.gif",
           firstName,
           lastName,
           password: hashedPassword,
@@ -262,6 +304,14 @@ export class UserController {
     return res.status(200).json({message: "Password changed!"});
   }
 
+  /**
+   * Method that updates user profile image
+   * 
+   * @param req 
+   * @param res 
+   * @param next 
+   * @returns 
+   */
   async updateProfileImg(req: Request, res: Response, next: NextFunction){
     try{
       if(!req.files || Object.keys(req.files).length === 0){  
@@ -270,23 +320,25 @@ export class UserController {
       }else{
         console.log("file recieved!")
         const recFile: UploadedFile = req.files.userImg as UploadedFile
-        const uploadPath = __dirname + '/imgs/userImgs/' + recFile.name;
+        //const genFileName: string = await super._generateImgCode(recFile.name)
+        const uploadPath = process.env.DIRNAME;
 
-        console.log("moving file ..." + uploadPath)
-        recFile.mv(uploadPath, (err) => {
+        console.log("Updating image on DataBase ...")
+        if(req.user.id){
+          const fileName: string = "user-"+req.user.id.toString() + ".gif"
+          await super._updateImgDB(fileName, req.user.id)
+
+          console.log("moving file ... " + uploadPath + fileName)
+          recFile.mv(uploadPath + fileName , (err) => {
           if(err) return res.status(400).json({message: "some error occurred"+err})
 
-          return res.status(200).json({message: "Image uploaded with success!"})
+          return res.status(200).json({message: "Image uploaded with success!", img: fileName})
         });
+        
+        }else{ return res.status(400).json({message: "User id not found!"})} 
       }
     }catch(e){
       throw e
     }
   }
-
-  //TODO: update image name on DB
-  //private async _updateImgDB(fileName: String): Promise<void>{}
-
-  // TODO: generate image code in order to not conflict with other image names
-  //private async _generateImgCode(fileName: String): Promise<String>{ return ""} 
 }

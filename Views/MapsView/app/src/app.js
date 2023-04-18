@@ -16,12 +16,6 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import MarkerClusterer from '@google/markerclustererplus';
 
-  const tTime = localStorage.getItem("tTime") || false
-
-  const fName = localStorage.getItem("firstName") || "???"
-  const lName = localStorage.getItem("lastName") || "???"
-
-  console.log(localStorage.getItem("t"))
   if(!tTime){
     // check if time has expired if yes remove actual token
     var actDate = new Date()
@@ -31,9 +25,6 @@ import MarkerClusterer from '@google/markerclustererplus';
       localStorage.removeItem("t")
     }
   }
-
-  const t = localStorage.getItem("t") || false
-  const tType = localStorage.getItem("tType") || false
 
   const apiOptions = {
     apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
@@ -154,6 +145,7 @@ import MarkerClusterer from '@google/markerclustererplus';
         nrAnon: parseInt(nrAnon.value),
         nrReview: nrReview.value,
         userName: fName+" "+lName,
+        userImage: uImage,
         flag: flag.value
       })
   

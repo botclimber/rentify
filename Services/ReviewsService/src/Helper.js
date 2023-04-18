@@ -112,7 +112,7 @@ module.exports = class Helper extends Db{
 			.then(resId => {
 
 				const appr = (data.flag != "fromMapClick")? 1: 0;
-				const review = new Reviews(data.userId, data.userName, resId, data.nrReview, data.nrRating, data.nrAnon, appr)
+				const review = new Reviews(data.userId, data.userName, data.userImage, resId, data.nrReview, data.nrRating, data.nrAnon, appr)
 				this.insert(review)
 				.then( _ => this.defaultResp(data, lat, lng) )
 				.catch(err => console.log(err))
