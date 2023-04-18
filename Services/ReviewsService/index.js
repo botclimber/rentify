@@ -31,7 +31,9 @@ app.post('/api/v1/create', (req, res) => {
 
  th.tokenHandler(req)
  .then(transfData => {
-   if(transfData) actions.actions(res).insertReview(transfData)
+  const apr = {onlyAppr: req.query.onlyAppr || 1}
+
+   if(transfData) actions.actions(res).insertReview({...transfData, ...apr})
  })
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 

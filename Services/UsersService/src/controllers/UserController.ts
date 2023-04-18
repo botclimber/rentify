@@ -124,7 +124,7 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
+    return res.status(200).json({ user: {uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
   }
 
   async loginAdmin(req: Request, res: Response, next: NextFunction) {
@@ -154,7 +154,7 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: {firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY")}, token: token });
+    return res.status(200).json({ user: {uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY")}, token: token });
   }
 
   async getProfile(req: Request, res: Response, next: NextFunction) {
@@ -257,6 +257,6 @@ export class UserController {
 
     await userRepository.save(user);
 
-    return res.status(200).json({msg: "updated  "});
+    return res.status(200).json({message: "Password changed!"});
   }
 }

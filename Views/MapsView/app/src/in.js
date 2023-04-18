@@ -1,9 +1,19 @@
+"use strict";
+
+/**
+   * global http values
+   */
+const authPage = "http://localhost:8081"
+const reviewsService = "http://localhost:8000"
+const userService = "http://localhost:8001"
+
 const tokenName = 't'
 const typeName = "tType"
 const timeName = "tTime"
 const firstName = "firstName"
 const lastName = "lastName"
 const userEmail = "userEmail"
+const userId = "uId"
 
 function checkLocalStorage(item){
     const urlParams = new URLSearchParams(window.location.search)
@@ -25,6 +35,7 @@ const tTime = checkLocalStorage(timeName)
 const fName = checkLocalStorage(firstName)
 const lName = checkLocalStorage(lastName)
 const uEmail = checkLocalStorage(userEmail)
+const uId = checkLocalStorage(userId)
 
 
 if(t != ""){
@@ -43,6 +54,7 @@ document.getElementById("mLogout").onclick = function(){
     localStorage.removeItem(firstName)
     localStorage.removeItem(lastName)
     localStorage.removeItem(userEmail)
+    localStorage.removeItem(userId)
 
     window.location.href = "/"
 }
@@ -82,7 +94,7 @@ function readMore(revId) {
    */
   function filterRevs(latAsId, lngAsId){
 
-    var input, filter, ul, li, i;
+    var input, filter, ul, li, i, div, p;
     input = document.getElementById("filterRevsInput"+(latAsId+lngAsId));
     filter = input.value.toUpperCase();
     ul = document.getElementById("revContent"+(latAsId+lngAsId));

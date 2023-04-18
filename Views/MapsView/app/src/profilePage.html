@@ -17,7 +17,7 @@
     <!-- Main Stylesheet -->
     <link href="assets/style.css" rel="stylesheet" media="screen" />
     <style>
-        input[type=text]{
+        input[type=text], input[type=password]{
             border: 1px solid rgb(123, 123, 123);
             border-radius: 0px;
         }
@@ -84,7 +84,7 @@
                 <a class="nav-link text-dark" href="#"><i style="margin-top:5px" class="fa-solid fa-power-off"></i></a>
               </li>
               <li id="mRegist" class="nav-item">
-                <a class="nav-link text-dark" href="http://localhost:8081/user/register">Regist</a> 
+                <a class="nav-link text-dark" href="http://localhost:8081/user/register">Register</a> 
               </li>
               <li id="mLogin" class="nav-item">
                 <a class="nav-link text-dark" href="http://localhost:8081/user/login">Login</a>
@@ -99,7 +99,7 @@
       <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold" id="_userName"></span><span class="text-black-50" id = "_userEmail"></span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="mt-5" width="150px" src="images/profileImg.jpeg"><span class="font-weight-bold" id="_userName"></span><span class="text-black-50" id = "_userEmail"></span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
@@ -113,10 +113,13 @@
             </div>
             <div class="col-md-4">
                 <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center experience"><span>Change Password</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Change</span></div><br>
-                    <div class="col-md-12"><label class="labels">Current Password</label><input type="text" class="form-control" placeholder="current password" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">New Password</label><input type="text" class="form-control" placeholder="new password" value=""></div>
-                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="text" class="form-control" placeholder="confirm new password" value=""></div>
+                  <form>
+                    <div class="d-flex justify-content-between align-items-center experience"><span>Change Password</span><span onclick="chgPassword()" class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Change</span></div><br>
+                    <div class="col-md-12"><label class="labels">Current Password</label><input type="password" id="c_password" class="form-control" placeholder="current password" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">New Password</label><input type="password" id="n_password" class="form-control" placeholder="new password" value=""></div>
+                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" id="cn_password" class="form-control" placeholder="confirm new password" value=""></div>
+                  <form>
+                    <span id="chgPasswordMsg" style="color:black"></span>
                 </div>
             </div>
         </div>

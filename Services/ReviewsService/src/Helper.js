@@ -78,7 +78,7 @@ module.exports = class Helper extends Db{
 		.then(allDataRes /* 3 arrays of dictionary */=> {
 			
 			const isApproved = parseInt(data.onlyAppr)
-			const rev = (isApproved)? allDataRes[0].filter(row => row.approved == 1) : allDataRes[0]
+			const rev = (isApproved)? allDataRes[0].filter(row => row.approved === 1) : allDataRes[0]
 
 			// logic goes here
 			const assembleData = this.generateLocations(allDataRes[2], allDataRes[1], rev).map(location =>{ location.transform(); return location})

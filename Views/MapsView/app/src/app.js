@@ -38,12 +38,6 @@ import MarkerClusterer from '@google/markerclustererplus';
   const apiOptions = {
     apiKey: "AIzaSyBq2YyQh70n_M6glKgr3U4a9vCmY5LU0xQ"
   }
-
-  /**
-   * global http values
-   */
-  const authPage = "http://localhost:8081"
-  const reviewsService = "http://localhost:8000"
   
   var locations = {}
   var data = {
