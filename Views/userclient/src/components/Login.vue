@@ -121,7 +121,7 @@ export default defineComponent({
           // redirect to rentify home page
           console.log(response.data)
           this.isLogged = true;
-          window.location.href = "http://localhost:8080/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime
+          window.location.href = "http://localhost:8080/?firstName="+response.data.user.firstName+"&lastName="+response.data.user.lastName+"&userEmail="+response.data.user.userEmail+"&t="+response.data.token+"&tType="+response.data.user.userType+"&tTime="+response.data.user.expTime
         })
         .catch((error) => {
           this.qResponse = error["response"].data.message
