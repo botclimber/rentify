@@ -264,8 +264,6 @@ export class UserController {
 
   async updateProfileImg(req: Request, res: Response, next: NextFunction){
     try{
-      console.log("trace")
-      console.log(req.files)
       if(!req.files || Object.keys(req.files).length === 0){  
         return res.status(400).json({message: "No file sent!"})
 
