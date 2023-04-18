@@ -21,5 +21,6 @@ routes.post(
 routes.get("/profile", authMiddleware, new UserController().getProfile);
 
 routes.put("/manualPassChange/:userId/:token", new UserController().manualPasswordChange);
+routes.put("/updateProfileImg/:userId", authMiddleware, new UserController().updateProfileImg);
 
 export default routes;

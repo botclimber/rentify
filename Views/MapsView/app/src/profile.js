@@ -37,3 +37,24 @@ async function chgPassword(){
     .catch(err => console.log(err))
 
 }
+
+async function updateProfileImg(files){
+
+  const data = new FormData()
+  data.append("userImg", files[0]) 
+
+  await fetch(userService+'/user/updateProfileImg/'+uId,{
+    method: 'PUT',
+    headers: {
+      //'Content-Type': 'application/json; multipart/form-data;',
+      'authorization': 'baer '+t
+    },
+    body: data
+  })
+  .then(res => res.json())
+  .then(data => {
+      console.log(data); 
+  })
+  .catch(err => console.log(err))
+
+}

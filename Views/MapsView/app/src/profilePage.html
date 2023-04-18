@@ -99,7 +99,15 @@
       <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="mt-5" width="150px" src="images/profileImg.jpeg"><span class="font-weight-bold" id="_userName"></span><span class="text-black-50" id = "_userEmail"></span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5 pImage">
+                  <img class="mt-5 pImage" width="150px" src="images/profileImg.jpeg">
+                  <div class="row mt-3">
+                  <form>
+                    <label>Change image:</label>
+                    <input class="form-control" type="file" id="pFile" onchange="updateProfileImg(this.files)"> 
+                  </form>
+                  </div>
+                <span class="font-weight-bold" id="_userName"></span><span class="text-black-50" id = "_userEmail"></span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">

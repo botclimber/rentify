@@ -1,4 +1,5 @@
 import { NextFunction, Response, Request } from "express";
+import fileUpload, { UploadedFile } from "express-fileupload";
 import dat from "date-and-time"
 import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/constants";
@@ -7,7 +8,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { EmailHelper } from "../helpers/emailHelper";
-
 
 type JwtPayload = {
   userId: number,
@@ -29,6 +29,7 @@ export class UserController {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = userRepository.create({
+      image: "default.png",
       firstName,
       lastName,
       password: hashedPassword,
@@ -71,6 +72,7 @@ export class UserController {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = userRepository.create({
+          image: "default.png",
           firstName,
           lastName,
           password: hashedPassword,
@@ -124,7 +126,7 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: {uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
+    return res.status(200).json({ user: {uImage: userLogin.image ,uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY") }, token: token });
   }
 
   async loginAdmin(req: Request, res: Response, next: NextFunction) {
@@ -154,7 +156,7 @@ export class UserController {
 
     console.log(`Login Successful for email: ${email}`);
 
-    return res.status(200).json({ user: {uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY")}, token: token });
+    return res.status(200).json({ user: {uImage: userLogin.image ,uId: userLogin.id, firstName: userLogin.firstName, lastName: userLogin.lastName, userEmail: userLogin.email, userType: userLogin.type, expTime: dat.format(new Date(), "DD/MM/YYYY")}, token: token });
   }
 
   async getProfile(req: Request, res: Response, next: NextFunction) {
@@ -259,4 +261,34 @@ export class UserController {
 
     return res.status(200).json({message: "Password changed!"});
   }
+
+  async updateProfileImg(req: Request, res: Response, next: NextFunction){
+    try{
+      console.log("trace")
+      console.log(req.files)
+      if(!req.files || Object.keys(req.files).length === 0){  
+        return res.status(400).json({message: "No file sent!"})
+
+      }else{
+        console.log("file recieved!")
+        const recFile: UploadedFile = req.files.userImg as UploadedFile
+        const uploadPath = __dirname + '/imgs/userImgs/' + recFile.name;
+
+        console.log("moving file ..." + uploadPath)
+        recFile.mv(uploadPath, (err) => {
+          if(err) return res.status(400).json({message: "some error occurred"+err})
+
+          return res.status(200).json({message: "Image uploaded with success!"})
+        });
+      }
+    }catch(e){
+      throw e
+    }
+  }
+
+  //TODO: update image name on DB
+  //private async _updateImgDB(fileName: String): Promise<void>{}
+
+  // TODO: generate image code in order to not conflict with other image names
+  //private async _generateImgCode(fileName: String): Promise<String>{ return ""} 
 }
