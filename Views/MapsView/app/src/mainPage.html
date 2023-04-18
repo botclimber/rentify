@@ -44,7 +44,7 @@ limitations under the License.
         input[type=text], select {
           width: 100%;
           padding: 12px 20px;
-          margin: 8px 0;
+          margin: 0px 0;
           display: inline-block;
           border: 1px solid #ccc;
           border-radius: 4px;
@@ -79,6 +79,8 @@ limitations under the License.
         user-select: none;
         }
 
+        .collapse.in { display: inline !important; }
+
     </style>
 
 </head>
@@ -97,13 +99,13 @@ limitations under the License.
 				<div class="collapse navbar-collapse text-center" id="navigation">
 					<ul class="navbar-nav ml-auto">
                         <li id="mProfile" class="nav-item">
-                          <a class="nav-link text-dark" href="profile.html">Profile</a>
+                          <a class="nav-link text-dark" href="profilePage.html">Profile</a>
                         </li>
                         <li id="mLogout" class="nav-item">
                           <a class="nav-link text-dark" href="#"><i style="margin-top:5px" class="fa-solid fa-power-off"></i></a>
                         </li>
                         <li id="mRegist" class="nav-item">
-                          <a class="nav-link text-dark" href="http://localhost:8081/user/register">Regist</a> 
+                          <a class="nav-link text-dark" href="http://localhost:8081/user/register">Register</a> 
                         </li>
                         <li id="mLogin" class="nav-item">
                           <a class="nav-link text-dark" href="http://localhost:8081/user/login">Login</a>
@@ -122,7 +124,7 @@ limitations under the License.
                 </div>
                 <div class = "col-md-2 mt-3">
                     <div class="row">
-                    <form>
+                    <form class="p-3">
                         <div class="form-group">
                           <label for="cityInput">City</label>
                           <input type="text" class="form-control" id="iCity" aria-describedby="City of location" placeholder="City/State">
@@ -140,15 +142,16 @@ limitations under the License.
                           </div>
                         
                           <div class="d-flex">
-                        <button type="button" id="sAddress" class="btn mr-2" style="background-color:#B7410E;color:white;">Search</button>
+                        <button type="button" id="sAddress" class="btn mr-2" style="background-color:#B7410E;color:white;border-radius:4px;padding:8px">Search</button>
                         <button type="button" id="openNReviewForm" data-toggle="modal" data-target="#myForm" style="display:none" class="btn" style="background-color:#B7410E;color:white;">Review</button>
                     </div>
                       </form>
                       </div>
                       <div class="row mt-3">
-                        <p>Message for users</p>
+                        <div class="p-3">
+                          <p>If location cant be exactly found, there's the possiblity of navigating in the maps and double click in order to regist location plus rented building. For this cases review will be placed on a pending queue waiting for approval, by this we prevent polluting navigation.</p>
+                        </div>
                     </div>
-
                 </div>
 			</div>
             
@@ -291,7 +294,7 @@ limitations under the License.
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="newReview" class="btn btn-primary" >Create Review</button>
+            <button type="button" id="newReview" class="btn btn-primary" >Send Review</button>
             </div>
         </div>
         </div>
@@ -308,7 +311,7 @@ limitations under the License.
     <script src="plugins/match-height/jquery.matchHeight-min.js"></script>
     <!-- Main Script -->
     <script src="assets/script.js"></script>
-
+    
     <script src="in.js"></script>
 </body>
 

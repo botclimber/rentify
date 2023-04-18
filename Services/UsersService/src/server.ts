@@ -1,6 +1,7 @@
 import "express-async-errors";
 import { myDataSource } from "../database/src/data-source";
 import express from "express";
+import fileUpload from "express-fileupload";
 import routes from "./routes/routes";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import helmet from "helmet";
@@ -38,6 +39,7 @@ myDataSource
 
     app.use(express.json());
     app.use(cors(corsOptions)); // Use this after the variable declaration
+    app.use(fileUpload())
     app.use("/user", routes);
     app.use(errorMiddleware);
 

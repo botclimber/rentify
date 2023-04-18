@@ -18,7 +18,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/v1/search', (req, res) => {
-  const address = {city: req.query.city || "Porto", street: req.query.street || "", buildingNumber: req.query.nr || ""}
+
+  const address = {city: req.query.city || "Porto", street: req.query.street || "", buildingNumber: req.query.nr || "", onlyAppr: req.query.onlyAppr || 1}
   actions.actions(res).search(address)
 })
 
@@ -30,24 +31,13 @@ app.post('/api/v1/create', (req, res) => {
 
  th.tokenHandler(req)
  .then(transfData => {
-   if(transfData) actions.actions(res).insertReview(transfData)
+  const apr = {onlyAppr: req.query.onlyAppr || 1}
+
+   if(transfData) actions.actions(res).insertReview({...transfData, ...apr})
  })
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 
 })
-
-/*
-- some alternative approach
-app.post('/api/v1/create', async (req, res) => {
-
-  try{
-    const transfData = await th.tokenHandler(req)
-    if(transfData) actions.actions(res).insertReview(transfData)
-
-  } catch(err) {
-    console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg}))
-  }
-}) */
 
 app.patch('/api/v1/updateReview/:revId', (req, res) => {
 
@@ -58,7 +48,6 @@ app.patch('/api/v1/updateReview/:revId', (req, res) => {
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 
 })
-// ---------
 
 app.listen(port, () => {
   console.log(`Host listening to port: ${port}`)

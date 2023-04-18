@@ -11,7 +11,7 @@ gulp.task('start', function (cb) {
         cb(err);
     });
 
-    exec('npm start', {
+    exec('npm start >> logs/log-$(date "+%Y.%m.%d-%H.%M.%S").log', {
         cwd: 'Services/UsersService/',
     }, function (err, stdout, stderr) {
         console.log(stdout);

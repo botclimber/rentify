@@ -73,7 +73,6 @@ exports.actions = (function(ws){
 			console.log(err)
 			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
 		})
-
 	}
 
 	// ACTION TO UPDATE A REVIEW STATE (pending, approved, rejected)

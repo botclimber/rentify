@@ -14,6 +14,9 @@ export class User {
   @Column("varchar", { length: 30 })
   firstName: string;
 
+  @Column("varchar", { length: 120 })
+  image: string;
+
   @Column("varchar", { length: 30 })
   lastName: string;
 

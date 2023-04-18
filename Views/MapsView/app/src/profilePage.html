@@ -5,18 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <!-- ** CSS Plugins Needed for the Project ** -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+
+    <script type="text/javascript" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" href = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- fa icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
-    <!-- themefy-icon -->
     <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
-  
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
     <!-- Main Stylesheet -->
     <link href="assets/style.css" rel="stylesheet" media="screen" />
+    <style>
+        input[type=text], input[type=password]{
+            border: 1px solid rgb(123, 123, 123);
+            border-radius: 0px;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #fd7439;
+        }
+
+        .profile-button {
+            background: #B7410E;
+            box-shadow: none;
+            border: none;
+        }
+
+        .profile-button:hover {
+            background: #e37344;
+        }
+
+        .profile-button:focus {
+            background: #B7410E;
+            box-shadow: none;
+        }
+
+        .profile-button:active {
+            background: #B7410E;
+            box-shadow: none;
+        }
+
+        .back:hover {
+            color: #B7410E;
+            cursor: pointer;
+        }
+
+        .labels {
+            font-size: 11px
+        }
+
+        .add-experience:hover {
+            background: #ff7d45;
+            color: #fff;
+            cursor: pointer;
+            border: solid 1px #B7410E;
+        }
+    </style>
   </head>
 
   <body>
@@ -48,77 +93,46 @@
           </div>
         </div>
       </nav>
-      <!-- banner -->
-      <div class="container section">
-        <div class="row">
-          <div class="col-lg-8 text-center mx-auto">
-            <h1 class="text-white mb-3">Search for a Place &amp; Give your feedback</h1>
-            <p class="text-white mb-4">
-              Give us your feedback about a rented space where you've been or see another place where you want to be </p>
-            <div class="position-relative">
-              <form method="GET" action="/mainPage.html">
-                <input id="search" class="form-control" placeholder="City"><i
-                class="ti-search search-icon"></i>
-              </form>
-                
-              
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- /banner -->
+
     </header>
-    <!-- /header -->
-  
-    <!-- topics -->
-    <!-- <section class="section">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-12 text-center">
-            <h2 class="section-title">Find your answer by subject</h2>
-          </div>
-          
-          <div class="col-lg-4 col-sm-6 mb-4">
-            <a href="single.html" class="px-4 py-5 bg-white shadow text-center d-block match-height">
-              <i class="ti-panel icon text-primary d-block mb-4"></i>
-              <h3 class="mb-3 mt-0">Installation</h3>
-              <p class="mb-0">Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet</p>
-            </a>
-          </div>
-          <div class="col-lg-4 col-sm-6 mb-4">
-            <a href="single.html" class="px-4 py-5 bg-white shadow text-center d-block match-height">
-              <i class="ti-credit-card icon text-primary d-block mb-4"></i>
-              <h3 class="mb-3 mt-0">Billing &amp; Pricing</h3>
-              <p class="mb-0">Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet</p>
-            </a>
-          </div>
-          <div class="col-lg-4 col-sm-6 mb-4">
-            <a href="single.html" class="px-4 py-5 bg-white shadow text-center d-block match-height">
-              <i class="ti-package icon text-primary d-block mb-4"></i>
-              <h3 class="mb-3 mt-0">Features</h3>
-              <p class="mb-0">Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>-- >
-  
-    call to action 
     <section>
-      <div class="container">
+      <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
-          <div class="col-12">
-            <div class="section px-3 bg-white shadow text-center">
-              <h2 class="mb-4">Didn&rsquo;t find an answer to your question?</h2>
-              <p class="mb-4">Musce libero nunc, dignissim quis turpis quis, semper vehicula dolor. Suspendisse tincidunt
-                consequat quam.</p>
-              <a href="contact.html" class="btn btn-primary">contact us</a>
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5 pImage">
+                  <img id="profileImage" class="mt-5 pImage" width="150px" src="images/default.gif">
+                  <div class="row mt-3">
+                  <form>
+                    <label>Change image:</label>
+                    <input class="form-control" type="file" id="pFile" onchange="updateProfileImg(this.files)"> 
+                  </form>
+                  </div>
+                <span class="font-weight-bold" id="_userName"></span><span class="text-black-50" id = "_userEmail"></span><span> </span></div>
             </div>
-          </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Stats</h4>
+                    </div>
+                    
+                    <!--  TODO: add some intersting personal stats  -->
+                
+                  </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 py-5">
+                  <form>
+                    <div class="d-flex justify-content-between align-items-center experience"><span>Change Password</span><span onclick="chgPassword()" class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Change</span></div><br>
+                    <div class="col-md-12"><label class="labels">Current Password</label><input type="password" id="c_password" class="form-control" placeholder="current password" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">New Password</label><input type="password" id="n_password" class="form-control" placeholder="new password" value=""></div>
+                    <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" id="cn_password" class="form-control" placeholder="confirm new password" value=""></div>
+                  <form>
+                    <span id="chgPasswordMsg" style="color:black"></span>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
     </section>
-    /call to action -->
   
     <!-- footer -->
     <footer class="section pb-4">
@@ -156,6 +170,7 @@
     <script src="assets/script.js"></script>
 
     <script src="in.js"></script>
+    <script src="profile.js"></script>
   </body>
 
 </html>
