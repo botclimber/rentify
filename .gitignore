@@ -4,3 +4,9 @@ node_modules
 .env
 *.log
 .vscode
+
+# ignore all log folders
+**/logs
+
+# ignore all user images unless default.gif
+**/userImages/user-*.gif

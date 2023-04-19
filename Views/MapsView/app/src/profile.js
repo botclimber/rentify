@@ -14,7 +14,7 @@
  */
 
 const proImg = document.getElementById("profileImage")
-proImg.src = "images/"+uImage
+proImg.src = "images/userImages"+uImage
 
 document.getElementById("_userName").innerHTML = fName + " " + lName
 document.getElementById("_userEmail").innerHTML = uEmail
@@ -61,7 +61,7 @@ async function updateProfileImg(files){
       if(data){
 
         localStorage.setItem(uImg, data.img)
-        proImg.src = "images/"+data.img
+        proImg.src = "images/userImages/"+data.img
       }
   })
   .catch(err => console.log(err))

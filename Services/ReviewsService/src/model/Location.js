@@ -23,7 +23,7 @@ module.exports = class Locations {
         +(this.getResidenceForRev(comment.residenceId) || '')
         +"</div>"
         +"<div class='col-md-12'>"
-        +"<img class='float-left p-2' style='border-radius: 30%;width:50px;height:50px' src='images/"+comment.userImg+"'><p class='float-left' style='font-weight:normal;margin-top:16px'>"+comment.userName+": </p>"
+        +"<img class='float-left p-2' style='border-radius: 30%;width:50px;height:50px' src='images/userImages/"+comment.userImg+"'><p class='float-left' style='font-weight:normal;margin-top:16px'>"+comment.userName+": </p>"
         +this.getStars(comment.rating)
         +"</div>"
         +"</div>"
