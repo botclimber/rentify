@@ -60,7 +60,7 @@ module.exports = class Locations {
     for (let data of this.residence){
       
       if(data.id == resId && (data.floor != '' || data.direction != '')){
-        return "<p>"+data.floor+" | "+data.direction+"</p>"
+        return "<p>"+data.floor+" - "+data.direction+"</p>"
       }
     }
   }
