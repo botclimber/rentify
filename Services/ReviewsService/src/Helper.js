@@ -97,6 +97,23 @@ module.exports = class Helper extends Db{
 		.catch(err => console.log(err))
 	}
 
+	#setupResReview(addrId){
+		const residenceAddresses = new addrInfo.ResidenceAddresses(addrId, data.nrFloor, data.nrSide)
+		const residenceId = this.insert(residenceAddresses)
+
+		residenceId
+		.then(resId => {
+
+			const appr = (data.flag != "fromMapClick")? 1: 0;
+			const review = new Reviews(data.userId, data.userName, data.userImage, resId, data.nrReview, data.nrRating, data.nrAnon, appr)
+			this.insert(review)
+			.then( _ => this.defaultResp(data, lat, lng) )
+			.catch(err => console.log(err))
+
+		})
+		.catch(err => console.log(err))
+	}
+
 	/**
 	 *
 	 * @param {*} lat
@@ -104,22 +121,6 @@ module.exports = class Helper extends Db{
 	 * @param {*} data
 	 */
 	createReview(lat, lng, data){
-		const call = (addrId) => {
-			const residenceAddresses = new addrInfo.ResidenceAddresses(addrId, data.nrFloor, data.nrSide)
-			const residenceId = this.insert(residenceAddresses)
-
-			residenceId
-			.then(resId => {
-
-				const appr = (data.flag != "fromMapClick")? 1: 0;
-				const review = new Reviews(data.userId, data.userName, data.userImage, resId, data.nrReview, data.nrRating, data.nrAnon, appr)
-				this.insert(review)
-				.then( _ => this.defaultResp(data, lat, lng) )
-				.catch(err => console.log(err))
-
-			})
-			.catch(err => console.log(err))
-		}
 
 		//Reviews.addReview(review)
 		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [lat, lng], operator: "and"})
@@ -127,13 +128,13 @@ module.exports = class Helper extends Db{
 
 			if(res.length) { // for this case if existing, expects only one record
 				console.log("Address with id: "+res[0].id+" already registed ...")
-				call(res[0].id)
+				this.#setupResReview(res[0].id)
 
 			}else{
 				console.log("None existing address, registering it ...")
 				const newAddress = new addrInfo.Addresses(lat, lng, data.city, data.street, data.buildingNumber, data.postalCode, data.country)
 				this.insert(newAddress)
-				.then(addressId => call(addressId))
+				.then(addressId => this.#setupResReview(addressId))
 				.catch(err => console.log(err))
 
 			}
@@ -156,6 +157,40 @@ module.exports = class Helper extends Db{
 			 console.log(err)
 			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
 		})
+
+	}
+
+	/**
+	 * 
+	 * @param {object} input 
+	 */
+	createResOwnerRecord(input){
+		// function to deal proofFile
+		// const fileHandler = (file) => {}
+
+		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [input.lat, input.lng], operator: "and"})
+		.then(res => {
+
+			if(res.length) { // for this case if existing, expects only one record
+				console.log("Address with id: "+res[0].id+" already registed ...")
+				// create only residenceOwner record
+				// call fileHandler(input.fileProof)
+
+			}else{
+				// create address and residenceOwner record
+				console.log("None existing address, registering it ...")
+				const newAddress = new addrInfo.Addresses(input.lat, input.lng, input.city, input.street, input.buildingNumber, input.postalCode, input.country)
+				this.insert(newAddress)
+				.then(addressId =>{ 
+					// create residenceOwner
+					// call fileHandler(input.fileProof)
+
+				})
+				.catch(err => console.log(err))
+
+			}
+		})
+		.catch(err => console.log(err))
 
 	}
 }

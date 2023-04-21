@@ -85,13 +85,17 @@ exports.actions = (function(ws){
 	/**
 	 * 
 	 * 
-	 * @param {object} data 
+	 * @param {object} input 
 	 */
-	function createResOwner(data){
-		// 1. check if no empty fields
-		// 2. check if address already exists
-		// 3. create residenceOwner record
+	function createResOwner(input){	
 		
+		// 1. check if no empty fields
+		for (const [key, value] of Object.entries(input)) {
+			if (!value || value === "") ws.status(400).send(JSON.stringify({msg: key+" is must be filled!"}))
+		}
+
+		helper.createResOwnerRecord(input)		  
+
 	}
 
 	//function getResidencesForCity(input){}
