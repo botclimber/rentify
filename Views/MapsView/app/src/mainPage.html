@@ -81,6 +81,11 @@ limitations under the License.
 
         .collapse.in { display: inline !important; }
 
+        .xTable tr:hover{
+          background-color: #e9906a;
+          cursor: pointer;
+        }
+
     </style>
 
 </head>
@@ -148,6 +153,37 @@ limitations under the License.
                       </form>
                       </div>
                       <div class="row mt-3">
+                        <div class="col-md-12">
+                          <h4>Braga: Available Residences</h4>
+                          <table class="table table-bordered xTable">
+                            <thead style="background-color: #b8410d;color:white">
+                              <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Street</th>
+                                <th scope="col">Port nr</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Daniel Silva</td>
+                                <td>R. Louseiros</td>
+                                <td>162</td>
+                              </tr>
+                              <tr>
+                                <td>Tania Silva</td>
+                                <td>Corga</td>
+                                <td>61</td>
+                              </tr>
+                              <tr>
+                                <td>Daniel Silva</td>
+                                <td>R. Louseiros</td>
+                                <td>164</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="row mt-3">
                         <div class="p-3">
                           <p>If location cant be exactly found, there's the possiblity of navigating in the maps and double click in order to regist location plus rented building. For this cases review will be placed on a pending queue waiting for approval, by this we prevent polluting navigation.</p>
                         </div>
@@ -191,7 +227,7 @@ limitations under the License.
         <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">New Review</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" id="closeModalTop" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
@@ -236,7 +272,7 @@ limitations under the License.
                       <div class="col-md-6">
                       <div class="form-group">
                         <label for="dirInput">Direction</label>
-                        <input type="text" class="form-control" id="nrSide" aria-describedby="Flat Side" placeholder="Directione.g. left or right (optional)">
+                        <input type="text" class="form-control" id="nrSide" aria-describedby="Flat Side" placeholder="Direction e.g. left or right (optional)">
                         <small id="sideHelp" class="form-text text-muted"></small>
                       </div>
                     </div>
@@ -293,7 +329,7 @@ limitations under the License.
                     </form>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeModalBot">Close</button>
             <button type="button" id="newReview" class="btn btn-primary" >Send Review</button>
             </div>
         </div>

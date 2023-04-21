@@ -14,7 +14,7 @@
  */
 
 const proImg = document.getElementById("profileImage")
-proImg.src = "images/userImages"+uImage
+proImg.src = "images/userImages/"+uImage
 
 document.getElementById("_userName").innerHTML = fName + " " + lName
 document.getElementById("_userEmail").innerHTML = uEmail

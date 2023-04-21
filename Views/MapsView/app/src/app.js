@@ -111,13 +111,13 @@ import MarkerClusterer from '@google/markerclustererplus';
     nrLat.value = lat
     nrLng.value = lng
   
-    nrCity.type= 'text'
-    nrStreet.type = 'text'
-    nrBNumber.type = 'text'
+    nrCity.disabled= false
+    nrStreet.disabled = false
+    nrBNumber.disabled = false
   
-    nrCity.value = iCity.value
-    nrStreet.value = iStreet.value
-    nrBNumber.value = iBNumber.value
+    nrCity.value = ""
+    nrStreet.value = ""
+    nrBNumber.value = ""
   
     $('#myForm').modal('show');
   }
@@ -247,6 +247,10 @@ import MarkerClusterer from '@google/markerclustererplus';
   document.getElementById("openNReviewForm").onclick = function(){
   
     if(t){
+      nrCity.disabled = true
+      nrStreet.disabled = true
+      nrBNumber.disabled = true
+
       nrCity.value = iCity.value
       nrStreet.value = iStreet.value
       nrBNumber.value = iBNumber.value
@@ -336,7 +340,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       marker.addListener('click', event => {
         const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
   
-        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='none'; nrCity.type = 'hidden'; nrStreet.value='none'; nrStreet.type = 'hidden'; nrBNumber.value='none'; flag.value =''; nrBNumber.type= 'hidden'; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
+        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; nrCity.value='-'; nrCity.disabled = true; nrStreet.value='-'; nrStreet.disabled = true; nrBNumber.value='-'; flag.value =''; nrBNumber.disabled= true; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
         infoWindow.open(map, marker);
   
       });
@@ -361,3 +365,25 @@ import MarkerClusterer from '@google/markerclustererplus';
         document.getElementById("st"+v).style.backgroundColor = "yellow"
     }
 }
+
+/**
+ * +--------------------+
+ * | Close modal clean  |
+ * +--------------------+
+ */
+
+document.getElementById("closeModalBot").addEventListener("click", (event) => {
+  nrCity.disabled = false
+  nrStreet.disabled = false
+  nrBNumber.disabled = false
+
+  $('#modalForm').trigger("reset");
+})
+
+document.getElementById("closeModalTop").addEventListener("click", (event) => {
+  nrCity.disabled = false
+  nrStreet.disabled = false
+  nrBNumber.disabled = false
+
+  $('#modalForm').trigger("reset");
+})
