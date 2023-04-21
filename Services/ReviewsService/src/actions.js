@@ -87,8 +87,19 @@ exports.actions = (function(ws){
 	 * 
 	 * @param {object} data 
 	 */
-	function createResOwner(data){}
+	function createResOwner(data){
+		// 1. check if no empty fields
+		// 2. check if address already exists
+		// 3. create residenceOwner record
+		
+	}
 
-	return { search, insertReview, getAllReviews, updateReviewState }
+	//function getResidencesForCity(input){}
+	//function updateResidenceApproval(input){}
+	//function getAllResidenceOwners(){}
+	//function updateResidenceOwnerData(input){}
+	//function deleteResidenceOwner(input){}
+
+	return { search, insertReview, getAllReviews, updateReviewState, createResOwner }
 
 })

@@ -1,7 +1,7 @@
 const date = require('date-and-time')
 
 module.exports = class ResidenceOwner {
-  constructor(userId, addressId, cityLat, cityLng, floorOwner, flatOwner, free, fileProof){
+  constructor(userId, addressId, cityLat, cityLng, floorOwner, flatOwner, free, fileProof, hide = 0){
 
 	this.userId = userId
 	this.adminId = 0
@@ -16,5 +16,6 @@ module.exports = class ResidenceOwner {
 	this.createdOn = date.format(new Date(), "YYYY/MM/DD HH:mm:ss")
 	this.approvedOn = "1000-01-01"
 	this.approved = 0
+	this.hide = hide
 	}
 }

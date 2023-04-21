@@ -42,6 +42,8 @@ Create Table Reviews (
 Create Table ResidenceOwners (
   id int auto_increment,
   userId int not null,
+  userName varchar(120) not null,
+  userImg varchar(120) not null,
   adminId int not null,
   addressId int not null,
   cityLat double not null,
@@ -53,6 +55,7 @@ Create Table ResidenceOwners (
   createdOn datetime,
   approvedOn datetime,
   approved int not null,
+  hide int
   fileProod varchar(120) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
