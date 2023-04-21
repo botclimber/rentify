@@ -49,6 +49,15 @@ app.patch('/api/v1/updateReview/:revId', (req, res) => {
 
 })
 
+app.post('/api/v1/createResOwner', (req, res) => {
+
+  th.tokenHandler(req)
+  .then(transfData => {
+    if(transfData) actions.actions(res).createResOwner(transfData)
+  })
+  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+ })
+
 app.listen(port, () => {
   console.log(`Host listening to port: ${port}`)
 })

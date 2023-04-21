@@ -148,36 +148,40 @@ limitations under the License.
                         
                           <div class="d-flex">
                         <button type="button" id="sAddress" class="btn mr-2" style="background-color:#B7410E;color:white;border-radius:4px;padding:8px">Search</button>
-                        <button type="button" id="openNReviewForm" data-toggle="modal" data-target="#myForm" style="display:none" class="btn" style="background-color:#B7410E;color:white;">Review</button>
+
                     </div>
                       </form>
                       </div>
                       <div class="row mt-3">
                         <div class="col-md-12">
                           <h4>Braga: Available Residences</h4>
-                          <table class="table table-bordered xTable">
+                          <table class="table table-bordered xTable" style="font-size:10pt">
                             <thead style="background-color: #b8410d;color:white">
                               <tr>
                                 <th scope="col">User</th>
                                 <th scope="col">Street</th>
-                                <th scope="col">Port nr</th>
+                                <th scope="col">Floor - Direction</th>
+                                <th scope="col">Free</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td>Daniel Silva</td>
-                                <td>R. Louseiros</td>
-                                <td>162</td>
+                                <td>R. Louseiros, 162</td>
+                                <td>1 - esq</td>
+                                <td><i style="color:green" class="fa fa-check float-right"></td>
                               </tr>
                               <tr>
                                 <td>Tania Silva</td>
-                                <td>Corga</td>
-                                <td>61</td>
+                                <td>Corga, 61</td>
+                                <td>3 - Fr</td>
+                                <td><i style="color:red" class="fa fa-close float-right"></td>
                               </tr>
                               <tr>
                                 <td>Daniel Silva</td>
-                                <td>R. Louseiros</td>
-                                <td>164</td>
+                                <td>R. Louseiros, 164</td>
+                                <td>0 - Esq</td>
+                                <td><i style="color:green" class="fa fa-check float-right"></td>
                               </tr>
                             </tbody>
                           </table>
@@ -226,13 +230,24 @@ limitations under the License.
         <div style="max-width: 40%;" class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New Review</h5>
+              <ul class="nav nav-tabs tab" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation" id="mnReviewBtn">
+                  <button class="nav-link active tablinks" onclick="changeTab(event, 'mnReview')" type="button" role="tab" aria-controls="home" aria-selected="true">New Review</button>
+                </li>
+                <li class="nav-item" role="presentation" id="mcResidenceBtn">
+                  <button class="nav-link tablinks" onclick="changeTab(event, 'mcResidence')" type="button" role="tab" aria-controls="profile" aria-selected="false">Claim Residence</button>
+                </li>
+
+              </ul>
+       
             <button type="button" class="close" data-dismiss="modal" id="closeModalTop" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
-                <form id = "modalForm">
+
+            <div class="tab-pane fade show active tabcontent" id="mnReview" role="tabpanel" aria-labelledby="home-tab">
+              <div class="modal-body tab-content">
+                  <form id = "modalForm">
                     <div class = "row">
                      
                     <div class = "col-md-4">
@@ -242,7 +257,7 @@ limitations under the License.
                         <small id="nrCityHelp" class="form-text text-muted"></small>
                       </div>
                       </div>
-
+  
                       <div class = "col-md-4">
                       <div class="form-group">
                         <label for="streetInput">Street</label>
@@ -250,7 +265,7 @@ limitations under the License.
                         <small id="nrStreetHelp" class="form-text text-muted"></small>
                       </div>
                     </div>
-
+  
                       <div class = "col-md-4">
                       <div class="form-group">
                         <label for="nrInput">Port Number</label>
@@ -259,7 +274,7 @@ limitations under the License.
                       </div>
                     </div>
                     </div>
-
+  
                     <div class="row">
                         <div class="col-md-6">
                       <div class="form-group">
@@ -268,7 +283,7 @@ limitations under the License.
                         <small id="nrFloorHelp" class="form-text text-muted"></small>
                       </div>
                     </div>
-
+  
                       <div class="col-md-6">
                       <div class="form-group">
                         <label for="dirInput">Direction</label>
@@ -277,7 +292,7 @@ limitations under the License.
                       </div>
                     </div>
                       </div>
-
+  
                       <!-- TODO: change Rating input to radio buton -->
                       <div class="row">
                         <div class="col-md-12">
@@ -310,7 +325,7 @@ limitations under the License.
                       </div>
                     </div>
                 </div>
-
+  
                     <div class="row">
                         <div class="col-md-12">
                       <div class="form-check">
@@ -321,17 +336,99 @@ limitations under the License.
                     </div>
                 </div>
                       <br/><br/>
-
+  
                     <input type="hidden" id="nrLat" value="">
                     <input type="hidden"  id="nrLng" value="">
                     <input type="hidden"  id="flag" value="">
                     
                     </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeModalBot">Close</button>
+                      <button type="button" id="newReview" class="btn btn-primary" >Send Review</button>
+                      </div>
             </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeModalBot">Close</button>
-            <button type="button" id="newReview" class="btn btn-primary" >Send Review</button>
+            <div style="display:none" class="tab-pane fade tabcontent" id="mcResidence" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="modal-body tab-content">
+                <form id="resModalForm">
+                  <div class = "row">
+                     
+                    <div class = "col-md-4">
+                    <div class="form-group">
+                        <label for="cityInput">City</label>
+                        <input type="text" class="form-control" id="resCity" aria-describedby="City of location" placeholder="City/State" required>
+                        <small id="nrCityHelp" class="form-text text-muted"></small>
+                      </div>
+                      </div>
+  
+                      <div class = "col-md-4">
+                      <div class="form-group">
+                        <label for="streetInput">Street</label>
+                        <input type="text" class="form-control" id="resStreet" aria-describedby="Street" placeholder="Street">
+                        <small id="nrStreetHelp" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+  
+                      <div class = "col-md-4">
+                      <div class="form-group">
+                        <label for="nrInput">Port Number</label>
+                        <input type="text" class="form-control" id="resBNumber" aria-describedby="Building Number" placeholder="Port Number">
+                        <small id="nrBNHelp" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="floorInput">Floor</label>
+                      <input type="text" class="form-control" id="resFloor" aria-describedby="Floor" placeholder="Floor" required>
+                      <small id="nrFloorHelp" class="form-text text-muted"></small>
+                    </div>
+                  </div>
+
+                    <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="dirInput">Direction</label>
+                      <input type="text" class="form-control" id="resSide" aria-describedby="Flat Side" placeholder="Direction e.g. left or right" required>
+                      <small id="sideHelp" class="form-text text-muted"></small>
+                    </div>
+                  </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                    <div class="form-check">
+                      <label for="anonInput">is the residence available for renting?</label><br>
+                      <input type="radio" class="form-radio-input" id="resFreeNo" name="free" aria-describedby="Anonymous" value="0" > Yes<br>
+                      <input type="radio" class="form-radio-input" id="resFreeYes" name="free"  aria-describedby="Anonymous" value="1" > No 
+                      <small id="reviewHelp" class="form-text text-muted"></small>    
+                    </div>
+                  </div>
+              </div>
+              <br/>
+              <div class="row">
+               <div class="col-md-4">
+                <label>Upload proof of ownership</label>
+                <input type="file" id="fileProof">
+              </div>
+              </div>
+                    
+
+                  <input type="hidden" id="resLat" value="">
+                  <input type="hidden"  id="resLng" value="">
+                  <input type="hidden"  id="resflag" value="">
+                </form>
             </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="resCloseModalBot">Close</button>
+                <button type="button" id="claimResidence" class="btn btn-primary" >Claim it</button>
+                </div>
+
+            </div>                
+            </div>
+            
         </div>
         </div>
     </div>
@@ -349,6 +446,7 @@ limitations under the License.
     <script src="assets/script.js"></script>
     
     <script src="in.js"></script>
+    <script src="claimer.js"></script>
 </body>
 
 </html>

@@ -82,6 +82,13 @@ exports.actions = (function(ws){
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param {object} data 
+	 */
+	function createResOwner(data){}
+
 	return { search, insertReview, getAllReviews, updateReviewState }
 
 })

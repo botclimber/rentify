@@ -38,3 +38,22 @@ Create Table Reviews (
   PRIMARY KEY (id),
   FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
 );
+
+Create Table ResidenceOwners (
+  id int auto_increment,
+  userId int not null,
+  adminId int not null,
+  addressId int not null,
+  cityLat double not null,
+  cityLng double not null,
+  floorOwner varchar(25) not null,
+  flatOwner varchar(25) not null,
+  rentPrice float(7,2)
+  free int not null,
+  createdOn datetime,
+  approvedOn datetime,
+  approved int not null,
+  fileProod varchar(120) not null,
+  PRIMARY KEY (id),
+  FOREIGN KEY (addressId) REFERENCES Addresses(Id)
+)
