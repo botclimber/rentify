@@ -3,6 +3,9 @@ const date = require('date-and-time')
 const Location = require('./model/Location.js')
 const addrInfo = require('./model/Address.js')
 const Reviews = require('./model/Review.js')
+const ResidenceOwners = require("./model/ResidenceOwner.js")
+const conv = require("./convertLocation.js")
+const fh = require("./fileHandler.js")
 
 module.exports = class Helper extends Db{
 	constructor(ws){
@@ -163,27 +166,53 @@ module.exports = class Helper extends Db{
 	/**
 	 * 
 	 * @param {object} input 
+	 * @param {object} files 
 	 */
-	createResOwnerRecord(input){
-		// function to deal proofFile
-		// const fileHandler = (file) => {}
+	async createResOwnerRecord(input, files){
+		const fileName = "userProofOfRes-"+input.userId+".pdf"
 
+		const cResidenceOwner = (addrId, city) => {
+			// get city lat, lng
+			console.log("Getting city lat,lng ...")
+			conv.getLatLng({city: city})
+			.then(res => {
+				
+				// create residenceOwner
+				console.log("Creating residenceOwner row ...")
+				console.log(input.userId, input.userName, input.userImg, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
+				const newResidenceOwner = new ResidenceOwners(input.userId, input.userName, input.userImg, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
+				console.log("Inserting residenceOwner row in the DataBase ...")
+				this.insert(newResidenceOwner)
+
+				return res.status(200).json({message: "Claim successful registed, waiting for approval!"})
+									
+			})
+			.catch(err => console.log(err))
+		}
+
+		console.log("Checking if its a claim of an already registed address ...")
 		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [input.lat, input.lng], operator: "and"})
 		.then(res => {
 
+			console.log("Handling File ...")
+			fh.fileHandler(files, fileName, process.env.DIRNAME)
+
 			if(res.length) { // for this case if existing, expects only one record
 				console.log("Address with id: "+res[0].id+" already registed ...")
-				// create only residenceOwner record
-				// call fileHandler(input.fileProof)
+
+				console.log("calling residence owner handler ...")
+				cResidenceOwner(res[0].id, res[0].city, fileName)
 
 			}else{
 				// create address and residenceOwner record
 				console.log("None existing address, registering it ...")
 				const newAddress = new addrInfo.Addresses(input.lat, input.lng, input.city, input.street, input.buildingNumber, input.postalCode, input.country)
+				
 				this.insert(newAddress)
 				.then(addressId =>{ 
-					// create residenceOwner
-					// call fileHandler(input.fileProof)
+				
+				console.log("calling residence owner handler ...")
+				cResidenceOwner(addressId, input.city, fileName)
 
 				})
 				.catch(err => console.log(err))
@@ -191,6 +220,57 @@ module.exports = class Helper extends Db{
 			}
 		})
 		.catch(err => console.log(err))
-
 	}
+
+	
+	getResidencesForCity(city){
+		console.log("getting all residence owners from db ...")
+		this.selectAll("ResidenceOwners")
+		.then(res => {
+			console.log("Getting lat,lng for mentioned city: "+city)
+			conv.getLatLng({city: city})
+			.then(resFromGeoCoder => {
+				console.log("Mounting response for following location: ("+resFromGeoCoder[0].latitude+", "+resFromGeoCoder[0].longitude+") ...")
+				const filResidences = res.filter(row => ( row.approved === 1 && row.cityLat === resFromGeoCoder[0].latitude && row.cityLng === resFromGeoCoder[0].longitude))
+				
+				if(filResidences.length > 0){
+					const dataToBeSent = filResidences.map(row => { return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} })
+
+					this.returnResponse(dataToBeSent)
+
+				}else return res.status(200).json({msg: "No available residences for rent found!"})
+			})
+			.catch(err => console.log(err))
+
+		})
+	}
+
+	/**
+	 * 
+	 * @param {object} input 
+	 */
+	updateROApprovalState(input){
+
+		const chgConfig = {tableName: 'ResidenceOwners', id: input.id, columns: ['adminId', 'approved','approvedOn'], values: [input.adminId, input.state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
+		this.update(chgConfig)
+		.then(res => console.log(res+" row changed!"))
+		.catch(err =>{
+			 console.log(err)
+			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+		})
+	}
+
+	/**
+	 * 
+	 */
+	getAllROData(){
+		this.selectAll("ResidenceOwners")
+		.then(res => {
+			this.returnResponse(res)
+		})
+		.catch(err => console.log(err))
+	}	
+
+	//getAllForSingleRO(userId){}
+
 }

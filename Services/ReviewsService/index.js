@@ -39,21 +39,52 @@ app.post('/api/v1/create', (req, res) => {
 
 })
 
+// TODO: check if userType is col,admin or superAdmin
 app.patch('/api/v1/updateReview/:revId', (req, res) => {
 
   th.tokenHandler(req)
  .then(transfData => {
-   if(transfData) actions.actions(res).updateReviewState({adminId: transfData.userId, revId: req.params.revId, decision: transfData.decision})
+   if(transfData) actions.actions(res).updateReviewState({adminId: transfData.userId, userType: transfData.userType, revId: req.params.revId, decision: transfData.decision})
  })
  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
 
 })
 
-app.post('/api/v1/createResOwner', (req, res) => {
+/**
+ * 
+ * +-----------------+
+ * | RESIDENCE OWNER |
+ * +-----------------+
+ */
+app.post('/api/v1/resOwner/createResOwner', (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
-    if(transfData) actions.actions(res).createResOwner(transfData)
+    if(transfData) actions.actions(res).createResOwner(transfData, req.files)
+  })
+  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+ })
+
+ app.get('/api/v1/resOwner/getByCity', (req, res) => {
+
+  const city = req.query.city || ""
+  actions.actions(res).getResidencesForCity(city)
+ })
+
+ app.post('/api/v1/resOwner/getAll', (req, res) => {
+
+  th.tokenHandler(req)
+  .then(transfData => {
+    if(transfData) actions.actions(res).getAllResidenceOwners(transfData.userType)
+  })
+  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+ })
+
+ app.post('/api/v1/resOwner/updateApproval', (req, res) => {
+
+  th.tokenHandler(req)
+  .then(transfData => {
+    if(transfData) actions.actions(res).approveResidenceOwner(transfData)
   })
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })

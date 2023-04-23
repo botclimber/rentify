@@ -1,6 +1,7 @@
 const conv = require("./convertLocation.js")
 const Helper = require("./Helper.js")
 const { filter } = require("rxjs/operators")
+const { authz } = require("./authorization.js") 
 
 // ws is an array or list of clients
 exports.actions = (function(ws){
@@ -77,33 +78,72 @@ exports.actions = (function(ws){
 
 	// ACTION TO UPDATE A REVIEW STATE (pending, approved, rejected)
 	function updateReviewState(data){
-		helper.changeReviewApprovalState(data.adminId, data.revId, data.decision)
-		this.getAllReviews()
+		
+		if(authz.isAuthz(data.userType)) {
+			helper.changeReviewApprovalState(data.adminId, data.revId, data.decision)
+			this.getAllReviews()
+		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
 
 	}
 
 	/**
 	 * 
-	 * 
 	 * @param {object} input 
+	 * @param {object} files 
 	 */
-	function createResOwner(input){	
+	function createResOwner(input, files){	
 		
 		// 1. check if no empty fields
+		checkIfAnyEmpty(input)
+
+		// 2.
+		helper.createResOwnerRecord(input, files)
+		.catch(err => {
+
+			console.log(err)
+			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+		})		  
+	}
+
+	function getResidencesForCity(input){
+		checkIfAnyEmpty(input)
+
+		helper.getResidencesPerCity(input)
+		.catch(err => {
+
+			console.log(err)
+			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+		})		
+		
+	}
+
+	function approveResidenceOwner (input){
+		if(authz.isAuthz(input.userType)) {
+			helper.updateROApprovalState(input)
+			helper.getAllROData()
+		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
+	}
+
+	function getAllResidenceOwners(userType){
+		
+		if(authz.isAuthz(userType)) {
+			helper.getAllROData()
+		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
+	}
+
+	function checkIfAnyEmpty(input){
 		for (const [key, value] of Object.entries(input)) {
 			if (!value || value === "") ws.status(400).send(JSON.stringify({msg: key+" is must be filled!"}))
 		}
-
-		helper.createResOwnerRecord(input)		  
-
 	}
 
-	//function getResidencesForCity(input){}
-	//function updateResidenceApproval(input){}
-	//function getAllResidenceOwners(){}
-	//function updateResidenceOwnerData(input){}
-	//function deleteResidenceOwner(input){}
-
-	return { search, insertReview, getAllReviews, updateReviewState, createResOwner }
+	return { search, 
+			insertReview, 
+			getAllReviews, 
+			updateReviewState, 
+			createResOwner, 
+			approveResidenceOwner, 
+			getAllResidenceOwners, 
+			getResidencesForCity }
 
 })

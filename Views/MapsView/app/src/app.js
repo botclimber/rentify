@@ -88,8 +88,29 @@ import MarkerClusterer from '@google/markerclustererplus';
     addPanToMarker(map, markers[0], markers[1]);
   
     map.addListener("click", (event) =>{
-      var coords = event.latLng.toJSON()
-      console.log(coords)
+      var geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode({
+        location: event.latLng,
+      }, (results, status) => {
+        if(status === 'OK') {
+          if(results && results.length) {
+              var filtered_array = results.filter(result => result.types.includes("locality")); 
+              var addressResult = filtered_array.length ? filtered_array[0]: results[0];
+
+              if(addressResult.address_components) {
+                  addressResult.address_components.forEach((component) => {
+                      if(component.types.includes('locality')) {
+                          console.log(component.long_name);
+                      }
+                  });
+              }
+          }
+        }else console.log("didnt worked")
+      })
+
+      //var coords = event.latLng.toJSON()
+      //console.log(coords)
     }); 
 
 
@@ -100,6 +121,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       var coords = mapsMouseEvent.latLng.toJSON()
       flag.value = "fromMapClick"
       resFlag.value = "fromMapClick"
+
       revFromClick(coords.lat, coords.lng)
     }
   

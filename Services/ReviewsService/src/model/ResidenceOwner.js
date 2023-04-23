@@ -1,9 +1,11 @@
 const date = require('date-and-time')
 
 module.exports = class ResidenceOwner {
-  constructor(userId, addressId, cityLat, cityLng, floorOwner, flatOwner, free, fileProof, hide = 0){
+  constructor(userId, userName, userImg, addressId, cityLat, cityLng, floorOwner, flatOwner, free, fileProof, hide = 0){
 
 	this.userId = userId
+	this.userName = userName,
+	this.userImg = userImg,
 	this.adminId = 0
 	this.addressId = addressId
 	this.cityLat = cityLat
