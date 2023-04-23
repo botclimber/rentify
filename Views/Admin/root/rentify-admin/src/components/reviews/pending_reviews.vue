@@ -22,7 +22,7 @@ export default{
         const res = await fetch(this.apis.reviewsApi+'updateReview/'+revId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
-          'r-access-token': this.tk},
+          'authorization': 'baer '+this.tk},
           body: JSON.stringify({decision: dec})
         })
         const data = await res.json()

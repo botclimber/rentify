@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import fileUpload, { UploadedFile } from "express-fileupload";
+import { UploadedFile } from "express-fileupload";
 import dat from "date-and-time"
 import { userRepository } from "../../database/src/repositories/userRepository";
 import { ErrorMessages } from "../helpers/constants";

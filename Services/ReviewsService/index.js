@@ -1,5 +1,6 @@
 // server init goes here
 const express = require('express')
+const fileupload = require('express-fileupload')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
@@ -11,6 +12,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors())
+app.use(fileupload());
 app.use(express.static("public"));
 
 app.get('/', (req, res) => {
@@ -59,8 +61,11 @@ app.patch('/api/v1/updateReview/:revId', (req, res) => {
 app.post('/api/v1/resOwner/createResOwner', (req, res) => {
 
   th.tokenHandler(req)
-  .then(transfData => {
-    if(transfData) actions.actions(res).createResOwner(transfData, req.files)
+  .then(_ => {
+    if( _ ){
+      const data = {...JSON.parse(req.body.data), ..._}
+      actions.actions(res).createResOwner(data, req.files)
+    } 
   })
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })

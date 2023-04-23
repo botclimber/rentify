@@ -50,13 +50,13 @@ Create Table ResidenceOwners (
   cityLng double not null,
   floorOwner varchar(25) not null,
   flatOwner varchar(25) not null,
-  rentPrice float(7,2)
+  rentPrice float(7,2),
   free int not null,
   createdOn datetime,
   approvedOn datetime,
   approved int not null,
-  hide int
-  fileProod varchar(120) not null,
+  hide int,
+  fileProof varchar(120) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
 )

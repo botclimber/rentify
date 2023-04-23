@@ -101,7 +101,19 @@ import MarkerClusterer from '@google/markerclustererplus';
               if(addressResult.address_components) {
                   addressResult.address_components.forEach((component) => {
                       if(component.types.includes('locality')) {
-                          console.log(component.long_name);
+                        const outputId = document.getElementById("resPerCity")
+                        
+                        fetch(reviewsService+'/api/v1/resOnwer/getByCity?city='+component.long_name)
+                        .then(res => res.json())
+                        .then((data) => {
+                          console.log(data)
+                          const output = data.map(row => {
+                            return "<tr><td>"+row.userName+"/td><td>"" | </td></tr>"
+                          })
+                          outputId.innerHTML = output
+                        })
+                        .catch(err => console.log(err))
+                        
                       }
                   });
               }
@@ -207,7 +219,7 @@ import MarkerClusterer from '@google/markerclustererplus';
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
-          'r-access-token': t,
+          'authorization':'baer '+t,
           'Content-Type': 'application/json'
           // 'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -344,7 +356,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       marker.addListener('click', event => {
         const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
   
-        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); resLat.value="+location.lat+"; resLng="+location.lng+"; nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; resCity.value='-'; resCity.disabled=true; resStreet.value='-'; resStreet.disabled=true; resBNumber.value='-'; resBNumber.disabled=true; nrCity.value='-'; nrCity.disabled = true; nrStreet.value='-'; nrStreet.disabled = true; nrBNumber.value='-'; flag.value =''; nrBNumber.disabled= true; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
+        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); resLat.value="+location.lat+"; resLng.value="+location.lng+"; nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; resCity.value='-'; resCity.disabled=true; resStreet.value='-'; resStreet.disabled=true; resBNumber.value='-'; resBNumber.disabled=true; nrCity.value='-'; nrCity.disabled = true; nrStreet.value='-'; nrStreet.disabled = true; nrBNumber.value='-'; flag.value =''; nrBNumber.disabled= true; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
         infoWindow.open(map, marker);
   
       });

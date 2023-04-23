@@ -21,29 +21,41 @@ var claimResidenceBtn = document.getElementById("claimResidence")
 claimResidenceBtn.addEventListener("click", async (event) => {
     if( ((resLat.value !== "" && resLng.value !== "") || resCity.value !=="" && resStreet.value !== "" && resBNumber.value !== "" ) && (resFloor.value !== "" && resSide.value !== "" && fileProof.files[0] && (resFreeNo.checked || resFreeYes.checked))){
 
-        const data = new FormData()
-        data.append("file", files[0])
-        data.append("resLat", resLat.value)
-        data.append("resLng", resLng.value)
-        // TODO: keep working  on this
+        console.log(fileProof.files)
+        const free = (resFreeNo.checked )? 0 : 1
 
-        await fetch(userService+'/user/updateProfileImg/'+uId,{
+        const data = {
+            "resLat": resLat.value,
+            "resLng": resLng.value,
+            "floor": resFloor.value,
+            "flat": resSide.value,
+            "free": free,
+            "city": resCity.value,
+            "street": resStreet.value,
+            "buildingNumber": resBNumber.value,
+            "postalCode": "0000-000",
+            "country": "PT",
+            flag: resFlag.value,
+            userName: fName+" "+lName,
+            userImage: uImage,
+        }
+
+        const fileData = new FormData()
+        fileData.append("file", fileProof.files[0])
+        fileData.append("data", JSON.stringify(data))
+        
+        await fetch(reviewsService+'/api/v1/resOwner/createResOwner',{
             method: 'POST',
             headers: {
-            //'Content-Type': 'application/json; multipart/form-data;',
-            'authorization': 'baer '+t
-            },
-            body: data
+                'authorization':'baer '+t,
+                //'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            body: fileData,
         })
-        .then(res =>{ if(res.ok){ return res.json() } else return false })
+        .then(res => res.json())
         .then(data => {
             console.log(data); 
-            
-            if(data){
-
-                localStorage.setItem(uImg, data.img)
-                proImg.src = "images/userImages/"+data.img
-            }
         })
         .catch(err => console.log(err))
 

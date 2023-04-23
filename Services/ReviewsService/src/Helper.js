@@ -100,7 +100,7 @@ module.exports = class Helper extends Db{
 		.catch(err => console.log(err))
 	}
 
-	#setupResReview(addrId){
+	#setupResReview(addrId, data ,lat, lng){
 		const residenceAddresses = new addrInfo.ResidenceAddresses(addrId, data.nrFloor, data.nrSide)
 		const residenceId = this.insert(residenceAddresses)
 
@@ -131,13 +131,13 @@ module.exports = class Helper extends Db{
 
 			if(res.length) { // for this case if existing, expects only one record
 				console.log("Address with id: "+res[0].id+" already registed ...")
-				this.#setupResReview(res[0].id)
+				this.#setupResReview(res[0].id,data, res[0].lat, res[0].lng)
 
 			}else{
 				console.log("None existing address, registering it ...")
 				const newAddress = new addrInfo.Addresses(lat, lng, data.city, data.street, data.buildingNumber, data.postalCode, data.country)
 				this.insert(newAddress)
-				.then(addressId => this.#setupResReview(addressId))
+				.then(addressId => this.#setupResReview(addressId, data, lat, lng))
 				.catch(err => console.log(err))
 
 			}
@@ -158,7 +158,7 @@ module.exports = class Helper extends Db{
 		.then(res => console.log(res+" row changed!"))
 		.catch(err =>{
 			 console.log(err)
-			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+			this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
 		})
 
 	}
@@ -179,19 +179,21 @@ module.exports = class Helper extends Db{
 				
 				// create residenceOwner
 				console.log("Creating residenceOwner row ...")
-				console.log(input.userId, input.userName, input.userImg, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
-				const newResidenceOwner = new ResidenceOwners(input.userId, input.userName, input.userImg, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
+				console.log(input.userId, input.userName, input.userImage, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
+				
+				const newResidenceOwner = new ResidenceOwners(input.userId, input.userName, input.userImage, addrId, res[0].latitude, res[0].longitude, input.floor, input.flat, input.free, fileName)
 				console.log("Inserting residenceOwner row in the DataBase ...")
 				this.insert(newResidenceOwner)
 
-				return res.status(200).json({message: "Claim successful registed, waiting for approval!"})
+				console.log("Record created!")
+				this.returnResponse({msg: "Record created!"})
 									
 			})
 			.catch(err => console.log(err))
 		}
 
 		console.log("Checking if its a claim of an already registed address ...")
-		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [input.lat, input.lng], operator: "and"})
+		this.exists({tableName: "Addresses", columns: ["lat", "lng"], values: [input.resLat, input.resLng], operator: "and"})
 		.then(res => {
 
 			console.log("Handling File ...")
@@ -201,18 +203,18 @@ module.exports = class Helper extends Db{
 				console.log("Address with id: "+res[0].id+" already registed ...")
 
 				console.log("calling residence owner handler ...")
-				cResidenceOwner(res[0].id, res[0].city, fileName)
+				return cResidenceOwner(res[0].id, res[0].city, fileName)
 
 			}else{
 				// create address and residenceOwner record
 				console.log("None existing address, registering it ...")
-				const newAddress = new addrInfo.Addresses(input.lat, input.lng, input.city, input.street, input.buildingNumber, input.postalCode, input.country)
+				const newAddress = new addrInfo.Addresses(input.resLat, input.resLng, input.city, input.street, input.buildingNumber, input.postalCode, input.country)
 				
 				this.insert(newAddress)
 				.then(addressId =>{ 
 				
 				console.log("calling residence owner handler ...")
-				cResidenceOwner(addressId, input.city, fileName)
+				return cResidenceOwner(addressId, input.city, fileName)
 
 				})
 				.catch(err => console.log(err))
@@ -234,11 +236,12 @@ module.exports = class Helper extends Db{
 				const filResidences = res.filter(row => ( row.approved === 1 && row.cityLat === resFromGeoCoder[0].latitude && row.cityLng === resFromGeoCoder[0].longitude))
 				
 				if(filResidences.length > 0){
+					//TODO: get all address mount response based on all residenceOnwers+addresses (by ID)
 					const dataToBeSent = filResidences.map(row => { return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} })
 
 					this.returnResponse(dataToBeSent)
 
-				}else return res.status(200).json({msg: "No available residences for rent found!"})
+				}else this.ws.status(200).send(JSON.stringify({msg: "No available residences for rent found!"}))
 			})
 			.catch(err => console.log(err))
 
@@ -253,10 +256,10 @@ module.exports = class Helper extends Db{
 
 		const chgConfig = {tableName: 'ResidenceOwners', id: input.id, columns: ['adminId', 'approved','approvedOn'], values: [input.adminId, input.state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
 		this.update(chgConfig)
-		.then(res => console.log(res+" row changed!"))
+		.then(res => this.returnResponse({msg: res+"Row Changed!"}))
 		.catch(err =>{
 			 console.log(err)
-			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+			this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
 		})
 	}
 

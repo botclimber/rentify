@@ -1,7 +1,6 @@
 const conv = require("./convertLocation.js")
 const Helper = require("./Helper.js")
-const { filter } = require("rxjs/operators")
-const { authz } = require("./authorization.js") 
+const {isAuthz} = require("./authorization.js")
 
 // ws is an array or list of clients
 exports.actions = (function(ws){
@@ -79,11 +78,20 @@ exports.actions = (function(ws){
 	// ACTION TO UPDATE A REVIEW STATE (pending, approved, rejected)
 	function updateReviewState(data){
 		
-		if(authz.isAuthz(data.userType)) {
+		if(isAuthz(data.userType)) {
 			helper.changeReviewApprovalState(data.adminId, data.revId, data.decision)
 			this.getAllReviews()
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
 
+	}
+
+	async function checkIfAnyEmpty(input){
+		for (const [key, value] of Object.entries(input)) {
+			console.log(value)
+			if (value === ""){console.log(key, value); throw Error("Please fill all fields!") }
+		}
+
+		return false
 	}
 
 	/**
@@ -92,17 +100,23 @@ exports.actions = (function(ws){
 	 * @param {object} files 
 	 */
 	function createResOwner(input, files){	
+		console.log(input)
 		
 		// 1. check if no empty fields
 		checkIfAnyEmpty(input)
+		.then(_ => {
+			console.log("ENTROOOO"+_)
+			// 2.
+			helper.createResOwnerRecord(input, files)
+			.catch(err => {
 
-		// 2.
-		helper.createResOwnerRecord(input, files)
-		.catch(err => {
-
-			console.log(err)
-			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
-		})		  
+				console.log(err)
+				ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
+			})	
+		})
+		.catch(e => {
+			ws.status(400).send(JSON.stringify({error: e, msg: "Some empty value!"}))
+		})	  
 	}
 
 	function getResidencesForCity(input){
@@ -129,12 +143,6 @@ exports.actions = (function(ws){
 		if(authz.isAuthz(userType)) {
 			helper.getAllROData()
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
-	}
-
-	function checkIfAnyEmpty(input){
-		for (const [key, value] of Object.entries(input)) {
-			if (!value || value === "") ws.status(400).send(JSON.stringify({msg: key+" is must be filled!"}))
-		}
 	}
 
 	return { search, 

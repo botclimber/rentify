@@ -6,7 +6,7 @@ module.exports = class Reviews {
 
 	this.userId = userId
 	this.userName = userName
-	this.userImg = userImage
+	this.userImage = userImage
 	this.adminId = 0
 	this.residenceId = residenceId
 	this.review = review
