@@ -225,10 +225,10 @@ module.exports = class Helper extends Db{
 	}
 
 	
-	getResidencesForCity(city){
+	resPerCity(city){
 		console.log("getting all residence owners from db ...")
 		this.selectAll("ResidenceOwners")
-		.then(res => {
+		.then(res => {	
 			console.log("Getting lat,lng for mentioned city: "+city)
 			conv.getLatLng({city: city})
 			.then(resFromGeoCoder => {
@@ -242,11 +242,16 @@ module.exports = class Helper extends Db{
 						const addressesToMap = new Map()
 						addrs.map(r => addressesToMap.set(r.id, r))
 
+						console.log("Mapped addresses"+addressesToMap)
+
 						const dataToBeSent = filResidences.map(row => { 
 							const addr = addressesToMap.get(row.addressId)
+							console.log("Address from map"+addr)
 
-							return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, lat: addr.lat, lng: addr.lng, city: addr.city, street: addr.street, nr: addr.nr, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} })
+							return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, lat: addr.lat, lng: addr.lng, city: addr.city, street: addr.street, nr: addr.nr, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} }
+						)
 
+						console.log(dataToBeSent)
 						this.returnResponse(dataToBeSent)
 
 					})
@@ -254,8 +259,15 @@ module.exports = class Helper extends Db{
 
 				}else this.ws.status(200).send(JSON.stringify({msg: "No available residences for rent found!"}))
 			})
-			.catch(err => console.log(err))
+			.catch(err => { 
+				console.log(err)
+				this.ws.status(500).send(JSON.stringify({msg: "Something went wrong when trying to get data from google maps api!"}))
+			})
 
+		})
+		.catch(err => {
+			console.log(err)
+			this.ws.status(500).send(JSON.stringify({msg: "Something went wrong when selecting data from db!"}))
 		})
 	}
 
@@ -263,11 +275,11 @@ module.exports = class Helper extends Db{
 	 * 
 	 * @param {object} input 
 	 */
-	updateROApprovalState(input){
+	updateROApprovalState(adminId, claimId, state){
 
-		const chgConfig = {tableName: 'ResidenceOwners', id: input.id, columns: ['adminId', 'approved','approvedOn'], values: [input.adminId, input.state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
+		const chgConfig = {tableName: 'ResidenceOwners', id: claimId, columns: ['adminId', 'approved','approvedOn'], values: [adminId, state, date.format(new Date(), "YYYY/MM/DD HH:mm:ss")]}
 		this.update(chgConfig)
-		.then(res => this.returnResponse({msg: res+"Row Changed!"}))
+		.then(res => console.log("Row updated! ID: "+claimId))
 		.catch(err =>{
 			 console.log(err)
 			this.ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));

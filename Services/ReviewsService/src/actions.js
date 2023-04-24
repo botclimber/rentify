@@ -105,7 +105,6 @@ exports.actions = (function(ws){
 		// 1. check if no empty fields
 		checkIfAnyEmpty(input)
 		.then(_ => {
-			console.log("ENTROOOO"+_)
 			// 2.
 			helper.createResOwnerRecord(input, files)
 			.catch(err => {
@@ -119,21 +118,17 @@ exports.actions = (function(ws){
 		})	  
 	}
 
-	function getResidencesForCity(input){
-		checkIfAnyEmpty(input)
+	function getResidencesForCity(city){
 
-		helper.getResidencesPerCity(input)
-		.catch(err => {
-
-			console.log(err)
-			ws.status(500).send(JSON.stringify({msg: 'something went wrong'}));
-		})		
-		
+		if(city && city !== ""){
+			helper.resPerCity(city)
+			
+		}else ws.status(200).send(JSON.stringify({msg: "Nothing found!"}))
 	}
 
 	function approveResidenceOwner (input){
 		if(isAuthz(input.userType)) {
-			helper.updateROApprovalState(input)
+			helper.updateROApprovalState(input.adminId, input.claimId, input.decision)
 			helper.getAllROData()
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
 	}

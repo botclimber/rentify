@@ -74,6 +74,7 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
 
   const city = req.query.city || ""
   actions.actions(res).getResidencesForCity(city)
+  
  })
 
  app.get('/api/v1/resOwner/getAll', (req, res) => {
@@ -89,7 +90,7 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
-    if(transfData) actions.actions(res).approveResidenceOwner({adminId: transfData.userId, userType: transfData.userType, revId: req.params.claimId, decision: transfData.decision})
+    if(transfData) actions.actions(res).approveResidenceOwner({adminId: transfData.userId, userType: transfData.userType, claimId: req.params.claimId, decision: transfData.decision})
   })
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })

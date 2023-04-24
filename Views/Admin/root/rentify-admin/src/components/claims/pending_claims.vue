@@ -22,7 +22,7 @@ export default{
 
     async updateClaim(claimId, dec){
       if(confirm("Are you sure ?")){
-        const res = await fetch(this.apis.reviewsApi+'/api/v1/resOnwer/updateApproval/'+claimId,{
+        const res = await fetch(this.apis.reviewsApi+'/api/v1/resOwner/updateApproval/'+claimId,{
           method: 'PATCH',
           headers: {'Content-type': 'application/json',
           'authorization': 'baer '+this.tk},
@@ -30,7 +30,7 @@ export default{
         })
         const data = await res.json()
 
-        this.allData = data.claims.filter(row => row.rev.approved == 0)
+        this.allData = this.onlyPendingRes(data.claims)
       }
     },
 
@@ -40,8 +40,10 @@ export default{
         const data = await res.json()
         console.log(data)
 
-        this.allData = data.claims
-    }
+        this.allData = this.onlyPendingRes(data.claims)
+    },
+
+    onlyPendingRes(input){ return input.filter(row => row.approved == 0) }
   }
 }
 </script>

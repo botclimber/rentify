@@ -103,17 +103,22 @@ import MarkerClusterer from '@google/markerclustererplus';
                       if(component.types.includes('locality')) {
                         const outputId = document.getElementById("resPerCity")
                         const currentCity = document.getElementById("currentCity")
+
+                        currentCity.innerHTML = component.long_name+": Available residences"
                         
-                        fetch(reviewsService+'/api/v1/resOnwer/getByCity?city='+component.long_name)
+                        fetch(reviewsService+'/api/v1/resOwner/getByCity?city='+component.long_name)
                         .then(res => res.json())
                         .then((data) => {
                           console.log(data)
 
-                          currentCity.innerHTML = component.long_name+": Available residences"
-                          const output = data.map(row => {
-                            return "<tr><td>"+row.userName+"/td><td> "+row.street+", "+row.nr+" </td></tr>"
-                          })
-                          outputId.innerHTML = output
+                          if(data.msg){
+                            outputId.innerHTML = data.msg
+                          }else {
+                            const output = data.map(row => {
+                              return "<tr><td>"+row.userName+"</td><td> "+row.street+", "+row.nr+" </td></tr>"
+                            })
+                            outputId.innerHTML = output
+                          }
                         })
                         .catch(err => console.log(err))
                         
