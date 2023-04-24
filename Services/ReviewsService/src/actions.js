@@ -132,7 +132,7 @@ exports.actions = (function(ws){
 	}
 
 	function approveResidenceOwner (input){
-		if(authz.isAuthz(input.userType)) {
+		if(isAuthz(input.userType)) {
 			helper.updateROApprovalState(input)
 			helper.getAllROData()
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
@@ -140,7 +140,7 @@ exports.actions = (function(ws){
 
 	function getAllResidenceOwners(userType){
 		
-		if(authz.isAuthz(userType)) {
+		if(isAuthz(userType)) {
 			helper.getAllROData()
 		}else return ws.status(400).send(JSON.stringify({msg: "no sufficient rights!"}))
 	}

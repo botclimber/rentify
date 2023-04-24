@@ -28,7 +28,7 @@ export default {
 
     methods: {
       async getUserData(){
-        const res = await fetch(this.apis.usersApi+'profile',{
+        const res = await fetch(this.apis.usersApi+'/user/profile',{
           method: 'GET',
           headers: {'Content-type': 'application/json',
           'authorization':'baer '+this.tk,
@@ -50,7 +50,7 @@ export default {
 
       // when existing change this request to one where old password verification exists
       async changePassword(){
-      const res = await fetch(this.apis.usersApi+'manualPassChange/'+this.userData.id+'/'+this.tk,{
+      const res = await fetch(this.apis.usersApi+'/user/manualPassChange/'+this.userData.id+'/'+this.tk,{
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

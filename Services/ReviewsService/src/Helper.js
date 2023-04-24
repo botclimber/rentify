@@ -237,9 +237,20 @@ module.exports = class Helper extends Db{
 				
 				if(filResidences.length > 0){
 					//TODO: get all address mount response based on all residenceOnwers+addresses (by ID)
-					const dataToBeSent = filResidences.map(row => { return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} })
+					this.selectAll("Addresses")
+					.then(addrs => {
+						const addressesToMap = new Map()
+						addrs.map(r => addressesToMap.set(r.id, r))
 
-					this.returnResponse(dataToBeSent)
+						const dataToBeSent = filResidences.map(row => { 
+							const addr = addressesToMap.get(row.addressId)
+
+							return {resOwnerId: row.id, userName: row.userName, userImg: row.userImg, addressId: row.addressId, lat: addr.lat, lng: addr.lng, city: addr.city, street: addr.street, nr: addr.nr, cityLat: row.cityLat, cityLng: row.cityLng, floor: row.floorOwner, flat: row.flatOwner, rentPrice: row.rentPrice, free: row.free} })
+
+						this.returnResponse(dataToBeSent)
+
+					})
+					.catch(err => console.log(err))
 
 				}else this.ws.status(200).send(JSON.stringify({msg: "No available residences for rent found!"}))
 			})
@@ -269,7 +280,7 @@ module.exports = class Helper extends Db{
 	getAllROData(){
 		this.selectAll("ResidenceOwners")
 		.then(res => {
-			this.returnResponse(res)
+			this.returnResponse({claims: res})
 		})
 		.catch(err => console.log(err))
 	}	

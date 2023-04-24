@@ -76,7 +76,7 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
   actions.actions(res).getResidencesForCity(city)
  })
 
- app.post('/api/v1/resOwner/getAll', (req, res) => {
+ app.get('/api/v1/resOwner/getAll', (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
@@ -85,11 +85,11 @@ app.post('/api/v1/resOwner/createResOwner', (req, res) => {
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })
 
- app.post('/api/v1/resOwner/updateApproval', (req, res) => {
+ app.patch('/api/v1/resOwner/updateApproval/:claimId', (req, res) => {
 
   th.tokenHandler(req)
   .then(transfData => {
-    if(transfData) actions.actions(res).approveResidenceOwner(transfData)
+    if(transfData) actions.actions(res).approveResidenceOwner({adminId: transfData.userId, userType: transfData.userType, revId: req.params.claimId, decision: transfData.decision})
   })
   .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
  })

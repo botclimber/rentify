@@ -30,7 +30,7 @@ export default {
 
           if(confirm("confirm this action, please!")){
 
-            const res = await fetch(this.apis.usersApi+'register/special',{
+            const res = await fetch(this.apis.usersApi+'/user/register/special',{
               method: 'POST',
               headers: {
                 'Content-type': 'application/json',

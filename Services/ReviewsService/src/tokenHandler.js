@@ -3,8 +3,8 @@ const SECRET = process.env.SECRET
 
 exports.tokenHandler = function(req){
     return new Promise( (r, e) => {
-        
-        const token = req.headers['authorization'].split(" ")[1]
+        console.log(req.query.token)
+        const token = (!req.query.token)? req.headers['authorization'].split(" ")[1] : req.query.token
         if(!token) e({statusCode: 401, msg: 'authorization must exist in headers'})
         else {
             jwt.verify(token, SECRET, function (err, decoded) {

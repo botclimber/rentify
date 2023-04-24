@@ -6,6 +6,7 @@ import Pending_Reviews from './components/reviews/pending_reviews.vue'
 import All_Reviews from './components/reviews/all_reviews.vue'
 import User_Profile from './components/profile/user_profile.vue'
 import New_Col from './components/profile/new_col.vue'
+import Pending_Claims from './components/claims/pending_claims.vue'
 
 const routes = {
   '/': Home,
@@ -14,7 +15,8 @@ const routes = {
   '/pending_reviews': Pending_Reviews,
   '/all_reviews': All_Reviews,
   '/user_profile': User_Profile,
-  '/new_col': New_Col
+  '/new_col': New_Col,
+  '/pending_claims': Pending_Claims
 
 }
 
@@ -44,7 +46,7 @@ export default {
   methods: {
 
     async getAllReviews(){
-      const res = await fetch(this.apis.reviewsApi+'reviews').catch(err => console.log(err))
+      const res = await fetch(this.apis.reviewsApi+'/api/v1/reviews').catch(err => console.log(err))
       const data = await res.json()
 
       this.reviews = data.reviews
@@ -102,17 +104,25 @@ export default {
           </a>
         </li>
         <li class="nav-item menu-items">
+          <a class="nav-link" href="#/all_reviews">
+            <span class="menu-icon">
+              <i class="mdi mdi-speedometer"></i>
+            </span>
+            <span class="menu-title">Reviews</span>
+          </a>
+        </li>
+        <li class="nav-item menu-items">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
-              <span class="menu-title">Reviews</span>
+              <span class="menu-title">Approvals</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="#/all_reviews"> All </a></li>
-                <li class="nav-item"> <a class="nav-link" href="#/pending_reviews"> To be Reviewed </a></li>
+                <li class="nav-item"> <a class="nav-link" href="#/pending_claims"> Pending Claims  </a></li>
+                <li class="nav-item"> <a class="nav-link" href="#/pending_reviews"> Pending Reviews </a></li>
               </ul>
             </div>
           </li>

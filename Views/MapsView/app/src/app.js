@@ -102,13 +102,16 @@ import MarkerClusterer from '@google/markerclustererplus';
                   addressResult.address_components.forEach((component) => {
                       if(component.types.includes('locality')) {
                         const outputId = document.getElementById("resPerCity")
+                        const currentCity = document.getElementById("currentCity")
                         
                         fetch(reviewsService+'/api/v1/resOnwer/getByCity?city='+component.long_name)
                         .then(res => res.json())
                         .then((data) => {
                           console.log(data)
+
+                          currentCity.innerHTML = component.long_name+": Available residences"
                           const output = data.map(row => {
-                            return "<tr><td>"+row.userName+"/td><td>"" | </td></tr>"
+                            return "<tr><td>"+row.userName+"/td><td> "+row.street+", "+row.nr+" </td></tr>"
                           })
                           outputId.innerHTML = output
                         })
