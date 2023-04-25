@@ -25,16 +25,16 @@ claimResidenceBtn.addEventListener("click", async (event) => {
         const free = (resFreeNo.checked )? 0 : 1
 
         const data = {
-            "resLat": resLat.value,
-            "resLng": resLng.value,
-            "floor": resFloor.value,
-            "flat": resSide.value,
-            "free": free,
-            "city": resCity.value,
-            "street": resStreet.value,
-            "buildingNumber": resBNumber.value,
-            "postalCode": "0000-000",
-            "country": "PT",
+            resLat: resLat.value,
+            resLng: resLng.value,
+            floor: resFloor.value,
+            flat: resSide.value,
+            free: free,
+            city: resCity.value,
+            street: resStreet.value,
+            buildingNumber: resBNumber.value,
+            postalCode: "0000-000",
+            country: "PT",
             flag: resFlag.value,
             userName: fName+" "+lName,
             userImage: uImage,
@@ -56,6 +56,8 @@ claimResidenceBtn.addEventListener("click", async (event) => {
         .then(res => res.json())
         .then(data => {
             console.log(data); 
+            $('#resModalForm').trigger("reset"); 
+            $('#myForm').modal('hide'); 
         })
         .catch(err => console.log(err))
 

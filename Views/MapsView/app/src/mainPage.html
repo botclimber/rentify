@@ -81,9 +81,14 @@ limitations under the License.
 
         .collapse.in { display: inline !important; }
 
-        .xTable tr:hover{
+        .xTable tr td:hover{
           background-color: #e9906a;
           cursor: pointer;
+        }
+
+        .xTable thead th {
+          font-size: 12px;
+          padding: 5px;
         }
 
     </style>
@@ -155,11 +160,12 @@ limitations under the License.
                       <div class="row mt-3">
                         <div class="col-md-12">
                           <h4 id="currentCity">Braga: Available Residences</h4>
-                          <table class="table table-bordered xTable" style="font-size:10pt">
+                          <table class="xTable" style="font-size:10pt;max-width: 100%;width: auto;">
                             <thead style="background-color: #b8410d;color:white">
                               <tr>
-                                <th scope="col">User</th>
-                                <th scope="col">Location</th>
+                                <th >User</th>
+                                <th >Location</th>
+                                <th ></th>
                               </tr>
                             </thead>
                             <tbody id="resPerCity">
@@ -319,7 +325,7 @@ limitations under the License.
   
                     <input type="hidden" id="nrLat" value="">
                     <input type="hidden"  id="nrLng" value="">
-                    <input type="hidden"  id="flag" value="">
+                    <input type="hidden"  id="flag" value="fromMarker">
                     
                     </form>
                     </div>
@@ -397,7 +403,7 @@ limitations under the License.
 
                   <input type="hidden" id="resLat" value="">
                   <input type="hidden"  id="resLng" value="">
-                  <input type="hidden"  id="resFlag" value="">
+                  <input type="hidden"  id="resFlag" value="fromMarker">
                 </form>
             </div>
 

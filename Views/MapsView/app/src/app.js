@@ -66,7 +66,6 @@ import MarkerClusterer from '@google/markerclustererplus';
   var mcResidence = document.getElementById("mcResidence")
   var mnReview = document.getElementById("mnReview")
   
-  
   const loader = new Loader(apiOptions)
   loader.load().then(() => {
     map = displayMap(data.address);
@@ -76,6 +75,11 @@ import MarkerClusterer from '@google/markerclustererplus';
   const urlParams = new URLSearchParams(window.location.search)
   const city = urlParams.get("city") || "Braga"
   
+  function makeCallBack(data, lat, lng){
+
+      
+}
+
   function mountPage(data){
     var locations = data.locations
   
@@ -108,16 +112,34 @@ import MarkerClusterer from '@google/markerclustererplus';
                         
                         fetch(reviewsService+'/api/v1/resOwner/getByCity?city='+component.long_name)
                         .then(res => res.json())
-                        .then((data) => {
-                          console.log(data)
+                        .then((dataFromServer) => {
+                          console.log(dataFromServer)
 
-                          if(data.msg){
-                            outputId.innerHTML = data.msg
+                          if(dataFromServer.msg){
+                            outputId.innerHTML = dataFromServer.msg
                           }else {
-                            const output = data.map(row => {
-                              return "<tr><td>"+row.userName+"</td><td> "+row.street+", "+row.nr+" </td></tr>"
+                            outputId.innerHTML = ""
+                            const els = []
+
+                            dataFromServer.map(row => {
+
+                              const optional = (row.floor !== "" && row.flat !== "")? "<br > "+row.floor+" - "+row.flat : ""
+                              const locId = parseFloat(row.lat) + parseFloat(row.lng)
+                              
+                              outputId.innerHTML += "<tr><td>"+row.userName+"</td><td id = 'goto"+locId+"'> "+row.city+", "+row.street+", "+row.nr+" "+optional+" </td><td><i class='fa fa-eye'></i></td></tr>"
+
+                              els.push({id: locId, data:data, lat: row.lat, lng: row.lng})
+
                             })
-                            outputId.innerHTML = output
+
+                            for(let x of els){
+                              document.getElementById('goto'+x.id).addEventListener('click', () => {
+                                data.address.lat = x.lat
+                                data.address.lng = x.lng
+                                mountPage(x.data)
+                              })
+                            }
+
                           }
                         })
                         .catch(err => console.log(err))
@@ -298,7 +320,7 @@ import MarkerClusterer from '@google/markerclustererplus';
     if searching for city zoom out
   
     */
-     zoom: 18
+     zoom: 19
   
       //mapId: 'YOUR_MAP_ID'
     };
@@ -364,7 +386,7 @@ import MarkerClusterer from '@google/markerclustererplus';
       marker.addListener('click', event => {
         const location = { lat: event.latLng.lat(), lng: event.latLng.lng() };
   
-        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); resLat.value="+location.lat+"; resLng.value="+location.lng+"; nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; resCity.value='-'; resCity.disabled=true; resStreet.value='-'; resStreet.disabled=true; resBNumber.value='-'; resBNumber.disabled=true; nrCity.value='-'; nrCity.disabled = true; nrStreet.value='-'; nrStreet.disabled = true; nrBNumber.value='-'; flag.value =''; nrBNumber.disabled= true; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
+        infoWindow.setContent("<div style = 'max-height:450px;min-height:40px;'><div class='row mb-3'><div class='col-md-6'><button type=\"button\" class=\"btn mb-3 float-left\" style=\"background-color:#B7410E;color:white;padding:10px 12px;font-size:10px;\" onclick=\"(function(){ if(!localStorage.getItem('t')){ window.location.href = '"+authPage+"/user/login'; } else { console.log('Place registed! Complete Form and add review [marker click] ("+location.lat+", "+location.lng+")'); resLat.value="+location.lat+"; resLng.value="+location.lng+"; nrLat.value = "+location.lat+"; nrLng.value = "+location.lng+"; resCity.value='-'; resCity.disabled=true; resStreet.value='-'; resStreet.disabled=true; resBNumber.value='-'; resBNumber.disabled=true; nrCity.value='-'; nrCity.disabled = true; nrStreet.value='-'; nrStreet.disabled = true; nrBNumber.value='-'; flag.value ='fromMarker'; resFlag.value='fromMarker'; nrBNumber.disabled= true; $('#myForm').modal('show');} })();\">Add Review</button></div> <div class='col-md-6'> <input style='height:35px;font-size:10pt' type='text' class='form-control float-right' onkeyup='filterRevs("+event.latLng.lat()+","+event.latLng.lng()+")' id='filterRevsInput"+(event.latLng.lat()+event.latLng.lng())+"' placeholder='floor - direction' /> </div>  </div><div class='row'><div class='col-md-12'>" + reviews[idx] + "</div></div></div>");
         infoWindow.open(map, marker);
   
       });
