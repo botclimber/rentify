@@ -60,3 +60,13 @@ Create Table ResidenceOwners (
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
 )
+
+-- TODO: to be implemented in ReviewsService
+Create Table RevChecker (
+  id int auto_increment,
+  userId int not null,
+  addressId varchar(120) not null,
+  totReviews int not null
+  lastReviewDate datetime, -- can only do 1 review per 6 months
+  createdOn datetime
+)
