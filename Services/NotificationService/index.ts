@@ -17,6 +17,10 @@ app.get('/', (req: Request, res: Response) => {
  * Create new subscription
  */
 app.post("/"+service+"/"+v+"/sub", (req: Request, res: Response) => {
+
+  // 1. input checking
+  // 2. insert in DB
+  // 3. send notification email
   
 });
 
@@ -27,7 +31,22 @@ app.post("/"+service+"/"+v+"/sub", (req: Request, res: Response) => {
  * 
  */ 
 app.post("/"+service+"/"+v+"/emToOwner", (req: Request, res: Response) => {
-  
+
+  /*
+  th.tokenHandler(req)
+  .then(_ => {
+    if( _ ){
+      
+      // 1. check token 
+      // 2. message check
+      // 3. send message to res owner
+      // 4. response to platform {success or failed}
+    
+    } 
+  })
+  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
+  */
+
 });
 
 // TODO: create massive email sending request
@@ -35,3 +54,4 @@ app.post("/"+service+"/"+v+"/emToOwner", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
+
