@@ -14,7 +14,7 @@ module.exports = class DB{
 	constructor(){
 
 		this.con = mysql.createConnection({
-		  host: "localhost",
+		  host: process.env.DB_HOST,
 		  user: process.env.DB_USER  , // switch to your current user
 		  password: process.env.DB_PASSWORD, // switch to your current password
 		  database: process.env.DB_NAME,

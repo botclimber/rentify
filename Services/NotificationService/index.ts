@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 
+import './src/travisScott/travis_types/typeModels' // interface types
+
 dotenv.config();
 
 const app: Express = express();
@@ -17,10 +19,11 @@ app.get('/', (req: Request, res: Response) => {
  * Create new subscription
  */
 app.post("/"+service+"/"+v+"/sub", (req: Request, res: Response) => {
-
+  
   // 1. input checking
   // 2. insert in DB
   // 3. send notification email
+
   
 });
 
