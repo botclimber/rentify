@@ -35,7 +35,7 @@ Create Table Reviews (
   createdOn datetime not null,
   approvedOn datetime,
   anonymous boolean not null,
-  approved int not null, # 0 - pending, 1 - approved, 3 - rejected
+  approved int not null, -- 0 - pending, 1 - approved, 3 - rejected
   PRIMARY KEY (id),
   FOREIGN KEY (residenceId) REFERENCES ResidenceAddresses(Id)
 );
@@ -60,17 +60,18 @@ Create Table ResidenceOwners (
   fileProof varchar(120) not null,
   PRIMARY KEY (id),
   FOREIGN KEY (addressId) REFERENCES Addresses(Id)
-)
+);
 
 -- TODO: to be implemented in ReviewsService
 Create Table RevChecker (
   id int auto_increment,
   userId int not null,
-  addressId varchar(120) not null,
-  totReviews int not null
+  addressId int not null,
+  totReviews int not null,
   lastReviewDate datetime, -- can only do 1 review per 6 months
-  createdOn datetime
-)
+  createdOn datetime,
+  PRIMARY KEY (id)
+);
 
 -- NotificationServices
 Create Table Subs(
@@ -99,6 +100,6 @@ Create Table Users(
     password varchar(128) not null,
     type varchar(30) not null,
     blocked boolean DEFAULT false,
-    verified boolean DEFAULT false
+    verified boolean DEFAULT false,
     PRIMARY KEY (id)
 );

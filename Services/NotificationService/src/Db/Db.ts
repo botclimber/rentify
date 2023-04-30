@@ -1,4 +1,4 @@
-import {createPool, Pool} from "mysql2";
+import {createPool, Pool, Query} from "mysql2";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -11,7 +11,7 @@ type DbConfig = {
 }
 
 export class Db {
-    private dbConfig: Required<DbConfig> = {
+    private _dbConfig: Required<DbConfig> = {
         host: process.env.DB_HOST || '',
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
@@ -19,7 +19,31 @@ export class Db {
     }
 
     async openConnection(): Promise<Pool> {
-        const connection = await createPool(this.dbConfig);
+        const connection = createPool(this._dbConfig);
         return connection;
     }
+
+    // selectAll
+    //TODO: teste result and add proper generic type
+    async selectAll<T>(table: string): Promise<T[]>  {
+        const con = await this.openConnection()
+
+        try{
+            
+            const sql = `SELECT * FROM ${table}`
+            const res: any[] = await con.promise().execute(sql)
+            return res[0]
+
+        }catch (e){
+            console.log(e)
+            throw e
+        }finally{
+            con.end(() => {/* close connection */})
+        }
+    }
+    // insert
+
+    // update
+
+    // delete
 }

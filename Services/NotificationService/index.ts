@@ -1,11 +1,19 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import {Sub} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 
 import './src/travisScott/travis_types/typeModels' // interface types
 
 dotenv.config();
 
 const app: Express = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+app.use(cors())
+
 const port = process.env.PORT;
 
 const v: string = "v1"
@@ -18,13 +26,24 @@ app.get('/', (req: Request, res: Response) => {
 /**
  * Create new subscription
  */
-app.post("/"+service+"/"+v+"/sub", (req: Request, res: Response) => {
+app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
   
   // 1. input checking
   // 2. insert in DB
   // 3. send notification email
+  try{
+    console.log(req)
+    const email: string = req.body.email
 
-  
+    if(email){
+      const sub: Sub = new Sub()
+      await sub.createSub(email, res)
+    
+    }else throw new Error("Missing email parameter!")
+  }catch (e){
+    console.log(e)
+  }
+
 });
 
 /**
