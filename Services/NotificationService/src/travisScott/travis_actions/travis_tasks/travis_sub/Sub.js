@@ -8,22 +8,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sub = void 0;
+exports.Subs = void 0;
 const Db_1 = require("../../../../Db/Db");
-class Sub {
+const date_and_time_1 = __importDefault(require("date-and-time"));
+class Subs {
+    constructor() {
+        this.className = "Subs";
+    }
     createSub(email, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const db = new Db_1.Db();
-            const Sub = {
+            // order matters
+            const sub = {
                 email: email,
-                createdAt: "1000-01-01"
+                createdAt: date_and_time_1.default.format(new Date(), "YYYY/MM/DD HH:mm:ss")
             };
             try {
-                const result = yield db.insert(Sub);
-                console.log(result, typeof (result));
-                if (result)
-                    res.status(200).json({ "msg": "row created, thanks!" });
+                // check if email already exists
+                const getOne = yield db.selectOne(sub, this.className);
+                if (getOne.length)
+                    res.status(400).json({ msg: "Email already existing!" });
+                else {
+                    const result = yield db.insert(sub, this.className);
+                    console.log(result, typeof (result));
+                    if (result)
+                        res.status(200).json({ "msg": "row created, thanks!" });
+                }
             }
             catch (e) {
                 console.log(e);
@@ -32,4 +46,4 @@ class Sub {
         });
     }
 }
-exports.Sub = Sub;
+exports.Subs = Subs;

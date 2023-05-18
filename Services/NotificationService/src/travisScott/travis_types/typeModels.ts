@@ -5,7 +5,7 @@ export interface ContactResOwner {
     //message?: string
 }
 
-export type sub = {
+export type Sub = {
     id?: number,
     email: string,
     createdAt: string

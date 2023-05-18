@@ -29,14 +29,12 @@ class Db {
         // delete
     }
     sqlTypeSafer(value) {
-        return __awaiter(this, void 0, void 0, function* () {
-            switch (typeof (value)) {
-                case "string":
-                    return '"' + value + '"';
-                    break;
-                default: return value;
-            }
-        });
+        switch (typeof (value)) {
+            case "string":
+                return '"' + value + '"';
+                break;
+            default: return value;
+        }
     }
     openConnection() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -63,16 +61,38 @@ class Db {
             }
         });
     }
-    insert(object) {
+    insert(object, table) {
         return __awaiter(this, void 0, void 0, function* () {
             const con = yield this.openConnection();
             try {
+                // TODO: name of object not being detected
                 const columnNames = Object.keys(object).join(',');
                 const values = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',');
-                const sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
+                const sql = `INSERT INTO ${table} (${columnNames}) VALUES (${values})`;
                 console.log("[SQL - INSERT]: " + sql);
                 const res = yield con.promise().execute(sql);
                 return res[0].insertId;
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+            finally {
+                con.end(() => { });
+            }
+        });
+    }
+    // selectOne
+    // maybe some rework in order to make this even more generic
+    // for now it search relying only on one field/column
+    selectOne(object, table) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const con = yield this.openConnection();
+            try {
+                const sql = `SELECT * FROM ${table} WHERE ${Object.keys(object)[0]} = ${this.sqlTypeSafer(Object.values(object)[0])}`;
+                console.log(sql);
+                const res = yield con.promise().execute(sql);
+                return res[0];
             }
             catch (e) {
                 console.log(e);

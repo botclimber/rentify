@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import {Sub} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
+import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 
 import './src/travisScott/travis_types/typeModels' // interface types
 
@@ -28,20 +28,24 @@ app.get('/', (req: Request, res: Response) => {
  */
 app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
   
-  // 1. input checking
-  // 2. insert in DB
+  // 1. input checking [done]
+  // 2. insert in DB [done]
   // 3. send notification email
   try{
-    console.log(req)
     const email: string = req.body.email
 
     if(email){
-      const sub: Sub = new Sub()
+      const sub: Subs = new Subs()
       await sub.createSub(email, res)
     
-    }else throw new Error("Missing email parameter!")
+    }else {
+      res.status(400).json({msg: "Missing email parameter!"})
+    }
+    
   }catch (e){
+    //res.status(500).json({"error": e})
     console.log(e)
+    res.status(500).json("Some Internal Error")
   }
 
 });

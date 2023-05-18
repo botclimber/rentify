@@ -37,17 +37,19 @@ app.post("/" + service + "/" + v + "/sub", (req, res) => __awaiter(void 0, void 
     // 2. insert in DB
     // 3. send notification email
     try {
-        console.log(req);
         const email = req.body.email;
         if (email) {
-            const sub = new Sub_1.Sub();
+            const sub = new Sub_1.Subs();
             yield sub.createSub(email, res);
         }
-        else
-            throw new Error("Missing email parameter!");
+        else {
+            res.status(400).json({ msg: "Missing email parameter!" });
+        }
     }
     catch (e) {
+        //res.status(500).json({"error": e})
         console.log(e);
+        res.status(500).json("Some Internal Error");
     }
 }));
 /**

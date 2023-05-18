@@ -38,7 +38,7 @@ export class Db {
         try{
             
             const sql = `SELECT * FROM ${table}`
-            const res: any[] = await con.promise().execute(sql)
+            const res: any = await con.promise().execute(sql)
             return res[0]
 
         }catch (e){
@@ -49,7 +49,7 @@ export class Db {
         }
     }
 
-    async insert(object: Object): Promise<number> { 
+    async insert(object: Object, table: string): Promise<number> { 
         const con = await this.openConnection()
 
         try
@@ -58,7 +58,7 @@ export class Db {
             const columnNames: string = Object.keys(object).join(',')
             const values: string = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',')
 
-            const sql: string = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
+            const sql: string = `INSERT INTO ${table} (${columnNames}) VALUES (${values})`;
 
             console.log("[SQL - INSERT]: "+sql)
             const res = await con.promise().execute(sql);
@@ -71,6 +71,28 @@ export class Db {
             con.end(() => {/** close connection */})
         }
     }
+
+    // selectOne
+    // maybe some rework in order to make this even more generic
+    // for now it search relying only on one field/column
+    async selectOne<A>(object: Partial<A>, table: string): Promise<A[]> {
+        const con = await this.openConnection()
+
+        try{
+            
+            const sql = `SELECT * FROM ${table} WHERE ${Object.keys(object)[0]} = ${this.sqlTypeSafer(Object.values(object)[0])}`
+            console.log(sql)
+            const res: any = await con.promise().execute(sql)
+            return res[0]
+
+        }catch (e){
+            console.log(e)
+            throw e
+        }finally{
+            con.end(() => {/* close connection */})
+        }
+    }
+
     // insert
 
     // update
