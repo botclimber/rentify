@@ -1,3 +1,10 @@
+
+export interface User {
+    id: number,
+    email: string,
+    type: "superAdmin" | "admin" | "col"
+}
+
 export interface ContactResOwner {
     resOwnerId: number,
     userId: number,

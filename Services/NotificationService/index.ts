@@ -52,7 +52,7 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
 
 /**
  * Send email to residence owner from user
- * owner email should preferencial be hidden from common user (for now lets just apparently hide it, in future we can just make a request to UsersService by userId in order to find the owner email, and then by completly hide the owner email)
+ * owner email should preferencial be hidden from common user (send it to front end encrypted)
  * 
  * 
  */ 
