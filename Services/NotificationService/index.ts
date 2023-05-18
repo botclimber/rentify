@@ -61,22 +61,20 @@ app.post("/"+service+"/"+v+"/emToOwner", (req: Request, res: Response) => {
 
   tokenHandler(req)
   .then(_ => {
-    if( _ ){
       
       // 1. check token [done]
       // 2. check body parameters
+      
       // 3. get email from encrypted
       // 4. send email to res owner
       // 5. create record on contactResOwner table
       // 6. send feedback to user on web page
 
-    } 
   })
   .catch(err => { 
     console.log(err); 
     res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) 
   })
-
 });
 
 // TODO: create massive email sending request

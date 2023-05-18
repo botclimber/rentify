@@ -7,7 +7,7 @@ type DbConfig = {
     user: string,
     password: string,
     database: string,
-    //connectionLimit?: number
+    connectionLimit?: number
 }
 
 export class Db {
@@ -18,7 +18,7 @@ export class Db {
         }
     } 
 
-    private _dbConfig: Required<DbConfig> = {
+    private _dbConfig: DbConfig = {
         host: process.env.DB_HOST || '',
         user: process.env.DB_USER || '',
         password: process.env.DB_PASSWORD || '',
