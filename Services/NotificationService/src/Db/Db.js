@@ -28,6 +28,16 @@ class Db {
         // update
         // delete
     }
+    sqlTypeSafer(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            switch (typeof (value)) {
+                case "string":
+                    return '"' + value + '"';
+                    break;
+                default: return value;
+            }
+        });
+    }
     openConnection() {
         return __awaiter(this, void 0, void 0, function* () {
             const connection = (0, mysql2_1.createPool)(this._dbConfig);
@@ -40,10 +50,29 @@ class Db {
         return __awaiter(this, void 0, void 0, function* () {
             const con = yield this.openConnection();
             try {
-                console.log("chicha penico");
                 const sql = `SELECT * FROM ${table}`;
                 const res = yield con.promise().execute(sql);
                 return res[0];
+            }
+            catch (e) {
+                console.log(e);
+                throw e;
+            }
+            finally {
+                con.end(() => { });
+            }
+        });
+    }
+    insert(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const con = yield this.openConnection();
+            try {
+                const columnNames = Object.keys(object).join(',');
+                const values = Object.values(object).map(_ => this.sqlTypeSafer(_)).join(',');
+                const sql = `INSERT INTO ${object.constructor.name} (${columnNames}) VALUES (${values})`;
+                console.log("[SQL - INSERT]: " + sql);
+                const res = yield con.promise().execute(sql);
+                return res[0].insertId;
             }
             catch (e) {
                 console.log(e);

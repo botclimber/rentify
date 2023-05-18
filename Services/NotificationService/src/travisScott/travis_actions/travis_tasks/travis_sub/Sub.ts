@@ -1,19 +1,20 @@
-import { Pool } from "mysql2"
 import {Db} from "../../../../Db/Db"
-
-type sub = {
-    id: number,
-    email: string,
-    createdAt: string
-}
+import {sub} from "../../../travis_types/typeModels"
 
 export class Sub{
     async createSub(email: string, res: Record<string, any>): Promise<Response | void>{
         const db: Db = new Db()
+
+        const Sub: sub = {
+            email: email,
+            createdAt: "1000-01-01"
+        }
         
         try{
-            const result: sub[] = await db.selectAll<sub>("Subs")
+            const result: number = await db.insert(Sub)
             console.log(result , typeof(result))
+            if(result)
+                res.status(200).json({"msg":"row created, thanks!"})
 
         }catch (e){
             console.log(e)

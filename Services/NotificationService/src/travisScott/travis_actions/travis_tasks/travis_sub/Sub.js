@@ -14,20 +14,20 @@ const Db_1 = require("../../../../Db/Db");
 class Sub {
     createSub(email, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("\n\n entro 0 \n\n");
             const db = new Db_1.Db();
+            const Sub = {
+                email: email,
+                createdAt: "1000-01-01"
+            };
             try {
-                const result = yield db.selectAll("Subs");
-                console.log("\n\n entro 2 \n\n");
+                const result = yield db.insert(Sub);
                 console.log(result, typeof (result));
+                if (result)
+                    res.status(200).json({ "msg": "row created, thanks!" });
             }
             catch (e) {
                 console.log(e);
                 throw (e);
-                //}finally {
-                //    conn.end(() => {
-                // close all connections
-                //    })
             }
         });
     }
