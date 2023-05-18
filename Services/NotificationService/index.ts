@@ -5,6 +5,7 @@ import cors from 'cors'
 import {Subs} from './src/travisScott/travis_actions/travis_tasks/travis_sub/Sub'
 
 import './src/travisScott/travis_types/typeModels' // interface types
+import { tokenHandler } from './src/travisScott/travis_check/tokenHandler/tokenHandler';
 
 dotenv.config();
 
@@ -58,20 +59,23 @@ app.post("/"+service+"/"+v+"/sub", async (req: Request, res: Response) => {
  */ 
 app.post("/"+service+"/"+v+"/emToOwner", (req: Request, res: Response) => {
 
-  /*
-  th.tokenHandler(req)
+  tokenHandler(req)
   .then(_ => {
     if( _ ){
       
-      // 1. check token 
-      // 2. message check
-      // 3. send message to res owner
-      // 4. response to platform {success or failed}
-    
+      // 1. check token [done]
+      // 2. check body parameters
+      // 3. get email from encrypted
+      // 4. send email to res owner
+      // 5. create record on contactResOwner table
+      // 6. send feedback to user on web page
+
     } 
   })
-  .catch(err => { console.log(err); res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) })
-  */
+  .catch(err => { 
+    console.log(err); 
+    res.status(err.statusCode).send(JSON.stringify({msg: err.msg})) 
+  })
 
 });
 
